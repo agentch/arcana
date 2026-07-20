@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/deck-manifest.schema.json",
+  "title": "Arcana Deck Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "name",
+    "edition",
+    "version",
+    "author",
+    "license",
+    "assets"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "1.0"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "name": {"type": "string", "minLength": 1},
+    "edition": {"type": "string", "minLength": 1},
+    "version": {"type": "string", "minLength": 1},
+    "author": {"type": "string", "minLength": 1},
+    "license": {"type": "string", "minLength": 1},
+    "assets": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/asset"}
+    }
+  },
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["image", "alt"],
+      "properties": {
+        "image": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "fallbackSymbol": {"type": "string", "minLength": 1},
+        "alt": {"type": "string", "minLength": 1}
+      },
+      "anyOf": [
+        {"required": ["image"], "properties": {"image": {"type": "string"}}},
+        {
+          "required": ["fallbackSymbol"],
+          "properties": {"fallbackSymbol": {"type": "string", "minLength": 1}}
+        }
+      ]
+    }
+  }
+}

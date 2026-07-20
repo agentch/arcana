@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "contentVersion": "2026.07.1",
+  "contentVersion": "2026.07.2",
   "locale": "zh-CN",
   "cards": [
     {
@@ -24,6 +24,106 @@
       }
     },
     {
+      "id": "major-01",
+      "arcana": "major",
+      "number": 1,
+      "romanNumeral": "I",
+      "name": "魔术师",
+      "englishName": "The Magician",
+      "keywords": {
+        "upright": ["主动创造", "资源整合", "表达"],
+        "reversed": ["能力分散", "操控", "准备未完成"]
+      },
+      "meaning": {
+        "upright": "你已经拥有开始所需的关键资源。重点不是继续等待条件完美，而是把意图、能力和行动连接起来。",
+        "reversed": "想法与行动之间可能存在落差，或力量被用在证明自己而非解决问题上。先辨认真正可用的资源。"
+      },
+      "advice": {
+        "upright": "选定一个目标，列出手边已有的三项资源，并在今天使用其中一项。",
+        "reversed": "缩小承诺范围，先完成一件能够验证能力的小事。"
+      }
+    },
+    {
+      "id": "major-02",
+      "arcana": "major",
+      "number": 2,
+      "romanNumeral": "II",
+      "name": "女祭司",
+      "englishName": "The High Priestess",
+      "keywords": {
+        "upright": ["直觉", "沉静", "未显现的信息"],
+        "reversed": ["忽视直觉", "封闭", "信息混乱"]
+      },
+      "meaning": {
+        "upright": "有些答案还不适合被催促。安静观察情绪、细节和没有说出口的部分，会比立即行动带来更多线索。",
+        "reversed": "外界声音可能盖过了你自己的判断，也可能因为害怕面对而保持沉默。需要区分直觉与焦虑。"
+      },
+      "advice": {
+        "upright": "暂缓一次即时回应，把最初的感受和随后出现的想法分别写下。",
+        "reversed": "减少信息输入，给自己十分钟安静时间，再重新判断。"
+      }
+    },
+    {
+      "id": "major-03",
+      "arcana": "major",
+      "number": 3,
+      "romanNumeral": "III",
+      "name": "皇后",
+      "englishName": "The Empress",
+      "keywords": {
+        "upright": ["滋养", "丰盛", "创造力"],
+        "reversed": ["过度付出", "自我忽视", "创造受阻"]
+      },
+      "meaning": {
+        "upright": "成长需要被照顾，而不只是被推动。当前适合让关系、创意或身体获得稳定而具体的滋养。",
+        "reversed": "照顾他人或追求成果可能挤压了你自己的空间。匮乏感也可能让创造变成消耗。"
+      },
+      "advice": {
+        "upright": "为正在培育的事物安排一个持续、可重复的小投入。",
+        "reversed": "先补回自己的休息与边界，再决定还能给予多少。"
+      }
+    },
+    {
+      "id": "major-04",
+      "arcana": "major",
+      "number": 4,
+      "romanNumeral": "IV",
+      "name": "皇帝",
+      "englishName": "The Emperor",
+      "keywords": {
+        "upright": ["结构", "责任", "稳定"],
+        "reversed": ["僵化", "控制过度", "权责失衡"]
+      },
+      "meaning": {
+        "upright": "清晰的规则与责任能让事情稳定推进。现在需要的是框架、边界和能够长期执行的安排。",
+        "reversed": "秩序可能已经变成限制，或者责任与权力没有对等。过度控制无法真正消除不确定性。"
+      },
+      "advice": {
+        "upright": "明确一个规则、一个负责人和一个检查时间点。",
+        "reversed": "检查现有规则服务于什么；删除一条只增加负担却没有价值的限制。"
+      }
+    },
+    {
+      "id": "major-05",
+      "arcana": "major",
+      "number": 5,
+      "romanNumeral": "V",
+      "name": "教皇",
+      "englishName": "The Hierophant",
+      "keywords": {
+        "upright": ["传统", "学习", "共同信念"],
+        "reversed": ["质疑规则", "教条", "寻找自己的道路"]
+      },
+      "meaning": {
+        "upright": "成熟的经验、可靠的方法或共同价值能够提供支持。向值得信任的体系学习，不必独自摸索全部答案。",
+        "reversed": "既有规则可能不再适合当前处境。质疑并不等于全盘否定，而是判断哪些原则仍值得保留。"
+      },
+      "advice": {
+        "upright": "寻找一位可信的老师、方法或案例，先按完整流程实践一次。",
+        "reversed": "写下你真正认同的原则，并说明它与惯例不同的理由。"
+      }
+    },
+    {
       "id": "major-06",
       "arcana": "major",
       "number": 6,
@@ -44,6 +144,206 @@
       }
     },
     {
+      "id": "major-07",
+      "arcana": "major",
+      "number": 7,
+      "romanNumeral": "VII",
+      "name": "战车",
+      "englishName": "The Chariot",
+      "keywords": {
+        "upright": ["意志", "前进", "方向感"],
+        "reversed": ["失去方向", "用力过猛", "内在拉扯"]
+      },
+      "meaning": {
+        "upright": "不同力量需要被带向同一方向。坚定并不等于没有矛盾，而是在矛盾中仍然知道自己要去哪里。",
+        "reversed": "速度可能掩盖了方向问题，或内在的两种需求正在相互拉扯。继续加速只会增加消耗。"
+      },
+      "advice": {
+        "upright": "用一句话定义这次行动的终点，并拒绝一个无关干扰。",
+        "reversed": "暂停推进，先决定哪一个目标真正优先。"
+      }
+    },
+    {
+      "id": "major-08",
+      "arcana": "major",
+      "number": 8,
+      "romanNumeral": "VIII",
+      "name": "力量",
+      "englishName": "Strength",
+      "keywords": {
+        "upright": ["温柔的勇气", "自我掌握", "耐心"],
+        "reversed": ["自我怀疑", "情绪压抑", "力量耗尽"]
+      },
+      "meaning": {
+        "upright": "真正的力量来自稳定地容纳本能和情绪，而不是压制它们。温和与坚定可以同时存在。",
+        "reversed": "你可能在怀疑自己的承受力，或把维持坚强当成唯一选择。被压住的情绪需要安全出口。"
+      },
+      "advice": {
+        "upright": "面对困难时放慢语速和动作，用稳定代替对抗。",
+        "reversed": "承认一项真实的疲惫，并主动减少一部分负荷。"
+      }
+    },
+    {
+      "id": "major-09",
+      "arcana": "major",
+      "number": 9,
+      "romanNumeral": "IX",
+      "name": "隐士",
+      "englishName": "The Hermit",
+      "keywords": {
+        "upright": ["独处", "内在指引", "深思"],
+        "reversed": ["孤立", "逃避交流", "迷失"]
+      },
+      "meaning": {
+        "upright": "暂时远离喧闹能够帮助你听见自己的判断。此刻需要深度，而不是更多意见。",
+        "reversed": "独处可能已经从整理自己变成切断连接。长时间困在思考中，也可能让方向更加模糊。"
+      },
+      "advice": {
+        "upright": "安排一段无输入的独处时间，只围绕一个问题思考。",
+        "reversed": "选择一位可信的人，分享你一直独自承担的部分。"
+      }
+    },
+    {
+      "id": "major-10",
+      "arcana": "major",
+      "number": 10,
+      "romanNumeral": "X",
+      "name": "命运之轮",
+      "englishName": "Wheel of Fortune",
+      "keywords": {
+        "upright": ["变化周期", "转折", "顺势"],
+        "reversed": ["抗拒变化", "重复模式", "暂时停滞"]
+      },
+      "meaning": {
+        "upright": "局面正在进入新的周期。你无法控制所有变化，但可以决定如何回应正在打开的机会。",
+        "reversed": "熟悉的模式可能再次出现，或变化不按预期推进。停滞提供了识别循环的机会。"
+      },
+      "advice": {
+        "upright": "辨认当前正在改变的一件事，并为它预留调整空间。",
+        "reversed": "回顾上一次类似处境，找出一个这次可以不同的选择。"
+      }
+    },
+    {
+      "id": "major-11",
+      "arcana": "major",
+      "number": 11,
+      "romanNumeral": "XI",
+      "name": "正义",
+      "englishName": "Justice",
+      "keywords": {
+        "upright": ["公平", "因果", "清晰判断"],
+        "reversed": ["偏见", "逃避责任", "信息不全"]
+      },
+      "meaning": {
+        "upright": "事实、责任与后果需要被放在同一张桌面上。清晰的判断来自诚实面对自己的选择。",
+        "reversed": "判断可能受到偏见、信息缺失或不愿承担后果的影响。现在不适合只听对自己有利的一面。"
+      },
+      "advice": {
+        "upright": "分别写下事实、感受和责任，再做决定。",
+        "reversed": "主动寻找一条可能推翻当前判断的证据。"
+      }
+    },
+    {
+      "id": "major-12",
+      "arcana": "major",
+      "number": 12,
+      "romanNumeral": "XII",
+      "name": "倒吊人",
+      "englishName": "The Hanged Man",
+      "keywords": {
+        "upright": ["暂停", "换位观察", "主动放下"],
+        "reversed": ["无效等待", "拖延", "拒绝松手"]
+      },
+      "meaning": {
+        "upright": "暂时不行动可能是一种有意识的选择。改变观察角度，能让原本僵住的问题出现新空间。",
+        "reversed": "等待已经失去意义，或你在用牺牲感回避决定。需要分辨耐心和拖延。"
+      },
+      "advice": {
+        "upright": "从相反立场重新描述一次问题，暂时不急着反驳。",
+        "reversed": "为等待设定明确截止点，到时选择行动或放下。"
+      }
+    },
+    {
+      "id": "major-13",
+      "arcana": "major",
+      "number": 13,
+      "romanNumeral": "XIII",
+      "name": "死神",
+      "englishName": "Death",
+      "keywords": {
+        "upright": ["结束", "转化", "释放"],
+        "reversed": ["抗拒结束", "停滞", "旧模式延续"]
+      },
+      "meaning": {
+        "upright": "某个阶段需要结束，新的空间才会出现。这里强调的是转化与更新，而不是字面上的死亡。",
+        "reversed": "你可能已经知道什么需要结束，却仍在维持熟悉的状态。抗拒会让过渡期更长。"
+      },
+      "advice": {
+        "upright": "明确说出一件准备结束的事，并完成一个告别动作。",
+        "reversed": "找出不愿放手背后的具体担忧，先处理其中最现实的一项。"
+      }
+    },
+    {
+      "id": "major-14",
+      "arcana": "major",
+      "number": 14,
+      "romanNumeral": "XIV",
+      "name": "节制",
+      "englishName": "Temperance",
+      "keywords": {
+        "upright": ["平衡", "调和", "循序渐进"],
+        "reversed": ["失衡", "极端", "节奏混乱"]
+      },
+      "meaning": {
+        "upright": "看似对立的需求可以被重新调配。稳定的进展来自适量、节奏和持续调整。",
+        "reversed": "生活或关系中的比例正在失衡。忽快忽慢、全有或全无会加剧消耗。"
+      },
+      "advice": {
+        "upright": "把目标调整为可以连续坚持七天的强度。",
+        "reversed": "减少一个过量投入，并补回一个长期被忽略的需要。"
+      }
+    },
+    {
+      "id": "major-15",
+      "arcana": "major",
+      "number": 15,
+      "romanNumeral": "XV",
+      "name": "恶魔",
+      "englishName": "The Devil",
+      "keywords": {
+        "upright": ["束缚", "欲望", "依赖模式"],
+        "reversed": ["看见束缚", "松绑", "重获选择"]
+      },
+      "meaning": {
+        "upright": "某种欲望、恐惧或依赖正在缩小你的选择感。束缚可能真实存在，也可能因为长期习惯而显得无法改变。",
+        "reversed": "你开始看见锁链的结构，并意识到自己仍有选择。改变需要具体边界，而不是只靠意志。"
+      },
+      "advice": {
+        "upright": "记录这个模式出现前的触发点，以及它承诺给你的短期好处。",
+        "reversed": "为一个反复消耗你的模式设置可执行的边界或求助方式。"
+      }
+    },
+    {
+      "id": "major-16",
+      "arcana": "major",
+      "number": 16,
+      "romanNumeral": "XVI",
+      "name": "高塔",
+      "englishName": "The Tower",
+      "keywords": {
+        "upright": ["突变", "真相显现", "旧结构瓦解"],
+        "reversed": ["延迟冲击", "害怕改变", "内部重建"]
+      },
+      "meaning": {
+        "upright": "原本不稳固的结构可能正在被打破。冲击令人不安，但也让被忽视的事实无法继续隐藏。",
+        "reversed": "变化可能发生在内部，或你正努力推迟不可避免的调整。压住裂缝并不能恢复稳定。"
+      },
+      "advice": {
+        "upright": "先确保安全与基本秩序，再区分必须保留和可以重建的部分。",
+        "reversed": "主动处理一处已经显现的裂缝，不等它扩大。"
+      }
+    },
+    {
       "id": "major-17",
       "arcana": "major",
       "number": 17,
@@ -61,6 +361,86 @@
       "advice": {
         "upright": "保留一个只为自己恢复能量的小时，不要求它产生任何成果。",
         "reversed": "把目标缩小到今天，完成一件能让身体或情绪稍微松动的事。"
+      }
+    },
+    {
+      "id": "major-18",
+      "arcana": "major",
+      "number": 18,
+      "romanNumeral": "XVIII",
+      "name": "月亮",
+      "englishName": "The Moon",
+      "keywords": {
+        "upright": ["不确定", "潜意识", "模糊感受"],
+        "reversed": ["迷雾渐散", "误解", "焦虑放大"]
+      },
+      "meaning": {
+        "upright": "信息还不完整，情绪与想象容易填补空白。不要急于把模糊感解释成确定事实。",
+        "reversed": "一些混乱开始显露来源，但焦虑仍可能放大细节。澄清需要时间和可验证的信息。"
+      },
+      "advice": {
+        "upright": "把你知道的事实与担心的可能分别列出。",
+        "reversed": "验证一个最影响判断的假设，不继续依靠猜测。"
+      }
+    },
+    {
+      "id": "major-19",
+      "arcana": "major",
+      "number": 19,
+      "romanNumeral": "XIX",
+      "name": "太阳",
+      "englishName": "The Sun",
+      "keywords": {
+        "upright": ["清晰", "活力", "喜悦"],
+        "reversed": ["快乐受阻", "期待过高", "能量不足"]
+      },
+      "meaning": {
+        "upright": "事情正在变得明朗，真诚表达与直接行动会带来活力。允许自己看见已经取得的成果。",
+        "reversed": "光仍然存在，但疲惫、完美期待或过度比较削弱了感受快乐的能力。"
+      },
+      "advice": {
+        "upright": "公开确认一个真实进展，并与重要的人分享。",
+        "reversed": "降低一次不必要的高标准，给小成果留下被看见的空间。"
+      }
+    },
+    {
+      "id": "major-20",
+      "arcana": "major",
+      "number": 20,
+      "romanNumeral": "XX",
+      "name": "审判",
+      "englishName": "Judgement",
+      "keywords": {
+        "upright": ["觉醒", "回应召唤", "重新评价"],
+        "reversed": ["自我苛责", "拒绝回应", "困在过去"]
+      },
+      "meaning": {
+        "upright": "过去的经验正在汇聚成新的理解。现在适合诚实回顾，并回应那个越来越清晰的方向。",
+        "reversed": "内在批判可能让你难以承认改变，也可能因为害怕评价而拖延回应真正重要的事。"
+      },
+      "advice": {
+        "upright": "总结这段经历教会你的三件事，并据此做出一个新决定。",
+        "reversed": "把反省与惩罚分开，只保留能够指导下一步的部分。"
+      }
+    },
+    {
+      "id": "major-21",
+      "arcana": "major",
+      "number": 21,
+      "romanNumeral": "XXI",
+      "name": "世界",
+      "englishName": "The World",
+      "keywords": {
+        "upright": ["完成", "整合", "新的阶段"],
+        "reversed": ["尚未收尾", "缺少整合", "接近完成"]
+      },
+      "meaning": {
+        "upright": "一个周期趋于完整，经验、能力与身份正在被整合。完成并不是停止，而是带着成果进入下一阶段。",
+        "reversed": "你已经接近终点，但仍有细节、告别或内在确认没有完成。不要因为临近结束而仓促跳过收尾。"
+      },
+      "advice": {
+        "upright": "为这个阶段做一次总结和庆祝，再选择新的方向。",
+        "reversed": "列出最后三项未完成事项，安排一个明确的收尾时间。"
       }
     }
   ]

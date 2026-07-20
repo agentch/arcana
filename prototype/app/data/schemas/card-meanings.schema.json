@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/card-meanings.schema.json",
+  "title": "Arcana Card Meanings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "contentVersion", "locale", "cards"],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "1.0"},
+    "contentVersion": {"type": "string", "minLength": 1},
+    "locale": {"type": "string", "minLength": 2},
+    "cards": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 78,
+      "items": {"$ref": "#/$defs/card"}
+    }
+  },
+  "$defs": {
+    "orientationText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["upright", "reversed"],
+      "properties": {
+        "upright": {"type": "string", "minLength": 1},
+        "reversed": {"type": "string", "minLength": 1}
+      }
+    },
+    "orientationKeywords": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["upright", "reversed"],
+      "properties": {
+        "upright": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "reversed": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "arcana",
+        "number",
+        "romanNumeral",
+        "name",
+        "englishName",
+        "keywords",
+        "meaning",
+        "advice"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(major|minor)-[a-z0-9-]+$"},
+        "arcana": {"type": "string", "enum": ["major", "minor"]},
+        "number": {"type": "integer", "minimum": 0, "maximum": 21},
+        "romanNumeral": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "englishName": {"type": "string", "minLength": 1},
+        "suit": {
+          "type": "string",
+          "enum": ["wands", "cups", "swords", "pentacles"]
+        },
+        "rank": {"type": "string", "minLength": 1},
+        "keywords": {"$ref": "#/$defs/orientationKeywords"},
+        "meaning": {"$ref": "#/$defs/orientationText"},
+        "advice": {"$ref": "#/$defs/orientationText"}
+      }
+    }
+  }
+}

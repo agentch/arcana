@@ -2,25 +2,32 @@
   "schemaVersion": "1.0",
   "id": "arcana-symbolic",
   "name": "Arcana 符号原型牌组",
-  "edition": "prototype",
-  "version": "2026.07.1",
+  "edition": "prototype-major-arcana",
+  "version": "2026.07.2",
   "author": "Arcana",
   "license": "project-internal",
   "assets": {
-    "major-00": {
-      "image": null,
-      "fallbackSymbol": "❂",
-      "alt": "愚人牌原型占位符"
-    },
-    "major-06": {
-      "image": null,
-      "fallbackSymbol": "✦",
-      "alt": "恋人牌原型占位符"
-    },
-    "major-17": {
-      "image": null,
-      "fallbackSymbol": "✧",
-      "alt": "星星牌原型占位符"
-    }
+    "major-00": {"image": null, "fallbackSymbol": "❂", "alt": "愚人牌原型占位符"},
+    "major-01": {"image": null, "fallbackSymbol": "✦", "alt": "魔术师牌原型占位符"},
+    "major-02": {"image": null, "fallbackSymbol": "☾", "alt": "女祭司牌原型占位符"},
+    "major-03": {"image": null, "fallbackSymbol": "❀", "alt": "皇后牌原型占位符"},
+    "major-04": {"image": null, "fallbackSymbol": "♜", "alt": "皇帝牌原型占位符"},
+    "major-05": {"image": null, "fallbackSymbol": "✥", "alt": "教皇牌原型占位符"},
+    "major-06": {"image": null, "fallbackSymbol": "♡", "alt": "恋人牌原型占位符"},
+    "major-07": {"image": null, "fallbackSymbol": "✣", "alt": "战车牌原型占位符"},
+    "major-08": {"image": null, "fallbackSymbol": "∞", "alt": "力量牌原型占位符"},
+    "major-09": {"image": null, "fallbackSymbol": "◇", "alt": "隐士牌原型占位符"},
+    "major-10": {"image": null, "fallbackSymbol": "⟲", "alt": "命运之轮牌原型占位符"},
+    "major-11": {"image": null, "fallbackSymbol": "⚖", "alt": "正义牌原型占位符"},
+    "major-12": {"image": null, "fallbackSymbol": "⧖", "alt": "倒吊人牌原型占位符"},
+    "major-13": {"image": null, "fallbackSymbol": "✤", "alt": "死神牌原型占位符"},
+    "major-14": {"image": null, "fallbackSymbol": "⚗", "alt": "节制牌原型占位符"},
+    "major-15": {"image": null, "fallbackSymbol": "⛓", "alt": "恶魔牌原型占位符"},
+    "major-16": {"image": null, "fallbackSymbol": "⚡", "alt": "高塔牌原型占位符"},
+    "major-17": {"image": null, "fallbackSymbol": "✧", "alt": "星星牌原型占位符"},
+    "major-18": {"image": null, "fallbackSymbol": "☽", "alt": "月亮牌原型占位符"},
+    "major-19": {"image": null, "fallbackSymbol": "☀", "alt": "太阳牌原型占位符"},
+    "major-20": {"image": null, "fallbackSymbol": "♩", "alt": "审判牌原型占位符"},
+    "major-21": {"image": null, "fallbackSymbol": "◎", "alt": "世界牌原型占位符"}
   }
 }
