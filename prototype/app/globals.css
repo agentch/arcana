@@ -280,7 +280,7 @@ button {
 .question-box {
   width: 100%;
   min-height: 148px;
-  margin: 34px 0 16px;
+  margin: 18px 0 16px;
   padding: 18px;
   color: var(--ink);
   resize: none;
@@ -288,6 +288,42 @@ button {
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid var(--line);
   border-radius: 18px;
+}
+
+.question-categories {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.category-tab {
+  min-height: 38px;
+  padding: 8px 4px;
+  color: var(--muted);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.category-tab.active {
+  color: #1b1424;
+  font-weight: 700;
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.category-description {
+  margin: 10px 0 0;
+  color: #8d849c;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  text-align: center;
 }
 
 .question-box:focus {
@@ -299,20 +335,27 @@ button {
   color: #80778f;
 }
 
-.prompt-chips {
-  display: flex;
-  flex-wrap: wrap;
+.question-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin: 4px 0 26px;
 }
 
-.chip {
-  padding: 8px 12px;
+.option-chip {
+  min-height: 42px;
+  padding: 9px 10px;
   color: var(--muted);
   cursor: pointer;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
+  border-radius: 12px;
+}
+
+.option-chip.active {
+  color: var(--gold);
+  background: rgba(214, 185, 120, 0.08);
+  border-color: var(--gold-soft);
 }
 
 .draw-stage {

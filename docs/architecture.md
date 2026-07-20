@@ -112,6 +112,7 @@ interface Reading {
 data/
   card-meanings.json       # 78 张牌的稳定语义
   spreads.json             # 牌阵与牌位配置
+  question-prompts.json    # 问题分类、选项与开放式问题提示
   deck-manifests/
     rider-waite.json       # 只存经典版素材映射
     eastern.json           # 只存东方版素材映射
@@ -119,6 +120,8 @@ data/
 ```
 
 运行时由领域目录将 `CardMeaning + DeckCardAsset` 组合成可展示对象。页面只接收组合结果，不读取素材路径，也不负责解释牌阵配置。
+
+问题引导同样配置化。页面只保存 `questionCategoryId`、`questionOptionId` 和用户最终编辑后的问题文本，便于后续分析不同主题的使用情况，同时不限制用户自由输入。
 
 ## 5. 跨端边界
 

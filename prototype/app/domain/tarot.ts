@@ -49,6 +49,17 @@ export type SpreadDefinition = {
   positions: SpreadPosition[];
 };
 
+export type QuestionCategory = {
+  id: string;
+  name: string;
+  description: string;
+  options: Array<{
+    id: string;
+    name: string;
+    prompt: string;
+  }>;
+};
+
 export type DrawnCard = {
   cardId: string;
   orientation: Orientation;
@@ -58,6 +69,8 @@ export type DrawnCard = {
 export type Reading = {
   id: string;
   question: string;
+  questionCategoryId: string;
+  questionOptionId: string;
   cards: DrawnCard[];
   cardName: string;
   createdAt: string;

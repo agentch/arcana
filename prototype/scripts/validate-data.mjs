@@ -22,16 +22,20 @@ const [
   meanings,
   deck,
   spreads,
+  questionPrompts,
   meaningsSchema,
   deckSchema,
   spreadsSchema,
+  questionPromptsSchema,
 ] = await Promise.all([
   readJson("app/data/card-meanings.json"),
   readJson("app/data/deck-manifests/arcana-symbolic.json"),
   readJson("app/data/spreads.json"),
+  readJson("app/data/question-prompts.json"),
   readJson("app/data/schemas/card-meanings.schema.json"),
   readJson("app/data/schemas/deck-manifest.schema.json"),
   readJson("app/data/schemas/spreads.schema.json"),
+  readJson("app/data/schemas/question-prompts.schema.json"),
 ]);
 
 const ajv = new Ajv2020({allErrors: true, strict: true});
@@ -39,6 +43,12 @@ const ajv = new Ajv2020({allErrors: true, strict: true});
 assertSchema(ajv, meaningsSchema, meanings, "card-meanings.json");
 assertSchema(ajv, deckSchema, deck, "arcana-symbolic.json");
 assertSchema(ajv, spreadsSchema, spreads, "spreads.json");
+assertSchema(
+  ajv,
+  questionPromptsSchema,
+  questionPrompts,
+  "question-prompts.json",
+);
 
 const cardIds = meanings.cards.map((card) => card.id);
 assert.equal(new Set(cardIds).size, cardIds.length, "card IDs must be unique");
@@ -88,6 +98,32 @@ for (const spread of spreads.spreads) {
   );
 }
 
+const questionCategoryIds = questionPrompts.categories.map(
+  (category) => category.id,
+);
+assert.deepEqual(
+  questionCategoryIds,
+  ["love", "career", "family", "mood"],
+  "question categories must keep the agreed product order",
+);
+assert.equal(
+  new Set(questionCategoryIds).size,
+  questionCategoryIds.length,
+  "question category IDs must be unique",
+);
+for (const category of questionPrompts.categories) {
+  assert.equal(
+    category.options.length,
+    4,
+    `${category.id} must provide four question options`,
+  );
+  assert.equal(
+    new Set(category.options.map((option) => option.id)).size,
+    category.options.length,
+    `${category.id} option IDs must be unique`,
+  );
+}
+
 console.log(
-  `Validated ${meanings.cards.length} cards, ${Object.keys(deck.assets).length} deck assets, and ${spreads.spreads.length} spreads.`,
+  `Validated ${meanings.cards.length} cards, ${Object.keys(deck.assets).length} deck assets, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );

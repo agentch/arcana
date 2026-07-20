@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "promptsVersion": "2026.07.2",
+  "categories": [
+    {
+      "id": "love",
+      "name": "感情",
+      "description": "关系、沟通与个人需要",
+      "options": [
+        {"id": "relationship", "name": "关系现状", "prompt": "这段关系现在最需要我看见什么？"},
+        {"id": "single", "name": "单身与缘分", "prompt": "在建立新的关系前，我最需要准备什么？"},
+        {"id": "reconciliation", "name": "复合与告别", "prompt": "面对这段过去的关系，我该如何理解自己的需要？"},
+        {"id": "communication", "name": "沟通与边界", "prompt": "我可以如何改善沟通并照顾自己的边界？"}
+      ]
+    },
+    {
+      "id": "career",
+      "name": "职场",
+      "description": "工作选择、合作与成长",
+      "options": [
+        {"id": "current-work", "name": "当前工作", "prompt": "我目前的工作重点应该放在哪里？"},
+        {"id": "job-change", "name": "求职转行", "prompt": "面对职业方向的变化，我可以如何准备？"},
+        {"id": "collaboration", "name": "合作关系", "prompt": "我该如何改善当前的职场合作？"},
+        {"id": "growth", "name": "能力成长", "prompt": "当前阻碍我成长的模式是什么？"}
+      ]
+    },
+    {
+      "id": "family",
+      "name": "家庭",
+      "description": "家庭互动、责任与边界",
+      "options": [
+        {"id": "parents", "name": "父母关系", "prompt": "我该如何理解与父母之间目前的互动？"},
+        {"id": "parenting", "name": "亲子沟通", "prompt": "这段亲子互动最需要怎样的理解与沟通？"},
+        {"id": "responsibility", "name": "家庭责任", "prompt": "我可以如何更平衡地面对家庭责任？"},
+        {"id": "conflict", "name": "家庭矛盾", "prompt": "这次家庭矛盾真正需要处理的是什么？"}
+      ]
+    },
+    {
+      "id": "mood",
+      "name": "心情",
+      "description": "情绪觉察、恢复与自我照顾",
+      "options": [
+        {"id": "anxiety", "name": "焦虑不安", "prompt": "这份焦虑正在提醒我关注什么？"},
+        {"id": "low-mood", "name": "低落疲惫", "prompt": "我现在最需要照顾的感受是什么？"},
+        {"id": "confusion", "name": "迷茫纠结", "prompt": "面对目前的迷茫，我可以先看清什么？"},
+        {"id": "recovery", "name": "恢复平衡", "prompt": "我可以如何找回一点内在平衡？"}
+      ]
+    }
+  ]
+}

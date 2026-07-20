@@ -5,20 +5,20 @@ import {
   activeDeck,
   catalogVersions,
   getCards,
+  getQuestionCategories,
   getSpread,
 } from "./domain/catalog";
-import type { Orientation, Reading, RenderableCard } from "./domain/tarot";
+import type {
+  Orientation,
+  Reading,
+  RenderableCard,
+} from "./domain/tarot";
 
 type Screen = "home" | "question" | "draw" | "reveal" | "result" | "history";
 
 const cards = getCards();
 const activeSpread = getSpread("single-card");
-
-const prompts = [
-  "我现在最需要看见什么？",
-  "这段关系给我的提醒是什么？",
-  "我该如何面对眼前的变化？",
-];
+const questionCategories = getQuestionCategories();
 
 function readHistory(): Reading[] {
   if (typeof window === "undefined") return [];
@@ -46,6 +46,8 @@ function readHistory(): Reading[] {
         deckVersion: "prototype-legacy",
         spreadId: activeSpread.id,
         spreadVersion: "prototype-legacy",
+        questionCategoryId: "uncategorized",
+        questionOptionId: "custom",
       }];
     });
   } catch {
@@ -56,6 +58,10 @@ function readHistory(): Reading[] {
 export function ArcanaPrototype() {
   const [screen, setScreen] = useState<Screen>("home");
   const [question, setQuestion] = useState("");
+  const [questionCategoryId, setQuestionCategoryId] = useState(
+    questionCategories[0].id,
+  );
+  const [questionOptionId, setQuestionOptionId] = useState("");
   const [selectedCard, setSelectedCard] = useState<RenderableCard | null>(null);
   const [orientation, setOrientation] = useState<Orientation>("upright");
   const [shuffling, setShuffling] = useState(false);
@@ -71,6 +77,10 @@ export function ArcanaPrototype() {
     () => (selectedCard ? `${selectedCard.name} · ${orientationName}` : ""),
     [selectedCard, orientationName],
   );
+  const activeQuestionCategory =
+    questionCategories.find(
+      (category) => category.id === questionCategoryId,
+    ) ?? questionCategories[0];
 
   function startReading() {
     setQuestion("");
@@ -117,6 +127,8 @@ export function ArcanaPrototype() {
       deckVersion: catalogVersions.deck,
       spreadId: activeSpread.id,
       spreadVersion: catalogVersions.spreads,
+      questionCategoryId,
+      questionOptionId: questionOptionId || "custom",
     };
     const updated = [next, ...history].slice(0, 12);
     setHistory(updated);
@@ -170,6 +182,24 @@ export function ArcanaPrototype() {
             <p className="eyebrow">01 · Set an intention</p>
             <h1 className="screen-title">此刻，你想照见什么？</h1>
             <p className="screen-copy">开放式的问题，往往比“会不会”更能带来启发。</p>
+            <div className="question-categories" aria-label="问题分类">
+              {questionCategories.map((category) => (
+                <button
+                  className={`category-tab ${questionCategoryId === category.id ? "active" : ""}`}
+                  key={category.id}
+                  onClick={() => {
+                    setQuestionCategoryId(category.id);
+                    setQuestionOptionId("");
+                  }}
+                  aria-pressed={questionCategoryId === category.id}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+            <p className="category-description">
+              {activeQuestionCategory.description}
+            </p>
             <textarea
               className="question-box"
               value={question}
@@ -178,10 +208,19 @@ export function ArcanaPrototype() {
               placeholder="例如：我该如何面对眼前的变化？"
               aria-label="输入你想探索的问题"
             />
-            <div className="prompt-chips">
-              {prompts.map((prompt) => (
-                <button className="chip" key={prompt} onClick={() => setQuestion(prompt)}>
-                  {prompt}
+            <div className="question-options" aria-label={`${activeQuestionCategory.name}选项`}>
+              {activeQuestionCategory.options.map((option) => (
+                <button
+                  className={`option-chip ${questionOptionId === option.id ? "active" : ""}`}
+                  key={option.id}
+                  onClick={() => {
+                    setQuestionOptionId(option.id);
+                    setQuestion(option.prompt);
+                  }}
+                  aria-pressed={questionOptionId === option.id}
+                  aria-label={`${option.name}：${option.prompt}`}
+                >
+                  {option.name}
                 </button>
               ))}
             </div>

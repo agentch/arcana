@@ -1,9 +1,11 @@
 import cardMeaningsJson from "../data/card-meanings.json";
 import prototypeDeckJson from "../data/deck-manifests/arcana-symbolic.json";
+import questionPromptsJson from "../data/question-prompts.json";
 import spreadsJson from "../data/spreads.json";
 import type {
   CardMeaning,
   DeckManifest,
+  QuestionCategory,
   RenderableCard,
   SpreadDefinition,
 } from "./tarot";
@@ -11,11 +13,14 @@ import type {
 const cardMeanings = cardMeaningsJson.cards as CardMeaning[];
 const deck = prototypeDeckJson as DeckManifest;
 const spreads = spreadsJson.spreads as SpreadDefinition[];
+const questionCategories =
+  questionPromptsJson.categories as QuestionCategory[];
 
 export const catalogVersions = {
   content: cardMeaningsJson.contentVersion,
   deck: deck.version,
   spreads: spreadsJson.spreadsVersion,
+  prompts: questionPromptsJson.promptsVersion,
 } as const;
 
 export const activeDeck = {
@@ -42,4 +47,8 @@ export function getSpread(spreadId: string): SpreadDefinition {
 
 export function getEnabledSpreads(): SpreadDefinition[] {
   return spreads.filter((spread) => spread.enabled);
+}
+
+export function getQuestionCategories(): QuestionCategory[] {
+  return questionCategories;
 }
