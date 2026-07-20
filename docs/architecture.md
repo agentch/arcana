@@ -39,16 +39,34 @@ src/
 
 ```ts
 type Orientation = 'upright' | 'reversed'
+type TopicId = 'love' | 'career' | 'finance' | 'growth'
 
 interface CardMeaning {
   id: string
   number: number
   arcana: 'major' | 'minor'
   suit?: 'wands' | 'cups' | 'swords' | 'pentacles'
-  name: string
-  keywords: Record<Orientation, string[]>
-  meaning: Record<Orientation, string>
-  advice: Record<Orientation, string>
+  name: {
+    zh: string
+    en: string
+  }
+  core: {
+    summary: string
+    symbols: string[]
+    element?: string
+  }
+  upright: OrientationMeaning
+  reversed: OrientationMeaning
+  topics: Record<TopicId, Record<Orientation, string>>
+}
+
+interface OrientationMeaning {
+  keywords: string[]
+  overview: string
+  light: string
+  shadow: string
+  advice: string[]
+  reflection: string
 }
 
 interface DeckCardAsset {
@@ -104,13 +122,18 @@ interface Reading {
 
 牌义、牌组和牌阵分别带版本号，历史记录同时保存三个版本，避免内容更新后无法还原。`CardMeaning` 不允许出现 `image` 或 `deckId`；`DeckManifest.assets` 通过稳定的 `cardId` 映射素材。同一份“愚人”牌义可以组合经典版、东方版、赛博版等不同视觉牌组。
 
+正式牌义采用分层内容模型，不使用单个超长 `meaning` 字段。运行时通过“基础牌义 + 正逆位 + 问题主题 + 牌阵位置”生成单牌解读，再由各牌摘要和牌位关系形成多牌组合解读。详细字段、展示字数和迁移策略见 [`card-content-model.md`](card-content-model.md)。
+
+`TopicId` 当前记录的是正式内容候选枚举。Schema v2 实施前需要与问题引导中的感情、职场、家庭、心情分类完成显式映射或统一，页面不得自行推断。
+
 牌阵同样使用版本化配置。页面不能通过 `if (spread === ...)` 写死牌位含义；抽牌数量、位置名称、排列顺序和解读提示均从 `SpreadDefinition` 读取。
 
 ### 数据文件边界
 
 ```text
 data/
-  card-meanings.json       # 78 张牌的稳定语义
+  cards/                   # 78 张牌的稳定分层语义，每张一份 JSON
+    major-00.json
   spreads.json             # 牌阵与牌位配置
   question-prompts.json    # 问题分类、选项与开放式问题提示
   deck-manifests/
