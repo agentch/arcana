@@ -27,6 +27,15 @@ npm run build
 
 当前仅使用愚人、恋人和星星三张抽象占位牌面，不包含正式塔罗素材。
 
+## 数据边界
+
+- `app/data/card-meanings.json`：稳定的牌 ID、名称、关键词、正逆位牌义和建议
+- `app/data/deck-manifests/`：牌组元数据与 `cardId → image` 素材映射
+- `app/data/spreads.json`：牌阵、牌位、顺序和解读提示
+- `app/domain/catalog.ts`：组合牌义与当前牌组资源，页面不直接读取图片路径
+
+切换牌组时只替换牌组清单，不复制牌义。增加牌阵时只增加配置，不在页面中写死牌位。
+
 ## 验证
 
 ```bash

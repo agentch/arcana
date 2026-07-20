@@ -1,95 +1,18 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  activeDeck,
+  catalogVersions,
+  getCards,
+  getSpread,
+} from "./domain/catalog";
+import type { Orientation, Reading, RenderableCard } from "./domain/tarot";
 
 type Screen = "home" | "question" | "draw" | "reveal" | "result" | "history";
-type Orientation = "upright" | "reversed";
 
-type Card = {
-  id: string;
-  number: string;
-  name: string;
-  en: string;
-  symbol: string;
-  keywords: Record<Orientation, string[]>;
-  meaning: Record<Orientation, string>;
-  advice: Record<Orientation, string>;
-};
-
-type Reading = {
-  id: string;
-  cardId: string;
-  cardName: string;
-  orientation: Orientation;
-  question: string;
-  createdAt: string;
-};
-
-const cards: Card[] = [
-  {
-    id: "major-00",
-    number: "0",
-    name: "愚人",
-    en: "The Fool",
-    symbol: "❂",
-    keywords: {
-      upright: ["新的开始", "信任", "探索"],
-      reversed: ["准备不足", "迟疑", "冒进"],
-    },
-    meaning: {
-      upright:
-        "这张牌把注意力带回“第一步”。你不需要现在就看清整条路，但可以用好奇心替代对未知的控制。",
-      reversed:
-        "新的方向正在召唤你，但准备与冲动之间还需要一点空间。先看清脚下，再决定迈出多大的一步。",
-    },
-    advice: {
-      upright: "写下今天可以完成的最小行动，让开始本身成为答案。",
-      reversed: "先确认一个最重要的风险，再决定继续、等待或调整方向。",
-    },
-  },
-  {
-    id: "major-06",
-    number: "VI",
-    name: "恋人",
-    en: "The Lovers",
-    symbol: "✦",
-    keywords: {
-      upright: ["连接", "选择", "一致"],
-      reversed: ["失衡", "价值冲突", "回避"],
-    },
-    meaning: {
-      upright:
-        "恋人牌关注的不只是关系，也是一场忠于内心的选择。真正重要的是，你的行动是否与你珍视的价值保持一致。",
-      reversed:
-        "此刻的张力可能来自未被说出的差异。比起急着得到结论，更值得先辨认彼此真正重视的是什么。",
-    },
-    advice: {
-      upright: "用一句诚实而不指责的话，表达你真正希望建立的连接。",
-      reversed: "把“我应该”暂时放下，分别写出自己的需要与可以协商的部分。",
-    },
-  },
-  {
-    id: "major-17",
-    number: "XVII",
-    name: "星星",
-    en: "The Star",
-    symbol: "✧",
-    keywords: {
-      upright: ["希望", "疗愈", "清晰"],
-      reversed: ["疲惫", "失去信心", "内在修复"],
-    },
-    meaning: {
-      upright:
-        "星星带来安静的希望。它不承诺事情立刻变好，而是提醒你：恢复已经发生，只是需要被耐心看见。",
-      reversed:
-        "你可能暂时感受不到方向，但这不等于希望消失了。先照顾耗尽的部分，比强迫自己乐观更重要。",
-    },
-    advice: {
-      upright: "保留一个只为自己恢复能量的小时，不要求它产生任何成果。",
-      reversed: "把目标缩小到今天，完成一件能让身体或情绪稍微松动的事。",
-    },
-  },
-];
+const cards = getCards();
+const activeSpread = getSpread("single-card");
 
 const prompts = [
   "我现在最需要看见什么？",
@@ -100,7 +23,31 @@ const prompts = [
 function readHistory(): Reading[] {
   if (typeof window === "undefined") return [];
   try {
-    return JSON.parse(window.localStorage.getItem("arcana-history") ?? "[]");
+    const stored = JSON.parse(
+      window.localStorage.getItem("arcana-history") ?? "[]",
+    ) as Array<Reading & {
+      cardId?: string;
+      orientation?: Orientation;
+    }>;
+
+    return stored.flatMap((item) => {
+      if (Array.isArray(item.cards)) return [item];
+      if (!item.cardId || !item.orientation) return [];
+
+      return [{
+        ...item,
+        cards: [{
+          cardId: item.cardId,
+          orientation: item.orientation,
+          positionId: activeSpread.positions[0].id,
+        }],
+        contentVersion: "prototype-legacy",
+        deckId: activeDeck.id,
+        deckVersion: "prototype-legacy",
+        spreadId: activeSpread.id,
+        spreadVersion: "prototype-legacy",
+      }];
+    });
   } catch {
     return [];
   }
@@ -109,7 +56,7 @@ function readHistory(): Reading[] {
 export function ArcanaPrototype() {
   const [screen, setScreen] = useState<Screen>("home");
   const [question, setQuestion] = useState("");
-  const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+  const [selectedCard, setSelectedCard] = useState<RenderableCard | null>(null);
   const [orientation, setOrientation] = useState<Orientation>("upright");
   const [shuffling, setShuffling] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -155,11 +102,21 @@ export function ArcanaPrototype() {
     if (!selectedCard) return;
     const next: Reading = {
       id: crypto.randomUUID(),
-      cardId: selectedCard.id,
       cardName: selectedCard.name,
-      orientation,
       question: question.trim() || "此刻，我最需要看见什么？",
       createdAt: new Date().toISOString(),
+      cards: [
+        {
+          cardId: selectedCard.id,
+          orientation,
+          positionId: activeSpread.positions[0].id,
+        },
+      ],
+      contentVersion: catalogVersions.content,
+      deckId: activeDeck.id,
+      deckVersion: catalogVersions.deck,
+      spreadId: activeSpread.id,
+      spreadVersion: catalogVersions.spreads,
     };
     const updated = [next, ...history].slice(0, 12);
     setHistory(updated);
@@ -266,10 +223,10 @@ export function ArcanaPrototype() {
               >
                 <span className="card-back" />
                 <span className="card-face">
-                  <span className="card-number">{selectedCard.number}</span>
-                  <span className="card-art">{selectedCard.symbol}</span>
+                  <span className="card-number">{selectedCard.romanNumeral}</span>
+                  <span className="card-art">{selectedCard.asset.fallbackSymbol}</span>
                   <span className="card-name">{selectedCard.name}</span>
-                  <span className="card-en">{selectedCard.en}</span>
+                  <span className="card-en">{selectedCard.englishName}</span>
                 </span>
               </button>
             </div>
@@ -285,10 +242,10 @@ export function ArcanaPrototype() {
               <div className={`tarot-card revealed ${orientation === "reversed" ? "reversed" : ""}`}>
                 <span className="card-back" />
                 <span className="card-face">
-                  <span className="card-number">{selectedCard.number}</span>
-                  <span className="card-art">{selectedCard.symbol}</span>
+                  <span className="card-number">{selectedCard.romanNumeral}</span>
+                  <span className="card-art">{selectedCard.asset.fallbackSymbol}</span>
                   <span className="card-name">{selectedCard.name}</span>
-                  <span className="card-en">{selectedCard.en}</span>
+                  <span className="card-en">{selectedCard.englishName}</span>
                 </span>
               </div>
             </div>
@@ -328,7 +285,7 @@ export function ArcanaPrototype() {
                   {history.map((item) => (
                     <article className="history-item" key={item.id}>
                       <div className="history-meta">
-                        <span>{item.cardName} · {item.orientation === "upright" ? "正位" : "逆位"}</span>
+                        <span>{item.cardName} · {item.cards[0]?.orientation === "upright" ? "正位" : "逆位"}</span>
                         <time>{new Date(item.createdAt).toLocaleDateString("zh-CN")}</time>
                       </div>
                       <p>{item.question}</p>

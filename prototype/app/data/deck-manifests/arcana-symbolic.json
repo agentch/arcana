@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0",
+  "id": "arcana-symbolic",
+  "name": "Arcana 符号原型牌组",
+  "edition": "prototype",
+  "version": "2026.07.1",
+  "author": "Arcana",
+  "license": "project-internal",
+  "assets": {
+    "major-00": {
+      "image": null,
+      "fallbackSymbol": "❂",
+      "alt": "愚人牌原型占位符"
+    },
+    "major-06": {
+      "image": null,
+      "fallbackSymbol": "✦",
+      "alt": "恋人牌原型占位符"
+    },
+    "major-17": {
+      "image": null,
+      "fallbackSymbol": "✧",
+      "alt": "星星牌原型占位符"
+    }
+  }
+}

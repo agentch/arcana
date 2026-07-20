@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "1.0",
+  "contentVersion": "2026.07.1",
+  "locale": "zh-CN",
+  "cards": [
+    {
+      "id": "major-00",
+      "arcana": "major",
+      "number": 0,
+      "romanNumeral": "0",
+      "name": "愚人",
+      "englishName": "The Fool",
+      "keywords": {
+        "upright": ["新的开始", "信任", "探索"],
+        "reversed": ["准备不足", "迟疑", "冒进"]
+      },
+      "meaning": {
+        "upright": "这张牌把注意力带回“第一步”。你不需要现在就看清整条路，但可以用好奇心替代对未知的控制。",
+        "reversed": "新的方向正在召唤你，但准备与冲动之间还需要一点空间。先看清脚下，再决定迈出多大的一步。"
+      },
+      "advice": {
+        "upright": "写下今天可以完成的最小行动，让开始本身成为答案。",
+        "reversed": "先确认一个最重要的风险，再决定继续、等待或调整方向。"
+      }
+    },
+    {
+      "id": "major-06",
+      "arcana": "major",
+      "number": 6,
+      "romanNumeral": "VI",
+      "name": "恋人",
+      "englishName": "The Lovers",
+      "keywords": {
+        "upright": ["连接", "选择", "一致"],
+        "reversed": ["失衡", "价值冲突", "回避"]
+      },
+      "meaning": {
+        "upright": "恋人牌关注的不只是关系，也是一场忠于内心的选择。真正重要的是，你的行动是否与你珍视的价值保持一致。",
+        "reversed": "此刻的张力可能来自未被说出的差异。比起急着得到结论，更值得先辨认彼此真正重视的是什么。"
+      },
+      "advice": {
+        "upright": "用一句诚实而不指责的话，表达你真正希望建立的连接。",
+        "reversed": "把“我应该”暂时放下，分别写出自己的需要与可以协商的部分。"
+      }
+    },
+    {
+      "id": "major-17",
+      "arcana": "major",
+      "number": 17,
+      "romanNumeral": "XVII",
+      "name": "星星",
+      "englishName": "The Star",
+      "keywords": {
+        "upright": ["希望", "疗愈", "清晰"],
+        "reversed": ["疲惫", "失去信心", "内在修复"]
+      },
+      "meaning": {
+        "upright": "星星带来安静的希望。它不承诺事情立刻变好，而是提醒你：恢复已经发生，只是需要被耐心看见。",
+        "reversed": "你可能暂时感受不到方向，但这不等于希望消失了。先照顾耗尽的部分，比强迫自己乐观更重要。"
+      },
+      "advice": {
+        "upright": "保留一个只为自己恢复能量的小时，不要求它产生任何成果。",
+        "reversed": "把目标缩小到今天，完成一件能让身体或情绪稍微松动的事。"
+      }
+    }
+  ]
+}

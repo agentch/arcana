@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0",
+  "spreadsVersion": "2026.07.1",
+  "spreads": [
+    {
+      "id": "single-card",
+      "name": "单牌",
+      "description": "聚焦当下最值得看见的主题",
+      "enabled": true,
+      "supportedTopics": ["general", "love", "career", "growth"],
+      "positions": [
+        {
+          "id": "focus",
+          "name": "此刻的提示",
+          "prompt": "将牌义连接到用户问题，并提供一个可执行的小建议",
+          "order": 1
+        }
+      ]
+    },
+    {
+      "id": "timeline",
+      "name": "时间流",
+      "description": "理解一件事如何从过去发展到未来",
+      "enabled": false,
+      "supportedTopics": ["general", "love", "career", "growth"],
+      "positions": [
+        {"id": "past", "name": "过去", "prompt": "已形成影响的背景、经验或旧模式", "order": 1},
+        {"id": "present", "name": "现在", "prompt": "当前最重要的力量、状态或选择", "order": 2},
+        {"id": "future", "name": "未来趋势", "prompt": "沿当前路径继续时可能出现的倾向", "order": 3}
+      ]
+    },
+    {
+      "id": "sacred-triangle",
+      "name": "圣三角",
+      "description": "分析现状、核心挑战与可行建议",
+      "enabled": false,
+      "supportedTopics": ["general", "career", "growth"],
+      "positions": [
+        {"id": "situation", "name": "现状", "prompt": "当前可见与未充分看见的状态", "order": 1},
+        {"id": "challenge", "name": "挑战", "prompt": "阻力、矛盾、盲点或需要整合的部分", "order": 2},
+        {"id": "guidance", "name": "建议", "prompt": "可以尝试的态度、行动或观察角度", "order": 3}
+      ]
+    },
+    {
+      "id": "relationship-five",
+      "name": "恋爱关系五牌阵",
+      "description": "观察双方状态、关系动力与发展趋势",
+      "enabled": false,
+      "supportedTopics": ["love"],
+      "positions": [
+        {"id": "self", "name": "我的状态", "prompt": "我的需要、感受与关系模式", "order": 1},
+        {"id": "other", "name": "对方状态", "prompt": "我所感受到的对方立场，不声称读取真实思想", "order": 2},
+        {"id": "connection", "name": "关系现状", "prompt": "双方当前形成的互动动力", "order": 3},
+        {"id": "challenge", "name": "关系挑战", "prompt": "冲突、误解、边界或外部压力", "order": 4},
+        {"id": "direction", "name": "发展趋势", "prompt": "维持当前互动方式时的可能方向", "order": 5}
+      ]
+    },
+    {
+      "id": "choice-five",
+      "name": "二选一牌阵",
+      "description": "对比两种选择的过程与可能倾向",
+      "enabled": false,
+      "supportedTopics": ["general", "love", "career", "growth"],
+      "positions": [
+        {"id": "context", "name": "当前处境", "prompt": "做出选择时真正重要的背景与需要", "order": 1},
+        {"id": "option-a-process", "name": "A 的过程", "prompt": "选择 A 可能面对的体验、资源和挑战", "order": 2},
+        {"id": "option-a-direction", "name": "A 的倾向", "prompt": "沿 A 路径发展的可能方向", "order": 3},
+        {"id": "option-b-process", "name": "B 的过程", "prompt": "选择 B 可能面对的体验、资源和挑战", "order": 4},
+        {"id": "option-b-direction", "name": "B 的倾向", "prompt": "沿 B 路径发展的可能方向", "order": 5}
+      ]
+    }
+  ]
+}

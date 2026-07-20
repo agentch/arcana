@@ -40,25 +40,31 @@ src/
 ```ts
 type Orientation = 'upright' | 'reversed'
 
-interface TarotCard {
+interface CardMeaning {
   id: string
-  deckId: string
   number: number
   arcana: 'major' | 'minor'
   suit?: 'wands' | 'cups' | 'swords' | 'pentacles'
   name: string
   keywords: Record<Orientation, string[]>
   meaning: Record<Orientation, string>
-  image: string
+  advice: Record<Orientation, string>
 }
 
-interface TarotDeck {
+interface DeckCardAsset {
+  image: string | null
+  fallbackSymbol?: string
+  alt: string
+}
+
+interface DeckManifest {
   id: string
   name: string
   author: string
   edition: string
   license: string
-  contentVersion: string
+  version: string
+  assets: Record<string, DeckCardAsset>
 }
 
 interface DrawnCard {
@@ -90,12 +96,29 @@ interface Reading {
   cards: DrawnCard[]
   createdAt: string
   contentVersion: string
+  deckId: string
+  deckVersion: string
+  spreadVersion: string
 }
 ```
 
-牌组、牌库与解读内容必须带版本号，避免内容更新后历史记录无法还原。图片不与牌的语义 ID 绑定，同一张“恋人”牌可以对应经典版、东方版或其他原创牌组。
+牌义、牌组和牌阵分别带版本号，历史记录同时保存三个版本，避免内容更新后无法还原。`CardMeaning` 不允许出现 `image` 或 `deckId`；`DeckManifest.assets` 通过稳定的 `cardId` 映射素材。同一份“愚人”牌义可以组合经典版、东方版、赛博版等不同视觉牌组。
 
 牌阵同样使用版本化配置。页面不能通过 `if (spread === ...)` 写死牌位含义；抽牌数量、位置名称、排列顺序和解读提示均从 `SpreadDefinition` 读取。
+
+### 数据文件边界
+
+```text
+data/
+  card-meanings.json       # 78 张牌的稳定语义
+  spreads.json             # 牌阵与牌位配置
+  deck-manifests/
+    rider-waite.json       # 只存经典版素材映射
+    eastern.json           # 只存东方版素材映射
+    cyber.json             # 只存赛博版素材映射
+```
+
+运行时由领域目录将 `CardMeaning + DeckCardAsset` 组合成可展示对象。页面只接收组合结果，不读取素材路径，也不负责解释牌阵配置。
 
 ## 5. 跨端边界
 
@@ -167,3 +190,9 @@ interface ReadingRepository {
 状态：采用。
 
 原因：AI 是差异化方向，但不能让密钥、模型厂商或不可控生成过程进入客户端核心逻辑。前端只依赖 `InterpretationService` 接口；未启用服务时使用审核过的固定牌义和组合模板。
+
+### ADR-005：牌义、牌组素材、牌阵配置三层分离
+
+状态：采用。
+
+原因：牌义是跨牌组的稳定领域知识，图片属于具体牌组，牌阵是独立的解读结构。三者分别版本化并通过稳定 ID 关联，换牌组不复制牌义，增加牌阵不修改页面业务逻辑。
