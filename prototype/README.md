@@ -19,7 +19,8 @@ npm run build
 - 首页
 - 问题输入与示例问题
 - 洗牌和跳过动效
-- 随机抽取一张样例牌
+- 单牌与时间流牌阵选择
+- 时间流过去、现在、未来三张无重复抽取与逐张翻牌
 - 正位 / 逆位
 - 翻牌与固定解读
 - 本地保存和最近记录
@@ -44,6 +45,6 @@ npm run data:validate
 npm test
 ```
 
-`data:validate` 会执行 JSON Schema 校验，并检查 card ID 唯一性、牌组素材映射完整性、牌阵位置顺序和版本化边界。
+`data:validate` 会执行 JSON Schema 校验，并检查 card ID 唯一性、牌组素材映射完整性、牌阵位置顺序、问题推荐牌阵和版本化边界。
 
 原型通过评审后，正式产品将在 Taro + React 工程中实现。

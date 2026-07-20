@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.1",
+  "spreadsVersion": "2026.07.2",
   "spreads": [
     {
       "id": "single-card",
@@ -21,7 +21,7 @@
       "id": "timeline",
       "name": "时间流",
       "description": "理解一件事如何从过去发展到未来",
-      "enabled": false,
+      "enabled": true,
       "supportedTopics": ["general", "love", "career", "growth"],
       "positions": [
         {"id": "past", "name": "过去", "prompt": "已形成影响的背景、经验或旧模式", "order": 1},

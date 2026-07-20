@@ -213,6 +213,11 @@ button {
   box-shadow: 0 12px 34px rgba(201, 165, 96, 0.18);
 }
 
+.primary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
 .secondary-button {
   color: var(--ink);
   background: transparent;
@@ -358,6 +363,63 @@ button {
   border-color: var(--gold-soft);
 }
 
+.section-label {
+  margin: 4px 0 10px;
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+}
+
+.spread-options {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.spread-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 13px 14px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+}
+
+.spread-option.active {
+  background: rgba(214, 185, 120, 0.08);
+  border-color: var(--gold-soft);
+}
+
+.spread-option span {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  color: var(--gold);
+}
+
+.spread-option small {
+  padding: 2px 6px;
+  color: #1b1424;
+  font-family: system-ui, sans-serif;
+  font-size: 9px;
+  background: var(--gold);
+  border-radius: 999px;
+}
+
+.spread-option em {
+  max-width: 68%;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  font-style: normal;
+  text-align: right;
+}
+
 .draw-stage {
   display: flex;
   flex: 1;
@@ -434,6 +496,52 @@ button {
   perspective: 1200px;
 }
 
+.spread-card-grid {
+  display: grid;
+  width: 100%;
+  gap: 8px;
+  align-items: start;
+  margin: 24px 0;
+}
+
+.spread-card-grid.count-1 {
+  grid-template-columns: minmax(0, 180px);
+  justify-content: center;
+}
+
+.spread-card-grid.count-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.spread-card-grid.result {
+  margin-top: 18px;
+}
+
+.spread-card-item {
+  min-width: 0;
+  text-align: center;
+}
+
+.position-label {
+  min-height: 18px;
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.spread-card-scene {
+  width: 100%;
+  aspect-ratio: 154 / 252;
+  perspective: 1200px;
+}
+
+.spread-card-scene.single {
+  width: 180px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
 .tarot-card {
   position: relative;
   width: 100%;
@@ -441,6 +549,32 @@ button {
   cursor: pointer;
   transform-style: preserve-3d;
   transition: transform 800ms cubic-bezier(0.2, 0.72, 0.2, 1);
+}
+
+.tarot-card.compact .card-number {
+  top: 8px;
+  font-size: 8px;
+}
+
+.tarot-card.compact .card-art {
+  width: 68%;
+  height: 55%;
+  margin-bottom: 7px;
+  font-size: clamp(28px, 9vw, 42px);
+}
+
+.tarot-card.compact .card-name {
+  font-size: clamp(11px, 3.5vw, 15px);
+}
+
+.tarot-card.compact .card-en {
+  margin-top: 2px;
+  font-size: 5px;
+  letter-spacing: 0.08em;
+}
+
+.tarot-card.compact .card-back::before {
+  font-size: 30px;
 }
 
 .tarot-card.revealed {
@@ -540,6 +674,26 @@ button {
   font-weight: 500;
 }
 
+.reading-list {
+  display: grid;
+  gap: 12px;
+}
+
+.reading-list .reading-panel {
+  margin: 0;
+}
+
+.reading-position {
+  margin: 0 0 7px;
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+.reading-panel.overview {
+  border-color: var(--gold-soft);
+}
+
 .keywords {
   display: flex;
   flex-wrap: wrap;
@@ -596,6 +750,14 @@ button {
   color: var(--muted);
   font-family: system-ui, sans-serif;
   font-size: 13px;
+}
+
+.history-cards {
+  display: block;
+  margin-top: 10px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .empty-state {

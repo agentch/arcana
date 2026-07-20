@@ -33,11 +33,15 @@
     "option": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "name", "prompt"],
+      "required": ["id", "name", "prompt", "recommendedSpreadId"],
       "properties": {
         "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
         "name": {"type": "string", "minLength": 1},
-        "prompt": {"type": "string", "minLength": 1}
+        "prompt": {"type": "string", "minLength": 1},
+        "recommendedSpreadId": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        }
       }
     }
   }

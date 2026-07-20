@@ -57,6 +57,7 @@ export type QuestionCategory = {
     id: string;
     name: string;
     prompt: string;
+    recommendedSpreadId: string;
   }>;
 };
 
@@ -72,7 +73,7 @@ export type Reading = {
   questionCategoryId: string;
   questionOptionId: string;
   cards: DrawnCard[];
-  cardName: string;
+  cardNames: string[];
   createdAt: string;
   contentVersion: string;
   deckId: string;

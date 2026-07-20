@@ -78,6 +78,9 @@ if (majorArcana.length > 0) {
 }
 
 const spreadIds = spreads.spreads.map((spread) => spread.id);
+const enabledSpreadIds = spreads.spreads
+  .filter((spread) => spread.enabled)
+  .map((spread) => spread.id);
 assert.equal(
   new Set(spreadIds).size,
   spreadIds.length,
@@ -122,7 +125,23 @@ for (const category of questionPrompts.categories) {
     category.options.length,
     `${category.id} option IDs must be unique`,
   );
+  for (const option of category.options) {
+    assert.ok(
+      spreadIds.includes(option.recommendedSpreadId),
+      `${category.id}/${option.id} references an unknown spread`,
+    );
+    assert.ok(
+      enabledSpreadIds.includes(option.recommendedSpreadId),
+      `${category.id}/${option.id} must recommend an enabled spread`,
+    );
+  }
 }
+
+assert.deepEqual(
+  enabledSpreadIds,
+  ["single-card", "timeline"],
+  "only the completed single-card and timeline spreads may be enabled",
+);
 
 console.log(
   `Validated ${meanings.cards.length} cards, ${Object.keys(deck.assets).length} deck assets, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
