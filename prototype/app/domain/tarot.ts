@@ -1,4 +1,11 @@
 export type Orientation = "upright" | "reversed";
+export type MeaningTopicId =
+  | "love"
+  | "career"
+  | "family"
+  | "mood"
+  | "finance"
+  | "growth";
 
 export type CardMeaning = {
   id: string;
@@ -33,6 +40,48 @@ export type RenderableCard = CardMeaning & {
   asset: CardAsset;
 };
 
+export type LayeredOrientationMeaning = {
+  keywords: string[];
+  overview: string;
+  light: string;
+  shadow: string;
+  advice: string[];
+  reflection: string;
+};
+
+export type LayeredCardMeaning = {
+  schemaVersion: "2.0";
+  contentVersion: string;
+  id: string;
+  arcana: "major" | "minor";
+  number: number;
+  romanNumeral?: string;
+  suit?: "wands" | "cups" | "swords" | "pentacles";
+  rank?: string;
+  name: {
+    zh: string;
+    en: string;
+  };
+  core: {
+    summary: string;
+    symbols: Array<{
+      name: string;
+      meaning: string;
+    }>;
+    element: string;
+  };
+  upright: LayeredOrientationMeaning;
+  reversed: LayeredOrientationMeaning;
+  topics: Partial<
+    Record<MeaningTopicId, Record<Orientation, string>>
+  >;
+  editorial: {
+    status: "draft" | "in-review" | "approved";
+    lastReviewedAt: string | null;
+    sourceNotes?: string;
+  };
+};
+
 export type SpreadPosition = {
   id: string;
   name: string;
@@ -50,7 +99,7 @@ export type SpreadDefinition = {
 };
 
 export type QuestionCategory = {
-  id: string;
+  id: "love" | "career" | "family" | "mood";
   name: string;
   description: string;
   options: Array<{

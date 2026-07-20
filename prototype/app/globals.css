@@ -719,10 +719,121 @@ button {
   line-height: 1.8;
 }
 
+.reading-summary {
+  margin: 0;
+  color: var(--paper);
+  font-family: system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.reading-section {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reading-section h3,
+.meaning-polarity h3 {
+  margin: 0 0 8px;
+  color: var(--gold);
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.topic-text {
+  margin-top: 12px;
+}
+
+.position-context {
+  margin: 12px 0 0;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.symbol-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.symbol-list div {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 10px;
+}
+
+.symbol-list dt {
+  color: var(--paper);
+  font-size: 13px;
+}
+
+.symbol-list dd {
+  margin: 0;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.meaning-polarity {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.meaning-polarity > div {
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.035);
+  border-radius: 14px;
+}
+
+.meaning-polarity p {
+  margin: 0;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
 .advice {
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.advice ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.advice li + li {
+  margin-top: 6px;
+}
+
+.advice.compact p {
+  margin: 6px 0 0;
+}
+
+.reflection-question {
+  margin: 18px 0 0;
+  padding: 16px 18px;
+  color: var(--paper);
+  font-size: 16px;
+  line-height: 1.7;
+  background: rgba(214, 185, 120, 0.08);
+  border-left: 2px solid var(--gold);
+  border-radius: 0 14px 14px 0;
+}
+
+@media (min-width: 520px) {
+  .meaning-polarity {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .history-list {

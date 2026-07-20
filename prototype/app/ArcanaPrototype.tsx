@@ -6,6 +6,8 @@ import {
   catalogVersions,
   getCards,
   getEnabledSpreads,
+  getLayeredMeaning,
+  getMeaningTopic,
   getQuestionCategories,
   getSpread,
 } from "./domain/catalog";
@@ -13,6 +15,7 @@ import {
   drawForSpread,
   type DrawnRenderableCard,
 } from "./domain/draw";
+import { composeInterpretation } from "./domain/interpretation";
 import type {
   Orientation,
   Reading,
@@ -494,32 +497,97 @@ export function ArcanaPrototype() {
             </div>
             <div className="reading-list">
               {drawnCards.map((drawn) => {
-                const orientationName =
-                  drawn.orientation === "upright" ? "正位" : "逆位";
+                const interpretation = composeInterpretation({
+                  card: drawn.card,
+                  layeredMeaning: getLayeredMeaning(drawn.card.id),
+                  orientation: drawn.orientation,
+                  topicId: getMeaningTopic(questionCategoryId),
+                  position: drawn.position,
+                });
+                const showFullReading = drawnCards.length === 1;
                 return (
                   <article
                     className="reading-panel"
                     key={drawn.position.id}
                   >
-                    <p className="reading-position">{drawn.position.name}</p>
+                    <p className="reading-position">
+                      {interpretation.positionName}
+                    </p>
                     <h2>
-                      {drawn.card.name} · {orientationName}
+                      {interpretation.cardName} ·{" "}
+                      {interpretation.orientationName}
                     </h2>
                     <div className="keywords">
-                      {drawn.card.keywords[drawn.orientation].map((keyword) => (
+                      {interpretation.keywords.map((keyword) => (
                         <span className="keyword" key={keyword}>
                           {keyword}
                         </span>
                       ))}
                     </div>
-                    <p className="reading-text">
-                      {drawn.card.meaning[drawn.orientation]}
+                    <p className="reading-summary">
+                      {interpretation.summary}
                     </p>
-                    <p className="advice">
-                      <strong>{drawn.position.name}可以观察：</strong>
-                      <br />
-                      {drawn.card.advice[drawn.orientation]}
-                    </p>
+                    {showFullReading ? (
+                      <>
+                        <div className="reading-section">
+                          <h3>详细解读</h3>
+                          <p className="reading-text">
+                            {interpretation.overview}
+                          </p>
+                          {interpretation.topicText && (
+                            <p className="reading-text topic-text">
+                              {interpretation.topicText}
+                            </p>
+                          )}
+                          <p className="position-context">
+                            {interpretation.positionText}
+                          </p>
+                        </div>
+                        {interpretation.symbols.length > 0 && (
+                          <div className="reading-section">
+                            <h3>牌面象征</h3>
+                            <dl className="symbol-list">
+                              {interpretation.symbols.map((symbol) => (
+                                <div key={symbol.name}>
+                                  <dt>{symbol.name}</dt>
+                                  <dd>{symbol.meaning}</dd>
+                                </div>
+                              ))}
+                            </dl>
+                          </div>
+                        )}
+                        {interpretation.light && interpretation.shadow && (
+                          <div className="meaning-polarity">
+                            <div>
+                              <h3>可以运用</h3>
+                              <p>{interpretation.light}</p>
+                            </div>
+                            <div>
+                              <h3>需要留意</h3>
+                              <p>{interpretation.shadow}</p>
+                            </div>
+                          </div>
+                        )}
+                        <div className="advice">
+                          <strong>可以尝试：</strong>
+                          <ul>
+                            {interpretation.advice.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        {interpretation.reflection && (
+                          <blockquote className="reflection-question">
+                            {interpretation.reflection}
+                          </blockquote>
+                        )}
+                      </>
+                    ) : (
+                      <div className="advice compact">
+                        <strong>{drawn.position.name}可以观察：</strong>
+                        <p>{interpretation.advice[0]}</p>
+                      </div>
+                    )}
                   </article>
                 );
               })}
