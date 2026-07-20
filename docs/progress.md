@@ -101,5 +101,9 @@ fix(prototype): refine tarot prototype after review
 验证：
 决策：
 风险：
-下一步：
+下一步打算：
+1.
+2.
+3.
+需要确认：
 ```
