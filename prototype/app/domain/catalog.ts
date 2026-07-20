@@ -1,6 +1,6 @@
 import cardMeaningsJson from "../data/card-meanings.json";
 import foolMeaningV2Json from "../data/cards/major-00.json";
-import prototypeDeckJson from "../data/deck-manifests/arcana-symbolic.json";
+import activeDeckJson from "../data/deck-manifests/rws-original.json";
 import meaningTopicMapJson from "../data/meaning-topic-map.json";
 import questionPromptsJson from "../data/question-prompts.json";
 import spreadsJson from "../data/spreads.json";
@@ -15,7 +15,7 @@ import type {
 } from "./tarot";
 
 const cardMeanings = cardMeaningsJson.cards as CardMeaning[];
-const deck = prototypeDeckJson as DeckManifest;
+const deck = activeDeckJson as DeckManifest;
 const spreads = spreadsJson.spreads as SpreadDefinition[];
 const questionCategories =
   questionPromptsJson.categories as QuestionCategory[];

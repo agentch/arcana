@@ -1,8 +1,8 @@
 # Rider–Waite–Smith 原始牌面素材规范
 
-版本：v1.1
+版本：v1.2
 制定日期：2026-07-20  
-状态：TaionWC Pam-A 候选来源技术审计通过；许可待项目方最终接受
+状态：TaionWC Pam-A 来源已接受；78张正面牌已完成接入和验收
 
 ## 1. 牌组选择
 
@@ -197,17 +197,17 @@ Web 文件从 `source/` 通过可重复执行的脚本生成。
 
 ## 10. 入库验收清单
 
-- [ ] 78张牌完整且来自同一来源、同一批次
+- [x] 78张牌完整且来自同一来源、同一批次
 - [ ] 牌背来源已确认或使用 Arcana 自有牌背
-- [ ] 来源页面和许可文本已归档
-- [ ] 商业使用、修改与再分发权限已核验
-- [ ] 原始文件已保存且 SHA-256 已生成
-- [ ] Web 文件通过固定脚本生成
-- [ ] 原始文件与 Web 文件尺寸、大小、格式已记录
-- [ ] `deck.json` 与 `manifest.json` 通过 JSON Schema
-- [ ] manifest 中所有 `cardId` 与基础牌义一一对应
-- [ ] 页面不直接引用 `source/`
-- [ ] 项目负责人完成最终授权与视觉验收
+- [x] 来源页面和许可记录已归档
+- [x] 商业使用、修改与再分发权限已核验并由项目方接受
+- [x] 原始文件已保存且 SHA-256 已生成
+- [x] Web 文件通过固定脚本生成
+- [x] 原始文件与 Web 文件尺寸、大小、格式已记录
+- [x] `deck.json` 与 `manifest.json` 通过 JSON Schema
+- [x] manifest 中所有 `cardId` 与标准卡牌索引一一对应
+- [x] 页面不直接引用 `source/`
+- [x] 项目负责人完成正面牌授权与视觉验收
 
 只有全部完成后，`rws-original` 才能从 `pending-review` 改为 `approved`。
 
@@ -215,14 +215,22 @@ Web 文件从 `source/` 通过可重复执行的脚本生成。
 
 ```bash
 npm run data:scaffold:rws
+npm run assets:download:commons
 npm run assets:verify
 npm run assets:build:web
+npm run assets:review:sheet
+npm run assets:approve
+npm run assets:sync:public
 ```
 
 - `data:scaffold:rws` 只用于首次生成78张索引和空 Manifest；已有数据时默认拒绝覆盖，防止清除来源或授权审核记录。
+- `assets:download:commons` 只下载审计清单锁定的文件，并核对 Commons SHA-1、字节数、尺寸和格式。
 - `assets:verify` 按素材状态检查路径边界、文件存在性、格式、尺寸、大小、SHA-256 和授权门槛。
 - `assets:build:web` 只处理 `source-ready` 条目，按照 `deck.json` 固定参数生成 WebP，写回元数据后再次执行完整校验。
+- `assets:review:sheet` 生成78张总览，供人工检查混版、缺牌、重复和异常裁切。
+- `assets:approve` 只允许来源和许可已批准、Web 文件完整的素材进入 `approved`。
+- `assets:sync:public` 根据牌组映射生成站点静态副本，不让业务逻辑引用归档原图。
 
-截至2026-07-20，78个槽位均为 `pending-source`，没有接入或发布任何未经核验的扫描文件。
+截至2026-07-20，78张正面牌均为 `approved`；牌背仍保持独立待定。
 
 候选来源的详细核验记录见 [`rws-source-audit.md`](rws-source-audit.md)。

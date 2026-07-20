@@ -1,5 +1,5 @@
 import {createHash} from "node:crypto";
-import {mkdir, readFile, stat, writeFile} from "node:fs/promises";
+import {copyFile, mkdir, readFile, stat, writeFile} from "node:fs/promises";
 import {dirname, resolve, sep} from "node:path";
 import {fileURLToPath} from "node:url";
 import sharp from "sharp";
@@ -8,6 +8,12 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const deckRoot = resolve(root, "app/data/decks/rws-original");
 const deckPath = resolve(deckRoot, "deck.json");
 const manifestPath = resolve(deckRoot, "manifest.json");
+const cardIndexPath = resolve(root, "app/data/card-index.json");
+const activeDeckPath = resolve(
+  root,
+  "app/data/deck-manifests/rws-original.json",
+);
+const publicRoot = resolve(root, "public/tarot/rws-original");
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
@@ -120,7 +126,6 @@ export async function verifyAssets() {
     if (webActual.mediaType !== "image/webp") {
       throw new Error(`${asset.cardId}.web must be image/webp`);
     }
-
     if (
       asset.status === "approved" &&
       (deck.source.status !== "verified" || deck.license.status !== "approved")
@@ -140,13 +145,50 @@ export async function verifyAssets() {
   };
 }
 
+async function syncPublicAssets(deck, manifest, cardIndex) {
+  await mkdir(publicRoot, {recursive: true});
+  for (const asset of Object.values(manifest.assets)) {
+    if (asset.status !== "web-ready" && asset.status !== "approved") {
+      throw new Error(`${asset.cardId} is not ready for public asset sync`);
+    }
+    const webPath = resolveDeckFile(asset.web.file, "web");
+    await copyFile(webPath, resolve(publicRoot, `${asset.cardId}.webp`));
+  }
+
+  const activeDeck = {
+    schemaVersion: "1.0",
+    id: deck.id,
+    name: deck.name,
+    edition: deck.edition,
+    version: deck.version,
+    author: "Pamela Colman Smith",
+    license: deck.license.name,
+    assets: Object.fromEntries(
+      cardIndex.cards.map((card) => [
+        card.id,
+        {
+          image: `/tarot/rws-original/${card.id}.webp`,
+          alt: `${card.name.zh}（${card.name.en}）Rider-Waite-Smith 牌面`,
+        },
+      ]),
+    ),
+  };
+  await writeFile(
+    activeDeckPath,
+    `${JSON.stringify(activeDeck, null, 2)}\n`,
+    "utf8",
+  );
+}
+
 async function buildWebAssets() {
-  const [deck, manifest] = await Promise.all([
+  const [deck, manifest, cardIndex] = await Promise.all([
     readJson(deckPath),
     readJson(manifestPath),
+    readJson(cardIndexPath),
   ]);
   let built = 0;
   await mkdir(resolve(deckRoot, "web"), {recursive: true});
+  await mkdir(publicRoot, {recursive: true});
 
   for (const asset of Object.values(manifest.assets)) {
     if (asset.status !== "source-ready") continue;
@@ -167,7 +209,6 @@ async function buildWebAssets() {
       })
       .webp({quality: deck.assetBuild.quality})
       .toFile(webPath);
-
     asset.web = {
       ...(await inspectFile(webFile, "web")),
       originalFileName: null,
@@ -181,7 +222,34 @@ async function buildWebAssets() {
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
+  await syncPublicAssets(deck, manifest, cardIndex);
   return built;
+}
+
+async function approveAssets() {
+  const [deck, manifest] = await Promise.all([
+    readJson(deckPath),
+    readJson(manifestPath),
+  ]);
+  if (deck.source.status !== "verified" || deck.license.status !== "approved") {
+    throw new Error("Source and license must be approved before asset approval");
+  }
+  const invalid = Object.values(manifest.assets).filter(
+    (asset) => asset.status !== "web-ready" && asset.status !== "approved",
+  );
+  if (invalid.length > 0) {
+    throw new Error(`${invalid.length} assets are not ready for approval`);
+  }
+  for (const asset of Object.values(manifest.assets)) {
+    asset.status = "approved";
+  }
+  await writeFile(
+    manifestPath,
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
+  const result = await verifyAssets();
+  return result.approved;
 }
 
 const command = process.argv[2] ?? "verify";
@@ -196,6 +264,17 @@ if (command === "verify") {
   process.stdout.write(
     `Built ${built} WebP files. Verified ${result.total} asset slots.\n`,
   );
+} else if (command === "approve") {
+  const approved = await approveAssets();
+  process.stdout.write(`Approved ${approved} verified RWS assets.\n`);
+} else if (command === "sync-public") {
+  const [deck, manifest, cardIndex] = await Promise.all([
+    readJson(deckPath),
+    readJson(manifestPath),
+    readJson(cardIndexPath),
+  ]);
+  await syncPublicAssets(deck, manifest, cardIndex);
+  process.stdout.write(`Synced ${manifest.cardCount} public RWS assets.\n`);
 } else {
   throw new Error(`Unknown command: ${command}`);
 }

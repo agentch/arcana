@@ -13,8 +13,13 @@
     "data:migrate:v2": "node scripts/migrate-card-meanings-v1-to-v2.mjs",
     "data:scaffold:rws": "node scripts/generate-rws-scaffold.mjs",
     "assets:audit:commons": "node scripts/audit-commons-rws-source.mjs",
+    "assets:download:commons": "node scripts/download-commons-rws-assets.mjs",
     "assets:verify": "node scripts/process-deck-assets.mjs verify",
     "assets:build:web": "node scripts/process-deck-assets.mjs build-web",
+    "assets:review:sheet": "node scripts/create-rws-review-sheet.mjs",
+    "assets:approve": "node scripts/process-deck-assets.mjs approve",
+    "assets:sync:public": "node scripts/process-deck-assets.mjs sync-public",
+    "prebuild": "npm run assets:sync:public",
     "test": "npm run data:validate && npm run assets:verify && npm run build && node --test tests/*.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"

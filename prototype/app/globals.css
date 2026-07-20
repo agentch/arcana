@@ -622,6 +622,13 @@ button {
   transform: rotateY(180deg);
 }
 
+.card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .card-number {
   position: absolute;
   top: 16px;

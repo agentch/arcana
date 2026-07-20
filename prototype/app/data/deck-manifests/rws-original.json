@@ -1,0 +1,323 @@
+{
+  "schemaVersion": "1.0",
+  "id": "rws-original",
+  "name": "Rider–Waite–Smith Original",
+  "edition": "Pam-A",
+  "version": "1.0.0",
+  "author": "Pamela Colman Smith",
+  "license": "Public Domain Mark 1.0",
+  "assets": {
+    "major-00": {
+      "image": "/tarot/rws-original/major-00.webp",
+      "alt": "愚人（The Fool）Rider-Waite-Smith 牌面"
+    },
+    "major-01": {
+      "image": "/tarot/rws-original/major-01.webp",
+      "alt": "魔术师（The Magician）Rider-Waite-Smith 牌面"
+    },
+    "major-02": {
+      "image": "/tarot/rws-original/major-02.webp",
+      "alt": "女祭司（The High Priestess）Rider-Waite-Smith 牌面"
+    },
+    "major-03": {
+      "image": "/tarot/rws-original/major-03.webp",
+      "alt": "皇后（The Empress）Rider-Waite-Smith 牌面"
+    },
+    "major-04": {
+      "image": "/tarot/rws-original/major-04.webp",
+      "alt": "皇帝（The Emperor）Rider-Waite-Smith 牌面"
+    },
+    "major-05": {
+      "image": "/tarot/rws-original/major-05.webp",
+      "alt": "教皇（The Hierophant）Rider-Waite-Smith 牌面"
+    },
+    "major-06": {
+      "image": "/tarot/rws-original/major-06.webp",
+      "alt": "恋人（The Lovers）Rider-Waite-Smith 牌面"
+    },
+    "major-07": {
+      "image": "/tarot/rws-original/major-07.webp",
+      "alt": "战车（The Chariot）Rider-Waite-Smith 牌面"
+    },
+    "major-08": {
+      "image": "/tarot/rws-original/major-08.webp",
+      "alt": "力量（Strength）Rider-Waite-Smith 牌面"
+    },
+    "major-09": {
+      "image": "/tarot/rws-original/major-09.webp",
+      "alt": "隐士（The Hermit）Rider-Waite-Smith 牌面"
+    },
+    "major-10": {
+      "image": "/tarot/rws-original/major-10.webp",
+      "alt": "命运之轮（Wheel of Fortune）Rider-Waite-Smith 牌面"
+    },
+    "major-11": {
+      "image": "/tarot/rws-original/major-11.webp",
+      "alt": "正义（Justice）Rider-Waite-Smith 牌面"
+    },
+    "major-12": {
+      "image": "/tarot/rws-original/major-12.webp",
+      "alt": "倒吊人（The Hanged Man）Rider-Waite-Smith 牌面"
+    },
+    "major-13": {
+      "image": "/tarot/rws-original/major-13.webp",
+      "alt": "死神（Death）Rider-Waite-Smith 牌面"
+    },
+    "major-14": {
+      "image": "/tarot/rws-original/major-14.webp",
+      "alt": "节制（Temperance）Rider-Waite-Smith 牌面"
+    },
+    "major-15": {
+      "image": "/tarot/rws-original/major-15.webp",
+      "alt": "恶魔（The Devil）Rider-Waite-Smith 牌面"
+    },
+    "major-16": {
+      "image": "/tarot/rws-original/major-16.webp",
+      "alt": "高塔（The Tower）Rider-Waite-Smith 牌面"
+    },
+    "major-17": {
+      "image": "/tarot/rws-original/major-17.webp",
+      "alt": "星星（The Star）Rider-Waite-Smith 牌面"
+    },
+    "major-18": {
+      "image": "/tarot/rws-original/major-18.webp",
+      "alt": "月亮（The Moon）Rider-Waite-Smith 牌面"
+    },
+    "major-19": {
+      "image": "/tarot/rws-original/major-19.webp",
+      "alt": "太阳（The Sun）Rider-Waite-Smith 牌面"
+    },
+    "major-20": {
+      "image": "/tarot/rws-original/major-20.webp",
+      "alt": "审判（Judgement）Rider-Waite-Smith 牌面"
+    },
+    "major-21": {
+      "image": "/tarot/rws-original/major-21.webp",
+      "alt": "世界（The World）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-ace": {
+      "image": "/tarot/rws-original/minor-wands-ace.webp",
+      "alt": "权杖王牌（Ace of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-two": {
+      "image": "/tarot/rws-original/minor-wands-two.webp",
+      "alt": "权杖二（Two of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-three": {
+      "image": "/tarot/rws-original/minor-wands-three.webp",
+      "alt": "权杖三（Three of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-four": {
+      "image": "/tarot/rws-original/minor-wands-four.webp",
+      "alt": "权杖四（Four of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-five": {
+      "image": "/tarot/rws-original/minor-wands-five.webp",
+      "alt": "权杖五（Five of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-six": {
+      "image": "/tarot/rws-original/minor-wands-six.webp",
+      "alt": "权杖六（Six of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-seven": {
+      "image": "/tarot/rws-original/minor-wands-seven.webp",
+      "alt": "权杖七（Seven of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-eight": {
+      "image": "/tarot/rws-original/minor-wands-eight.webp",
+      "alt": "权杖八（Eight of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-nine": {
+      "image": "/tarot/rws-original/minor-wands-nine.webp",
+      "alt": "权杖九（Nine of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-ten": {
+      "image": "/tarot/rws-original/minor-wands-ten.webp",
+      "alt": "权杖十（Ten of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-page": {
+      "image": "/tarot/rws-original/minor-wands-page.webp",
+      "alt": "权杖侍从（Page of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-knight": {
+      "image": "/tarot/rws-original/minor-wands-knight.webp",
+      "alt": "权杖骑士（Knight of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-queen": {
+      "image": "/tarot/rws-original/minor-wands-queen.webp",
+      "alt": "权杖王后（Queen of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-wands-king": {
+      "image": "/tarot/rws-original/minor-wands-king.webp",
+      "alt": "权杖国王（King of Wands）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-ace": {
+      "image": "/tarot/rws-original/minor-cups-ace.webp",
+      "alt": "圣杯王牌（Ace of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-two": {
+      "image": "/tarot/rws-original/minor-cups-two.webp",
+      "alt": "圣杯二（Two of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-three": {
+      "image": "/tarot/rws-original/minor-cups-three.webp",
+      "alt": "圣杯三（Three of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-four": {
+      "image": "/tarot/rws-original/minor-cups-four.webp",
+      "alt": "圣杯四（Four of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-five": {
+      "image": "/tarot/rws-original/minor-cups-five.webp",
+      "alt": "圣杯五（Five of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-six": {
+      "image": "/tarot/rws-original/minor-cups-six.webp",
+      "alt": "圣杯六（Six of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-seven": {
+      "image": "/tarot/rws-original/minor-cups-seven.webp",
+      "alt": "圣杯七（Seven of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-eight": {
+      "image": "/tarot/rws-original/minor-cups-eight.webp",
+      "alt": "圣杯八（Eight of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-nine": {
+      "image": "/tarot/rws-original/minor-cups-nine.webp",
+      "alt": "圣杯九（Nine of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-ten": {
+      "image": "/tarot/rws-original/minor-cups-ten.webp",
+      "alt": "圣杯十（Ten of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-page": {
+      "image": "/tarot/rws-original/minor-cups-page.webp",
+      "alt": "圣杯侍从（Page of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-knight": {
+      "image": "/tarot/rws-original/minor-cups-knight.webp",
+      "alt": "圣杯骑士（Knight of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-queen": {
+      "image": "/tarot/rws-original/minor-cups-queen.webp",
+      "alt": "圣杯王后（Queen of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-cups-king": {
+      "image": "/tarot/rws-original/minor-cups-king.webp",
+      "alt": "圣杯国王（King of Cups）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-ace": {
+      "image": "/tarot/rws-original/minor-swords-ace.webp",
+      "alt": "宝剑王牌（Ace of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-two": {
+      "image": "/tarot/rws-original/minor-swords-two.webp",
+      "alt": "宝剑二（Two of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-three": {
+      "image": "/tarot/rws-original/minor-swords-three.webp",
+      "alt": "宝剑三（Three of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-four": {
+      "image": "/tarot/rws-original/minor-swords-four.webp",
+      "alt": "宝剑四（Four of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-five": {
+      "image": "/tarot/rws-original/minor-swords-five.webp",
+      "alt": "宝剑五（Five of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-six": {
+      "image": "/tarot/rws-original/minor-swords-six.webp",
+      "alt": "宝剑六（Six of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-seven": {
+      "image": "/tarot/rws-original/minor-swords-seven.webp",
+      "alt": "宝剑七（Seven of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-eight": {
+      "image": "/tarot/rws-original/minor-swords-eight.webp",
+      "alt": "宝剑八（Eight of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-nine": {
+      "image": "/tarot/rws-original/minor-swords-nine.webp",
+      "alt": "宝剑九（Nine of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-ten": {
+      "image": "/tarot/rws-original/minor-swords-ten.webp",
+      "alt": "宝剑十（Ten of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-page": {
+      "image": "/tarot/rws-original/minor-swords-page.webp",
+      "alt": "宝剑侍从（Page of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-knight": {
+      "image": "/tarot/rws-original/minor-swords-knight.webp",
+      "alt": "宝剑骑士（Knight of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-queen": {
+      "image": "/tarot/rws-original/minor-swords-queen.webp",
+      "alt": "宝剑王后（Queen of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-swords-king": {
+      "image": "/tarot/rws-original/minor-swords-king.webp",
+      "alt": "宝剑国王（King of Swords）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-ace": {
+      "image": "/tarot/rws-original/minor-pentacles-ace.webp",
+      "alt": "钱币王牌（Ace of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-two": {
+      "image": "/tarot/rws-original/minor-pentacles-two.webp",
+      "alt": "钱币二（Two of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-three": {
+      "image": "/tarot/rws-original/minor-pentacles-three.webp",
+      "alt": "钱币三（Three of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-four": {
+      "image": "/tarot/rws-original/minor-pentacles-four.webp",
+      "alt": "钱币四（Four of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-five": {
+      "image": "/tarot/rws-original/minor-pentacles-five.webp",
+      "alt": "钱币五（Five of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-six": {
+      "image": "/tarot/rws-original/minor-pentacles-six.webp",
+      "alt": "钱币六（Six of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-seven": {
+      "image": "/tarot/rws-original/minor-pentacles-seven.webp",
+      "alt": "钱币七（Seven of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-eight": {
+      "image": "/tarot/rws-original/minor-pentacles-eight.webp",
+      "alt": "钱币八（Eight of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-nine": {
+      "image": "/tarot/rws-original/minor-pentacles-nine.webp",
+      "alt": "钱币九（Nine of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-ten": {
+      "image": "/tarot/rws-original/minor-pentacles-ten.webp",
+      "alt": "钱币十（Ten of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-page": {
+      "image": "/tarot/rws-original/minor-pentacles-page.webp",
+      "alt": "钱币侍从（Page of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-knight": {
+      "image": "/tarot/rws-original/minor-pentacles-knight.webp",
+      "alt": "钱币骑士（Knight of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-queen": {
+      "image": "/tarot/rws-original/minor-pentacles-queen.webp",
+      "alt": "钱币王后（Queen of Pentacles）Rider-Waite-Smith 牌面"
+    },
+    "minor-pentacles-king": {
+      "image": "/tarot/rws-original/minor-pentacles-king.webp",
+      "alt": "钱币国王（King of Pentacles）Rider-Waite-Smith 牌面"
+    }
+  }
+}

@@ -21,7 +21,7 @@ export type CardMeaning = {
 
 export type CardAsset = {
   image: string | null;
-  fallbackSymbol: string;
+  fallbackSymbol?: string;
   alt: string;
 };
 

@@ -44,7 +44,7 @@ const [
   sourceAuditSchema,
 ] = await Promise.all([
   readJson("app/data/card-meanings.json"),
-  readJson("app/data/deck-manifests/arcana-symbolic.json"),
+  readJson("app/data/deck-manifests/rws-original.json"),
   readJson("app/data/spreads.json"),
   readJson("app/data/question-prompts.json"),
   readJson("app/data/meaning-topic-map.json"),
@@ -71,7 +71,7 @@ const ajv = new Ajv2020({allErrors: true, strict: true});
 
 assertSchema(ajv, meaningsSchema, meanings, "card-meanings.json");
 assertSchema(ajv, meaningV2Schema, foolV2, "cards/major-00.json");
-assertSchema(ajv, deckSchema, deck, "arcana-symbolic.json");
+assertSchema(ajv, deckSchema, deck, "deck-manifests/rws-original.json");
 assertSchema(ajv, spreadsSchema, spreads, "spreads.json");
 assertSchema(
   ajv,
@@ -159,6 +159,11 @@ assert.equal(
   "formal deck and manifest must use the same deck ID",
 );
 assert.equal(
+  deck.id,
+  formalDeck.id,
+  "the active deck must use the approved formal deck",
+);
+assert.equal(
   formalDeck.sourceBatchId,
   sourceAudit.sourceBatchId,
   "formal deck must pin the audited Commons source batch",
@@ -186,6 +191,18 @@ assert.deepEqual(
 for (const [cardId, asset] of Object.entries(formalDeckManifest.assets)) {
   assert.equal(asset.cardId, cardId, `${cardId} manifest key must match cardId`);
 }
+assert.deepEqual(
+  Object.keys(deck.assets),
+  standardCardIds,
+  "the active RWS deck must expose all 78 cards in standard order",
+);
+for (const cardId of standardCardIds) {
+  assert.equal(
+    deck.assets[cardId].image,
+    `/tarot/rws-original/${cardId}.webp`,
+    `${cardId} must resolve through the active deck mapping`,
+  );
+}
 if (cardBacks.defaultBackId === null) {
   assert.equal(
     cardBacks.backs.length,
@@ -198,10 +215,10 @@ if (cardBacks.defaultBackId === null) {
     "defaultBackId must reference a configured card back",
   );
 }
-assert.deepEqual(
-  Object.keys(deck.assets).sort(),
-  [...cardIds].sort(),
-  "the active deck must map every card meaning exactly once",
+assert.equal(
+  cardIds.every((cardId) => deck.assets[cardId]),
+  true,
+  "the active deck must map every available card meaning",
 );
 assert.equal(
   meanings.cards.some((card) => "image" in card || "deckId" in card),
@@ -297,5 +314,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, 1 complete v2 sample, ${Object.keys(deck.assets).length} prototype assets, ${Object.keys(formalDeckManifest.assets).length} RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, 1 complete v2 sample, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );

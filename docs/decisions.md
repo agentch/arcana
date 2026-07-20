@@ -208,10 +208,21 @@
 ## D-027：RWS 候选来源选用 Commons TaionWC Pam-A 集合
 
 - 日期：2026-07-20
-- 状态：技术审计通过，许可待项目方最终接受
+- 状态：已接受并落实
 - 候选：Wikimedia Commons 的 `Rider-Waite-Smith tarot deck (TaionWC)` 分类。
 - 完整性：分类明确为 TaionWC 成套上传的 Pam-A image set，共78个文件。
 - 一致性：78个文件均为 JPEG，宽1090–1144、高1919–1920；作者、原作日期和使用条款字段一致。
 - 权利元数据：78个文件均标记 Public domain、Public Domain Mark 和 `PD-old-80-expired`。
 - 固化：逐文件页面、下载地址、当前版本、SHA-1、尺寸和许可字段写入 `source-audit.json`，并生成不可变 `sourceBatchId`。
-- 边界：Wikimedia 不提供权利状态保证；在项目方接受该风险前，许可保持 `pending-review`，不把文件标记为正式批准素材。
+- 边界：Wikimedia 不提供权利状态保证；项目方于2026-07-20明确接受该免责声明，并批准该集合进入正式素材管线。
+
+## D-028：启用 RWS Original 作为首套正式牌面
+
+- 日期：2026-07-20
+- 状态：已决定并落实
+- 决策：下载 `source-audit.json` 固化的78个文件版本，逐项核对 Commons SHA-1、字节数、像素尺寸和 JPEG 格式，并计算项目 SHA-256。
+- 原图：保留未经修改的78张扫描文件，以稳定 `cardId` 命名；原始 Commons 文件名继续记录在 Manifest。
+- Web 图：固定使用最大宽1200、`inside`、不放大、质量84的 WebP 转换参数；不裁切、不重新上色。
+- 发布映射：业务层只读取 `deck-manifests/rws-original.json`，牌义数据中不保存图片路径。
+- 验收：78张总览确认完整、顺序正确、无重复、无混版、无异常裁切后，全部素材状态标记为 `approved`。
+- 牌背：本决定仅覆盖78张正面牌，牌背仍独立待定。

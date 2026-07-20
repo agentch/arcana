@@ -122,10 +122,24 @@ function CardVisual({
     <>
       <span className="card-back" />
       <span className="card-face">
-        <span className="card-number">{drawn.card.romanNumeral}</span>
-        <span className="card-art">{drawn.card.asset.fallbackSymbol}</span>
-        <span className="card-name">{drawn.card.name}</span>
-        <span className="card-en">{drawn.card.englishName}</span>
+        {drawn.card.asset.image ? (
+          // The deck pipeline already produces immutable, optimized WebP files.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="card-image"
+            src={drawn.card.asset.image}
+            alt={drawn.card.asset.alt}
+          />
+        ) : (
+          <>
+            <span className="card-number">{drawn.card.romanNumeral}</span>
+            <span className="card-art">
+              {drawn.card.asset.fallbackSymbol ?? "✦"}
+            </span>
+            <span className="card-name">{drawn.card.name}</span>
+            <span className="card-en">{drawn.card.englishName}</span>
+          </>
+        )}
       </span>
     </>
   );

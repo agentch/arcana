@@ -5,6 +5,7 @@
 /.wrangler/
 /outputs/
 /work/
+/public/tarot/
 
 # Generated framework files
 next-env.d.ts

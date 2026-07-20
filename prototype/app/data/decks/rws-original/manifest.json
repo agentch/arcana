@@ -6,1718 +6,1718 @@
   "assets": {
     "major-00": {
       "cardId": "major-00",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-00.jpg",
+        "originalFileName": "RWS Tarot 00 Fool.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1144,
+        "height": 1919,
+        "bytes": 1177006,
+        "sha256": "557c6592b73107508eac65ef140d090d2ccd657ac5a2d5d4fe31c6c2ceacbcb5"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-00.webp",
+        "mediaType": "image/webp",
+        "width": 1144,
+        "height": 1919,
+        "bytes": 451468,
+        "sha256": "77adf51a2e0a59797d6ea53102d860e0b152ed4956f3fa27b5874fed614f6c26",
+        "originalFileName": null
       }
     },
     "major-01": {
       "cardId": "major-01",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-01.jpg",
+        "originalFileName": "RWS Tarot 01 Magician.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 800458,
+        "sha256": "e0569e468545abfd2987ec0af5d3c51da3a9d478e37077aeaa1d715ddfc9941b"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-01.webp",
+        "mediaType": "image/webp",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 454098,
+        "sha256": "58da59099ad082ce9a0ba32f73ca82193d59f0b3241e712f83c5e44e5f765306",
+        "originalFileName": null
       }
     },
     "major-02": {
       "cardId": "major-02",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-02.jpg",
+        "originalFileName": "RWS Tarot 02 High Priestess.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 884438,
+        "sha256": "0e87b5a22187a299334188c2e8fd178125151f9015c122f6946367489cfd252a"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-02.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 551938,
+        "sha256": "482728f6f567cc60d984ae77c82a0151e7ee03364ece2920a568f12d585726f8",
+        "originalFileName": null
       }
     },
     "major-03": {
       "cardId": "major-03",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-03.jpg",
+        "originalFileName": "RWS Tarot 03 Empress.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1123,
+        "height": 1920,
+        "bytes": 949129,
+        "sha256": "2f0a9885c4f4e68bbca4cb40d3d5f42d4c7559f914bb5b3765ee429c74c142df"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-03.webp",
+        "mediaType": "image/webp",
+        "width": 1123,
+        "height": 1920,
+        "bytes": 585670,
+        "sha256": "bd58562c13ce5fd54368c456054576502731d17c56cfefd81a24d0dbcd6e43a9",
+        "originalFileName": null
       }
     },
     "major-04": {
       "cardId": "major-04",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-04.jpg",
+        "originalFileName": "RWS Tarot 04 Emperor.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 938373,
+        "sha256": "7a800b57c5b7da7b493e6968da31325327134e98083e95ee75b3db6eaef7e868"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-04.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 600912,
+        "sha256": "ebc15c79b58eb97b8392719811dfae850b5f4d3f348fe5132504ab54359d4641",
+        "originalFileName": null
       }
     },
     "major-05": {
       "cardId": "major-05",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-05.jpg",
+        "originalFileName": "RWS Tarot 05 Hierophant.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 900561,
+        "sha256": "68faba7f016b2d76b2fc2200f834279a0b08b7228767ae744fcdc70f9402699d"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-05.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 555088,
+        "sha256": "9c17263ba8b20bcee11667ba91fedc537eb88a7781e66d54e1114ea5a2ecd013",
+        "originalFileName": null
       }
     },
     "major-06": {
       "cardId": "major-06",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-06.jpg",
+        "originalFileName": "RWS Tarot 06 Lovers.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1122,
+        "height": 1920,
+        "bytes": 995290,
+        "sha256": "5a24e337a146568ebbbfa9783fa451d22c02bccd3cb7fe518afdb3ff396487fe"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-06.webp",
+        "mediaType": "image/webp",
+        "width": 1122,
+        "height": 1920,
+        "bytes": 642030,
+        "sha256": "c912181f841e42d74a039dc6ea13f05d5c77615c5f934852844b8ca177705188",
+        "originalFileName": null
       }
     },
     "major-07": {
       "cardId": "major-07",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-07.jpg",
+        "originalFileName": "RWS Tarot 07 Chariot.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 859575,
+        "sha256": "3906e01a159d3b7f1696e9094080e0a4ae95b2f4d4ca8b084131aba6ad133dd8"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-07.webp",
+        "mediaType": "image/webp",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 507380,
+        "sha256": "c84044a74f540cb8c319e50a1446087a57a600df45b57ce4351358cb0266c333",
+        "originalFileName": null
       }
     },
     "major-08": {
       "cardId": "major-08",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-08.jpg",
+        "originalFileName": "RWS Tarot 08 Strength.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 806480,
+        "sha256": "b222f1799b8dc46944d28f6079b1551011691dc439740371126e874fcf0c768f"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-08.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 464072,
+        "sha256": "57393d19fdede9567b7c4e92df3af8cfe49bb6e5f91d7c834ac5722f3fd9db4b",
+        "originalFileName": null
       }
     },
     "major-09": {
       "cardId": "major-09",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-09.jpg",
+        "originalFileName": "RWS Tarot 09 Hermit.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1123,
+        "height": 1920,
+        "bytes": 735989,
+        "sha256": "0f86ac4560e598ced039665e21023d329e7a7e58872c46b3e9a9d85bb6cb2a50"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-09.webp",
+        "mediaType": "image/webp",
+        "width": 1123,
+        "height": 1920,
+        "bytes": 405692,
+        "sha256": "3ccd5d27634ed5d42cb2616345ae65b52f83bed780cd6db78930acc2d7ba16bf",
+        "originalFileName": null
       }
     },
     "major-10": {
       "cardId": "major-10",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-10.jpg",
+        "originalFileName": "RWS Tarot 10 Wheel of Fortune.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1104,
+        "height": 1920,
+        "bytes": 1155837,
+        "sha256": "2979bea7530572f408739757c87200772f6171a5249684cc9ee2a379108b3657"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-10.webp",
+        "mediaType": "image/webp",
+        "width": 1104,
+        "height": 1920,
+        "bytes": 563570,
+        "sha256": "f5c6e9bfe34d4edd8d8b4140b009985a8ad4cbe21ded83e5ce08001eb341dded",
+        "originalFileName": null
       }
     },
     "major-11": {
       "cardId": "major-11",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-11.jpg",
+        "originalFileName": "RWS Tarot 11 Justice.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 893399,
+        "sha256": "028645f4ed40a82035c410f4b7b5b00adbdcdf1c21ffd706cddeaf9227e0151d"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-11.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 551048,
+        "sha256": "064190cd9cadd9d4f04407121e84fb84fd95103cee45b972bcb7d3b980433b10",
+        "originalFileName": null
       }
     },
     "major-12": {
       "cardId": "major-12",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-12.jpg",
+        "originalFileName": "RWS Tarot 12 Hanged Man.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1092,
+        "height": 1920,
+        "bytes": 1138974,
+        "sha256": "0eacf7afe48e4b51c5405a8354ecb867a4d8868151137434ef84621e4d56359c"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-12.webp",
+        "mediaType": "image/webp",
+        "width": 1092,
+        "height": 1920,
+        "bytes": 610304,
+        "sha256": "00f069dcd9644ad8a231d1621ece4511d78623c319d7830eb15248d886215ff2",
+        "originalFileName": null
       }
     },
     "major-13": {
       "cardId": "major-13",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-13.jpg",
+        "originalFileName": "RWS Tarot 13 Death.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 922316,
+        "sha256": "9e9cdd41a4d975691e79acc2358b45f4f2c58661431c3113a5ccf27477356a66"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-13.webp",
+        "mediaType": "image/webp",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 589216,
+        "sha256": "c820c1682ce941c2cd9036be5b988ce438c3c7f1f4d61265088d49d37f60b5c8",
+        "originalFileName": null
       }
     },
     "major-14": {
       "cardId": "major-14",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-14.jpg",
+        "originalFileName": "RWS Tarot 14 Temperance.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1106,
+        "height": 1920,
+        "bytes": 957655,
+        "sha256": "a306b373f8ff18270a2daabe3d89967eadd428e460c39ed717bda7bd38a1f009"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-14.webp",
+        "mediaType": "image/webp",
+        "width": 1106,
+        "height": 1920,
+        "bytes": 622754,
+        "sha256": "be453db25502a55d7ec945187f2489cb4a79d269f48d6a8f9a4f082c7d1c5fb0",
+        "originalFileName": null
       }
     },
     "major-15": {
       "cardId": "major-15",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-15.jpg",
+        "originalFileName": "RWS Tarot 15 Devil.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1090,
+        "height": 1920,
+        "bytes": 779014,
+        "sha256": "f8e37102cbf2120270c0ed8c3e193b260d2f79dd5908bc9acbd48e8335083cf8"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-15.webp",
+        "mediaType": "image/webp",
+        "width": 1090,
+        "height": 1920,
+        "bytes": 471518,
+        "sha256": "ebd499af309c5ceb29d751fc48e96b818b47fe4c3e10a8d085f0f18fd5d653a8",
+        "originalFileName": null
       }
     },
     "major-16": {
       "cardId": "major-16",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-16.jpg",
+        "originalFileName": "RWS Tarot 16 Tower.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 758728,
+        "sha256": "ab5ce9bf29f32b9cf61720b375fe35f23ce7e116ee1c648a9bf6832e17241163"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-16.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 452206,
+        "sha256": "0a47bc3260e5cbf29294677452dcf04a36cd077f46147337faf30904a6fd1c91",
+        "originalFileName": null
       }
     },
     "major-17": {
       "cardId": "major-17",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-17.jpg",
+        "originalFileName": "RWS Tarot 17 Star.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 852520,
+        "sha256": "20bb3e04c1655cc318031d94a024d84199cfeae2ca55e80d2d341c2d30435ac7"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-17.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 510176,
+        "sha256": "1cd6ac19fbb0f00572c02b928b2cb4e023071b4b9965d7ee3018c94763127a24",
+        "originalFileName": null
       }
     },
     "major-18": {
       "cardId": "major-18",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-18.jpg",
+        "originalFileName": "RWS Tarot 18 Moon.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 859000,
+        "sha256": "866474dc3de02bf3817495fd75d254dac2b9f36470f2f29ecb54de572f9dc70e"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-18.webp",
+        "mediaType": "image/webp",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 510374,
+        "sha256": "fee4a51d24747a0d47ed42cd94217ad079202d90d8d333e534e196c2cb3a6b40",
+        "originalFileName": null
       }
     },
     "major-19": {
       "cardId": "major-19",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-19.jpg",
+        "originalFileName": "RWS Tarot 19 Sun.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 935619,
+        "sha256": "6c21ef99fef3807bafb26cd467464c8efc59e7312a688ae66285968e364c6450"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-19.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 579490,
+        "sha256": "08fb06b55aa9b6ce195958dbf1adf4fa67c029561bd47726583a38118ccc1a63",
+        "originalFileName": null
       }
     },
     "major-20": {
       "cardId": "major-20",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-20.jpg",
+        "originalFileName": "RWS Tarot 20 Judgement.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 934640,
+        "sha256": "1d670d30e651554051f1a04708a11c57583a92a2cc370b8c0fc54fb82f2ffbd3"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-20.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 591952,
+        "sha256": "dfa0fe511c2b889d98a4fb9fb20b6d2804609b55c66f654f1de6f0446aa11d86",
+        "originalFileName": null
       }
     },
     "major-21": {
       "cardId": "major-21",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/major-21.jpg",
+        "originalFileName": "RWS Tarot 21 World.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 1171390,
+        "sha256": "f866b87a3c4422f96074080024860f46b5b3f456fcad74ca7aefdb5263bf0e69"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/major-21.webp",
+        "mediaType": "image/webp",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 579646,
+        "sha256": "97ba2d8214e16e32591ee7b30f85b97a67d6baddac5815b6e697162f5231f122",
+        "originalFileName": null
       }
     },
     "minor-wands-ace": {
       "cardId": "minor-wands-ace",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-ace.jpg",
+        "originalFileName": "Wands01.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1106,
+        "height": 1920,
+        "bytes": 849701,
+        "sha256": "c29a4231878072d66be3aa344b348ea77cf12617571db4836a270730ae5a04e0"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-ace.webp",
+        "mediaType": "image/webp",
+        "width": 1106,
+        "height": 1920,
+        "bytes": 541606,
+        "sha256": "142d640263c43c41a17b88c173b0d72e1a76eac3d83cf4423817059953e5c8f3",
+        "originalFileName": null
       }
     },
     "minor-wands-two": {
       "cardId": "minor-wands-two",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-two.jpg",
+        "originalFileName": "Wands02.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 847840,
+        "sha256": "b715689f6097b32884678d52f946df0fafdd225ed8ead3979307f455a88e8e80"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-two.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 546906,
+        "sha256": "2ac06227aa18964746704e16f76b20e58a825dc06334d85434b97b0587d5fca5",
+        "originalFileName": null
       }
     },
     "minor-wands-three": {
       "cardId": "minor-wands-three",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-three.jpg",
+        "originalFileName": "Wands03.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1103,
+        "height": 1920,
+        "bytes": 939010,
+        "sha256": "1177316634bf3990c95ccb908b7e5a6759ec0356039d896e6ee0bbb8796e958a"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-three.webp",
+        "mediaType": "image/webp",
+        "width": 1103,
+        "height": 1920,
+        "bytes": 612048,
+        "sha256": "8b486634afbddc13679be6160cfa376d8d91d67c33ad78bdcf0257b8e85dab7c",
+        "originalFileName": null
       }
     },
     "minor-wands-four": {
       "cardId": "minor-wands-four",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-four.jpg",
+        "originalFileName": "Wands04.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 797257,
+        "sha256": "9850a241100dd084bacab39a8e87baaa13d1de1a590dc0dde013b92aa783af7e"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-four.webp",
+        "mediaType": "image/webp",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 462128,
+        "sha256": "113ee5b168ff72adf40abde94d16e727cefd93462779af3ca3f64b90064633b8",
+        "originalFileName": null
       }
     },
     "minor-wands-five": {
       "cardId": "minor-wands-five",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-five.jpg",
+        "originalFileName": "Wands05.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 843454,
+        "sha256": "6298f82e6ce5e7524041bb608852471b03e29d528f6a5b52b2b44a8ff1f06bba"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-five.webp",
+        "mediaType": "image/webp",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 511548,
+        "sha256": "14a0d700fb96b2e4c6d10c68c72f5eab5a2c734d18cad2a678fcfc32cd8d5cbd",
+        "originalFileName": null
       }
     },
     "minor-wands-six": {
       "cardId": "minor-wands-six",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-six.jpg",
+        "originalFileName": "Wands06.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1118,
+        "height": 1920,
+        "bytes": 878047,
+        "sha256": "249a1eaa2de24dc9c1095e953b9577ca613fcda4b4b884dab2a1964c686dad72"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-six.webp",
+        "mediaType": "image/webp",
+        "width": 1118,
+        "height": 1920,
+        "bytes": 537206,
+        "sha256": "cab2fe547589990b2e16d989b157c43ed3eab3a887e25d9e3133efd1b1728729",
+        "originalFileName": null
       }
     },
     "minor-wands-seven": {
       "cardId": "minor-wands-seven",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-seven.jpg",
+        "originalFileName": "Wands07.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 762723,
+        "sha256": "0117736a1c9d543960bb94c73d20a587e9ec877dfc2120b7d5ee0255c40dd731"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-seven.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 429456,
+        "sha256": "bc48851f86bbebe08e5749f2c2649b4bae894cc68244f6d2ad7378de9eaed488",
+        "originalFileName": null
       }
     },
     "minor-wands-eight": {
       "cardId": "minor-wands-eight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-eight.jpg",
+        "originalFileName": "Wands08.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 767846,
+        "sha256": "fbf01153074154c6b0e130e0690e00320e9293daaf9c84fe4a37804f02145cd6"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-eight.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 421910,
+        "sha256": "33c42b9b807a6b3d2950846dbee686d511dc9ae8e41ff824c4c38a25c693594c",
+        "originalFileName": null
       }
     },
     "minor-wands-nine": {
       "cardId": "minor-wands-nine",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-nine.jpg",
+        "originalFileName": "Wands09.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 883412,
+        "sha256": "f0edfe460b1ba3fdd2cb0d0e82786a84bcdcaf97bb2e1a2ffaf4c82ed235b469"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-nine.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 546720,
+        "sha256": "e6a61117d0801b682a3ecc9ee6b50b78ac2474ff6f8d0783837be6be9bb303f5",
+        "originalFileName": null
       }
     },
     "minor-wands-ten": {
       "cardId": "minor-wands-ten",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-ten.jpg",
+        "originalFileName": "Wands10.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1101,
+        "height": 1920,
+        "bytes": 822089,
+        "sha256": "64c10fe7ba527498547bb3bf85a4a5c5fc687ba2209b8d38ffe5722d25810685"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-ten.webp",
+        "mediaType": "image/webp",
+        "width": 1101,
+        "height": 1920,
+        "bytes": 492510,
+        "sha256": "9c2b63a49423d3c97bd37a0972bdf09ed51fab4130d0f374aa09f6260a004a85",
+        "originalFileName": null
       }
     },
     "minor-wands-page": {
       "cardId": "minor-wands-page",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-page.jpg",
+        "originalFileName": "Wands11.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 951740,
+        "sha256": "ecb79ab9035c43d322cbef211e8028fc175e220a764db7fcb566c4e44d1842bb"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-page.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 619664,
+        "sha256": "577b78e0d470746847218910f2ea3e08594850b97d355938740e0e45b113e37a",
+        "originalFileName": null
       }
     },
     "minor-wands-knight": {
       "cardId": "minor-wands-knight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-knight.jpg",
+        "originalFileName": "Wands12.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 988758,
+        "sha256": "00dd859cf067753c5ed009ac0ab8a0673cb8e5bdf5677fb3c7d4b04c93c0e025"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-knight.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 640598,
+        "sha256": "fd957518ab48c405dd441acd7a8f87a00acb8648150fec77f437745de5ba5949",
+        "originalFileName": null
       }
     },
     "minor-wands-queen": {
       "cardId": "minor-wands-queen",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-queen.jpg",
+        "originalFileName": "Wands13.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1118,
+        "height": 1920,
+        "bytes": 971970,
+        "sha256": "f1646c86efe388dfff3d4a1fc8e5a5c7bb60a5605d3e4b67c1157216c773202d"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-queen.webp",
+        "mediaType": "image/webp",
+        "width": 1118,
+        "height": 1920,
+        "bytes": 617884,
+        "sha256": "e50276e0f9f0783372c31762c07a2945abe1f82c265f44de2ad924fafde47026",
+        "originalFileName": null
       }
     },
     "minor-wands-king": {
       "cardId": "minor-wands-king",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-wands-king.jpg",
+        "originalFileName": "Wands14.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1104,
+        "height": 1920,
+        "bytes": 984389,
+        "sha256": "671c7c53329fa99e309f101a2ee093503a5d3bad137cb626a588dc74f4f0506f"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-wands-king.webp",
+        "mediaType": "image/webp",
+        "width": 1104,
+        "height": 1920,
+        "bytes": 653414,
+        "sha256": "20397211c174c5ae959f5806d120b7054f4f2bf69ebbbfa7ada38b17bba05532",
+        "originalFileName": null
       }
     },
     "minor-cups-ace": {
       "cardId": "minor-cups-ace",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-ace.jpg",
+        "originalFileName": "Cups01.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 923080,
+        "sha256": "fd157290a61bd075e837879275b811c86c32d3ea2beadb2b24327d133c5fb5f9"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-ace.webp",
+        "mediaType": "image/webp",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 612792,
+        "sha256": "a624430e73e1d816df3f41ba6094051ef3422df3bda542b6da86d12a24c4ba22",
+        "originalFileName": null
       }
     },
     "minor-cups-two": {
       "cardId": "minor-cups-two",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-two.jpg",
+        "originalFileName": "Cups02.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 1138042,
+        "sha256": "5d1f09a9b69784e6006a9b662496f0664b26b15740062ac2285e77eadf3b36e4"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-two.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 558340,
+        "sha256": "ed551075f890f791fc9264194858588ab182fa35c7969f61d6495aae98df916a",
+        "originalFileName": null
       }
     },
     "minor-cups-three": {
       "cardId": "minor-cups-three",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-three.jpg",
+        "originalFileName": "Cups03.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 1153303,
+        "sha256": "25bfd4dbc2917a5a33b34c56579facffca464df0f4b4a0b4f00d9c9e96d9be0e"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-three.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 560204,
+        "sha256": "70a3b86e3f4604fa1ea69c1918eac9f77862ecf23229477cd74d5e776115b547",
+        "originalFileName": null
       }
     },
     "minor-cups-four": {
       "cardId": "minor-cups-four",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-four.jpg",
+        "originalFileName": "Cups04.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1118,
+        "height": 1920,
+        "bytes": 804378,
+        "sha256": "92097fe69d21dd0a0c9d5ece68ed465fa4a53d5107509cde3689840b67ed3f13"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-four.webp",
+        "mediaType": "image/webp",
+        "width": 1118,
+        "height": 1920,
+        "bytes": 480406,
+        "sha256": "86cfff48ce6c69ec38905eed5e21dfaf097b9d6982a52cbf7eaece09d9398905",
+        "originalFileName": null
       }
     },
     "minor-cups-five": {
       "cardId": "minor-cups-five",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-five.jpg",
+        "originalFileName": "Cups05.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1121,
+        "height": 1920,
+        "bytes": 702301,
+        "sha256": "07d2354d331f8a9397c407cea0b2bcc1544b134eab526b9262ececb3d0a57166"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-five.webp",
+        "mediaType": "image/webp",
+        "width": 1121,
+        "height": 1920,
+        "bytes": 385324,
+        "sha256": "6a2b6a8b4078c30b0cacf592d1a066fb5c48f25bb6c1046d478d94d98d6ec3ac",
+        "originalFileName": null
       }
     },
     "minor-cups-six": {
       "cardId": "minor-cups-six",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-six.jpg",
+        "originalFileName": "Cups06.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 984386,
+        "sha256": "bb6fb5b6de8c22811e0c9057a05e46cd0014984e3d43160844bd5c395e8973bf"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-six.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 635046,
+        "sha256": "95d04ce9a74d70dbbefd3eaf0d6b97d081ef9b85fa54084e4f1537396209a60b",
+        "originalFileName": null
       }
     },
     "minor-cups-seven": {
       "cardId": "minor-cups-seven",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-seven.jpg",
+        "originalFileName": "Cups07.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 808227,
+        "sha256": "3c9d1d310ca3f4303a2e4beb872d998f7b45fbd26ee361ee48fadb366cf3b3a7"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-seven.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 471624,
+        "sha256": "841d069567ee6fb3bb128669d1da6c16ce673b5039d1c8e9a30c59f12c7cb2fd",
+        "originalFileName": null
       }
     },
     "minor-cups-eight": {
       "cardId": "minor-cups-eight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-eight.jpg",
+        "originalFileName": "Cups08.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 829918,
+        "sha256": "727c07c60753aa7925c9421ca3a93e80eaadd0053018e68c819b2ac5e6562312"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-eight.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 526510,
+        "sha256": "5e2b1e8e5a370bef998b913b6c1acac8f3b0a53a89cf69dad6829fda4eb30530",
+        "originalFileName": null
       }
     },
     "minor-cups-nine": {
       "cardId": "minor-cups-nine",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-nine.jpg",
+        "originalFileName": "Cups09.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 824525,
+        "sha256": "5d0704e0dc1de8ab59da38230b609a5aeeceaf61473ca5271f48049976f3cb6f"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-nine.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 466772,
+        "sha256": "bafe8550bc0e0136d70a7d5613a92370f108faff35082add7eac7461926b4b26",
+        "originalFileName": null
       }
     },
     "minor-cups-ten": {
       "cardId": "minor-cups-ten",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-ten.jpg",
+        "originalFileName": "Cups10.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 955053,
+        "sha256": "ac33d5a07ac63e10301cd632cedc020aca25a0d8a3e64f58fbd9e221b39fa261"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-ten.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 618554,
+        "sha256": "aaba5b4e7996d0ab70794a1ff0e44d9761d6ef28179f7062e980156d5cb537ef",
+        "originalFileName": null
       }
     },
     "minor-cups-page": {
       "cardId": "minor-cups-page",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-page.jpg",
+        "originalFileName": "Cups11.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 943695,
+        "sha256": "c6000e0ec6cf784ec75ac3a9fa8971e9ba56c8072c899cc0d44dece6acafc526"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-page.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 634528,
+        "sha256": "d5da1a6e04467c576052909be2252221d7190336cea1447f678a9b51de81507f",
+        "originalFileName": null
       }
     },
     "minor-cups-knight": {
       "cardId": "minor-cups-knight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-knight.jpg",
+        "originalFileName": "Cups12.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 908276,
+        "sha256": "99a7b7c91da744cb03a3741c4bac674ef91adbb5b22aca53404f3467d1ea8e65"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-knight.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 586418,
+        "sha256": "efb9709a06d0a3656435263205db61ed68281bfeb542425707c4417b343e1961",
+        "originalFileName": null
       }
     },
     "minor-cups-queen": {
       "cardId": "minor-cups-queen",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-queen.jpg",
+        "originalFileName": "Cups13.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 866465,
+        "sha256": "a1732a137bfc441a68703e3c8c14653f22452a287e790b9d5047035afc374b2a"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-queen.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 524102,
+        "sha256": "a01ef3ec19b1b09e5f3ac8e12bbe4ef9e24260e84a1a60f4bd3921e981d831fe",
+        "originalFileName": null
       }
     },
     "minor-cups-king": {
       "cardId": "minor-cups-king",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-cups-king.jpg",
+        "originalFileName": "Cups14.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1121,
+        "height": 1920,
+        "bytes": 903180,
+        "sha256": "79ae249016aaafb01279007e2da5ad00dffd6dc7d3017526853cfa6efc989372"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-cups-king.webp",
+        "mediaType": "image/webp",
+        "width": 1121,
+        "height": 1920,
+        "bytes": 581150,
+        "sha256": "a0e8f597f107750ace1cb1258dad52da40ea1b583e60361850da23f93d6049bf",
+        "originalFileName": null
       }
     },
     "minor-swords-ace": {
       "cardId": "minor-swords-ace",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-ace.jpg",
+        "originalFileName": "Swords01.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 850219,
+        "sha256": "32f0f932346a25b6ec3753ff95d3e4a7481cb5c3582205ba76c53356a496f15a"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-ace.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 542842,
+        "sha256": "0c5ab36457095b41285ba3abec0fb2489da1ad3c58f1742225a3ba24866ab713",
+        "originalFileName": null
       }
     },
     "minor-swords-two": {
       "cardId": "minor-swords-two",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-two.jpg",
+        "originalFileName": "Swords02.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1121,
+        "height": 1920,
+        "bytes": 810433,
+        "sha256": "a44b7e2b454db3dc1ff42f70107fb15750babf659f5750892de4b5be721ec380"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-two.webp",
+        "mediaType": "image/webp",
+        "width": 1121,
+        "height": 1920,
+        "bytes": 487600,
+        "sha256": "66e300cc5dda8b77fb8a2425053a21bd05b5e375947858f047b2eb5dd242dc26",
+        "originalFileName": null
       }
     },
     "minor-swords-three": {
       "cardId": "minor-swords-three",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-three.jpg",
+        "originalFileName": "Swords03.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1103,
+        "height": 1920,
+        "bytes": 725080,
+        "sha256": "4fdf7db3e7611561831af32b5c886f9862c7d90a851965cddf71298047da1dee"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-three.webp",
+        "mediaType": "image/webp",
+        "width": 1103,
+        "height": 1920,
+        "bytes": 410084,
+        "sha256": "8c34fd2a6a136d46660f7fcd2134f25ea5e232935a4e44fe18612d9fa7b3f173",
+        "originalFileName": null
       }
     },
     "minor-swords-four": {
       "cardId": "minor-swords-four",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-four.jpg",
+        "originalFileName": "Swords04.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 854971,
+        "sha256": "d4f9dad59b25daf3c9e98e50107dd692e9682f058cdc8424ce61fd448e941a78"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-four.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 521652,
+        "sha256": "e57e4cb1f297c38807887c2e96ced660c6b088ca212d3416973454c90b23436d",
+        "originalFileName": null
       }
     },
     "minor-swords-five": {
       "cardId": "minor-swords-five",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-five.jpg",
+        "originalFileName": "Swords05.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 889221,
+        "sha256": "e4fc379d7ce3f7675f474ec9b3c2c8e4be7bdc0af2f2186eb2e2de4643b0a0bf"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-five.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 557986,
+        "sha256": "017fc2337f539d78545490ab0724b0cd5060dc11dc60d31e5013c2d4b217d808",
+        "originalFileName": null
       }
     },
     "minor-swords-six": {
       "cardId": "minor-swords-six",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-six.jpg",
+        "originalFileName": "Swords06.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 935341,
+        "sha256": "25279d7133301f59748f9ec0c6517a56fc4b8f76477ecfb4495f039adbc9aed5"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-six.webp",
+        "mediaType": "image/webp",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 622838,
+        "sha256": "1995389281e571d048c79ebd55141aba2923cf5b6b0a348e648b58eb87aba2b1",
+        "originalFileName": null
       }
     },
     "minor-swords-seven": {
       "cardId": "minor-swords-seven",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-seven.jpg",
+        "originalFileName": "Swords07.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 794393,
+        "sha256": "6204a31b5949937c95ea47ed47bae0cdd86ba112cb0c933935efbfc294033ea6"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-seven.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 456270,
+        "sha256": "0101c51b4636f2f00bf6b1bce379512832ca84aa3d4a6b518d1d2b9cf8733eee",
+        "originalFileName": null
       }
     },
     "minor-swords-eight": {
       "cardId": "minor-swords-eight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-eight.jpg",
+        "originalFileName": "Swords08.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 894497,
+        "sha256": "019acbe3faff292c48c2744c42df052d7c7440a896f1cac42930e8c727d983b6"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-eight.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 564214,
+        "sha256": "54a970da75374ba07ce3718255112c37ea0fa8ac99e3a633c9e87a7fe8ad7515",
+        "originalFileName": null
       }
     },
     "minor-swords-nine": {
       "cardId": "minor-swords-nine",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-nine.jpg",
+        "originalFileName": "Swords09.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 789057,
+        "sha256": "b592a2ebe7fca2b648c12d42ec1d5edd4da60d60b0ec7e548e7115c977c485fb"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-nine.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 481746,
+        "sha256": "c1b460d8170cccd75ae28fa85ef8435a878018117df545569844d54b30927efa",
+        "originalFileName": null
       }
     },
     "minor-swords-ten": {
       "cardId": "minor-swords-ten",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-ten.jpg",
+        "originalFileName": "Swords10.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1107,
+        "height": 1920,
+        "bytes": 730530,
+        "sha256": "10d0b161d115dc340c6c54a274a9f0a21547584b9bd20dbd61fb12e78885043f"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-ten.webp",
+        "mediaType": "image/webp",
+        "width": 1107,
+        "height": 1920,
+        "bytes": 417286,
+        "sha256": "ef864815ddcebfee77581824f6e6d5346e20b2168de77e85e9eedb84028f3e28",
+        "originalFileName": null
       }
     },
     "minor-swords-page": {
       "cardId": "minor-swords-page",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-page.jpg",
+        "originalFileName": "Swords11.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 872818,
+        "sha256": "ac69cec7c4b763fe229b3bc43214d5c81e573abe0584a13691970ab65be351ad"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-page.webp",
+        "mediaType": "image/webp",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 546728,
+        "sha256": "ebac7a65c46ac07cc96a6c6bcc3e2044b1b54163d054572d94afe6ee47d6e38c",
+        "originalFileName": null
       }
     },
     "minor-swords-knight": {
       "cardId": "minor-swords-knight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-knight.jpg",
+        "originalFileName": "Swords12.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 852095,
+        "sha256": "b38c1618eb6b5eca33d5bfebfddf8739773fb4ec8918a8946b4df2790d95db4e"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-knight.webp",
+        "mediaType": "image/webp",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 515508,
+        "sha256": "30a99cd2531317e5b48d10b34432ebf438302d8ef4f4e116b1c01dcac4809faa",
+        "originalFileName": null
       }
     },
     "minor-swords-queen": {
       "cardId": "minor-swords-queen",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-queen.jpg",
+        "originalFileName": "Swords13.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1104,
+        "height": 1920,
+        "bytes": 817537,
+        "sha256": "55854543540d12f9c201197537f4521b22379b84d0955149621755601ce6da90"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-queen.webp",
+        "mediaType": "image/webp",
+        "width": 1104,
+        "height": 1920,
+        "bytes": 487960,
+        "sha256": "c8e0133637678038153c2a355e9690163914ebfdab24f71a3fa1f96f70726879",
+        "originalFileName": null
       }
     },
     "minor-swords-king": {
       "cardId": "minor-swords-king",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-swords-king.jpg",
+        "originalFileName": "Swords14.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 932596,
+        "sha256": "5307da08322c8ccf2bc748aec5fe919e16849568fda3986225a921bf2cac9cee"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-swords-king.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 585044,
+        "sha256": "f721c57883d7db9f72f27c01e1221acf2be1b9293557e8439ba9cebe54c5afcb",
+        "originalFileName": null
       }
     },
     "minor-pentacles-ace": {
       "cardId": "minor-pentacles-ace",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-ace.jpg",
+        "originalFileName": "Pents01.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 864022,
+        "sha256": "fd6ddf90ead3062dd3696856e9771356dd9a2527048dab19417ee7ad79e28464"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-ace.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 548880,
+        "sha256": "d5c41126fe1fea4fce15de3d23b8b43e1e3f0f0733e1c56436abb027a41d7c55",
+        "originalFileName": null
       }
     },
     "minor-pentacles-two": {
       "cardId": "minor-pentacles-two",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-two.jpg",
+        "originalFileName": "Pents02.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 918042,
+        "sha256": "1ee94470d0a0d53f867b5f6616bfe9e672b5693ba7c1d0a0c29303b2a1c08a88"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-two.webp",
+        "mediaType": "image/webp",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 572044,
+        "sha256": "0dcf295bd2a3bfa1328f4eac858852d14336e5b9ebad7568e37c97dc8fb7ff6e",
+        "originalFileName": null
       }
     },
     "minor-pentacles-three": {
       "cardId": "minor-pentacles-three",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-three.jpg",
+        "originalFileName": "Pents03.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 889863,
+        "sha256": "a8d826b099c0920329be52de5b96c0b2e5ddcfb45b8d109490e9ab74ae6f9eaa"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-three.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1919,
+        "bytes": 555568,
+        "sha256": "18798a97061c6510048c09ab1b8630e889d67a105cd7ad4597a78b6994411663",
+        "originalFileName": null
       }
     },
     "minor-pentacles-four": {
       "cardId": "minor-pentacles-four",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-four.jpg",
+        "originalFileName": "Pents04.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1110,
+        "height": 1920,
+        "bytes": 811275,
+        "sha256": "37e44050b8ac86dc7db3c1bb00e80154e97986b028a1499504ab89c5612e5989"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-four.webp",
+        "mediaType": "image/webp",
+        "width": 1110,
+        "height": 1920,
+        "bytes": 517192,
+        "sha256": "1823ec3ab060791a4ae97d93a8768fd401470878a5e0e615aa5e53bc10ff731c",
+        "originalFileName": null
       }
     },
     "minor-pentacles-five": {
       "cardId": "minor-pentacles-five",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-five.jpg",
+        "originalFileName": "Pents05.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 899969,
+        "sha256": "5a6705ba00c102c9e66a716b182e195f17c1bcf94a8d1b5163e2ce7195166938"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-five.webp",
+        "mediaType": "image/webp",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 546374,
+        "sha256": "80e78aa31bf40c37a76cd0c97a4974e1ced7b5228e44f39d9f9f45a9864397fe",
+        "originalFileName": null
       }
     },
     "minor-pentacles-six": {
       "cardId": "minor-pentacles-six",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-six.jpg",
+        "originalFileName": "Pents06.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 871487,
+        "sha256": "d9d67638f7f4075b42b03ee80ca9bf3817d2406cda647618504140b85ab3ca6b"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-six.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 556224,
+        "sha256": "07307351eda02203d1146d52de30ccdef421b06d3c92a251bbcd27f915e83240",
+        "originalFileName": null
       }
     },
     "minor-pentacles-seven": {
       "cardId": "minor-pentacles-seven",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-seven.jpg",
+        "originalFileName": "Pents07.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 935784,
+        "sha256": "78a9d4965ce497192e5186737a44d73b4e94aa8a4092b49b374879ed22b138ab"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-seven.webp",
+        "mediaType": "image/webp",
+        "width": 1114,
+        "height": 1919,
+        "bytes": 611672,
+        "sha256": "f602ced1050ce43077a164917c489b5ee70bd1110b928d072bb8c06adcb80447",
+        "originalFileName": null
       }
     },
     "minor-pentacles-eight": {
       "cardId": "minor-pentacles-eight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-eight.jpg",
+        "originalFileName": "Pents08.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1117,
+        "height": 1920,
+        "bytes": 889064,
+        "sha256": "13c82cbdec9ce101f157ee502663eb38bbd8117cec5e019b8400474056caebd9"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-eight.webp",
+        "mediaType": "image/webp",
+        "width": 1117,
+        "height": 1920,
+        "bytes": 573618,
+        "sha256": "2d21afd0e3806c6b613516ef6a81f4d7ca0457530e3be923b986047db6f5d6fe",
+        "originalFileName": null
       }
     },
     "minor-pentacles-nine": {
       "cardId": "minor-pentacles-nine",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-nine.jpg",
+        "originalFileName": "Pents09.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 853539,
+        "sha256": "e491630d7291a34266f2d227f4085602cb9a000e31346402773a653e07b48f32"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-nine.webp",
+        "mediaType": "image/webp",
+        "width": 1108,
+        "height": 1920,
+        "bytes": 503380,
+        "sha256": "26e544f7f98bac3268b4a4fa6578597488648623ece0ad7fe201790d8f0cda8d",
+        "originalFileName": null
       }
     },
     "minor-pentacles-ten": {
       "cardId": "minor-pentacles-ten",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-ten.jpg",
+        "originalFileName": "Pents10.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 963926,
+        "sha256": "e14d5029ff2151a5ef53218c853382828dd0940bfd3a608d72ec59a967f97809"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-ten.webp",
+        "mediaType": "image/webp",
+        "width": 1115,
+        "height": 1920,
+        "bytes": 621126,
+        "sha256": "cd20c20d8502faaf73a972c7eb03f51eb63ee584a197ae22e2e5e5b792680db3",
+        "originalFileName": null
       }
     },
     "minor-pentacles-page": {
       "cardId": "minor-pentacles-page",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-page.jpg",
+        "originalFileName": "Pents11.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 766976,
+        "sha256": "d2c3cb2f6a602e62748f873eca72acfab06b64a6de50cf3499e6197d650b6fe9"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-page.webp",
+        "mediaType": "image/webp",
+        "width": 1112,
+        "height": 1920,
+        "bytes": 424068,
+        "sha256": "42a7451eae6bf5c1871aae6496d2f1b487ec7c4e3efe5fc9fcd00ad910b36336",
+        "originalFileName": null
       }
     },
     "minor-pentacles-knight": {
       "cardId": "minor-pentacles-knight",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-knight.jpg",
+        "originalFileName": "Pents12.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 709002,
+        "sha256": "6a652fbf447b7d0c78145627749c87806d1c356e96e73ca365d2618d9b255e9f"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-knight.webp",
+        "mediaType": "image/webp",
+        "width": 1111,
+        "height": 1919,
+        "bytes": 387600,
+        "sha256": "89853fba28eb023701a8f90986ae58f2e8b177928a5c8e592d15452f9a3cefd4",
+        "originalFileName": null
       }
     },
     "minor-pentacles-queen": {
       "cardId": "minor-pentacles-queen",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-queen.jpg",
+        "originalFileName": "Pents13.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 1198823,
+        "sha256": "051a9a46a806910754969d806b3cf1e1621d30f51225b0a3db9b5474e222a877"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-queen.webp",
+        "mediaType": "image/webp",
+        "width": 1109,
+        "height": 1920,
+        "bytes": 586606,
+        "sha256": "bf25cebf3fe9abcd3f245c2071c8ac03f0fcbf7c7a93004ab118779059113509",
+        "originalFileName": null
       }
     },
     "minor-pentacles-king": {
       "cardId": "minor-pentacles-king",
-      "status": "pending-source",
+      "status": "approved",
       "source": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "source/minor-pentacles-king.jpg",
+        "originalFileName": "Pents14.jpg",
+        "mediaType": "image/jpeg",
+        "width": 1107,
+        "height": 1920,
+        "bytes": 821927,
+        "sha256": "887b31bb3a9213e9f97dd6fd9c0f8b421c24735f3a0efd1d087fadfb600b0020"
       },
       "web": {
-        "file": null,
-        "originalFileName": null,
-        "mediaType": null,
-        "width": null,
-        "height": null,
-        "bytes": null,
-        "sha256": null
+        "file": "web/minor-pentacles-king.webp",
+        "mediaType": "image/webp",
+        "width": 1107,
+        "height": 1920,
+        "bytes": 485394,
+        "sha256": "ddecd14752018f66bdac0344743c005917d26b8b4ac66ec246472757afddf493",
+        "originalFileName": null
       }
     }
   }
