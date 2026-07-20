@@ -29,8 +29,8 @@
   "version": "1.0.0",
   "assetBuild": {
     "format": "webp",
-    "maxWidth": 1200,
-    "quality": 84,
+    "maxWidth": 720,
+    "quality": 78,
     "fit": "inside",
     "withoutEnlargement": true
   }

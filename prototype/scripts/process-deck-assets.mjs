@@ -180,7 +180,7 @@ async function syncPublicAssets(deck, manifest, cardIndex) {
   );
 }
 
-async function buildWebAssets() {
+async function buildWebAssets({rebuild = false} = {}) {
   const [deck, manifest, cardIndex] = await Promise.all([
     readJson(deckPath),
     readJson(manifestPath),
@@ -191,7 +191,12 @@ async function buildWebAssets() {
   await mkdir(publicRoot, {recursive: true});
 
   for (const asset of Object.values(manifest.assets)) {
-    if (asset.status !== "source-ready") continue;
+    if (
+      asset.status !== "source-ready" &&
+      !(rebuild && (asset.status === "web-ready" || asset.status === "approved"))
+    ) {
+      continue;
+    }
     if (!asset.source.file) {
       throw new Error(`${asset.cardId} has no configured source file`);
     }
@@ -263,6 +268,12 @@ if (command === "verify") {
   const result = await verifyAssets();
   process.stdout.write(
     `Built ${built} WebP files. Verified ${result.total} asset slots.\n`,
+  );
+} else if (command === "rebuild-web") {
+  const built = await buildWebAssets({rebuild: true});
+  const result = await verifyAssets();
+  process.stdout.write(
+    `Rebuilt ${built} WebP files. Verified ${result.total} asset slots.\n`,
   );
 } else if (command === "approve") {
   const approved = await approveAssets();

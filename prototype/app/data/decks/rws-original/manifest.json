@@ -19,10 +19,10 @@
       "web": {
         "file": "web/major-00.webp",
         "mediaType": "image/webp",
-        "width": 1144,
-        "height": 1919,
-        "bytes": 451468,
-        "sha256": "77adf51a2e0a59797d6ea53102d860e0b152ed4956f3fa27b5874fed614f6c26",
+        "width": 720,
+        "height": 1208,
+        "bytes": 172752,
+        "sha256": "36e130c5b2af40db5a8524321f6e15f77853026dac5812a85ee78e09dff49e95",
         "originalFileName": null
       }
     },
@@ -41,10 +41,10 @@
       "web": {
         "file": "web/major-01.webp",
         "mediaType": "image/webp",
-        "width": 1108,
-        "height": 1920,
-        "bytes": 454098,
-        "sha256": "58da59099ad082ce9a0ba32f73ca82193d59f0b3241e712f83c5e44e5f765306",
+        "width": 720,
+        "height": 1248,
+        "bytes": 175738,
+        "sha256": "4e8b76f4d3d838bd11cbb480c739acff9b2c81fb48c3704a6effcd94a6456afa",
         "originalFileName": null
       }
     },
@@ -63,10 +63,10 @@
       "web": {
         "file": "web/major-02.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1919,
-        "bytes": 551938,
-        "sha256": "482728f6f567cc60d984ae77c82a0151e7ee03364ece2920a568f12d585726f8",
+        "width": 720,
+        "height": 1237,
+        "bytes": 213132,
+        "sha256": "ba242ced9e611db886ad7519095ff97f6e3600fe9de718628bce0fcfd851a76c",
         "originalFileName": null
       }
     },
@@ -85,10 +85,10 @@
       "web": {
         "file": "web/major-03.webp",
         "mediaType": "image/webp",
-        "width": 1123,
-        "height": 1920,
-        "bytes": 585670,
-        "sha256": "bd58562c13ce5fd54368c456054576502731d17c56cfefd81a24d0dbcd6e43a9",
+        "width": 720,
+        "height": 1231,
+        "bytes": 231168,
+        "sha256": "3c3905a54463ce1986f17949ea7ba5d7830d1fc477a06b42978103bd0918f070",
         "originalFileName": null
       }
     },
@@ -107,10 +107,10 @@
       "web": {
         "file": "web/major-04.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1919,
-        "bytes": 600912,
-        "sha256": "ebc15c79b58eb97b8392719811dfae850b5f4d3f348fe5132504ab54359d4641",
+        "width": 720,
+        "height": 1237,
+        "bytes": 233924,
+        "sha256": "e1095e5c37d926301cc5c469652395b3cc4252374fb1d79eabcb38d49da382ea",
         "originalFileName": null
       }
     },
@@ -129,10 +129,10 @@
       "web": {
         "file": "web/major-05.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 555088,
-        "sha256": "9c17263ba8b20bcee11667ba91fedc537eb88a7781e66d54e1114ea5a2ecd013",
+        "width": 720,
+        "height": 1240,
+        "bytes": 223800,
+        "sha256": "6b8b366d1ecd864aea13bfef895904f486c037a31809034e128758df8117ddf0",
         "originalFileName": null
       }
     },
@@ -151,10 +151,10 @@
       "web": {
         "file": "web/major-06.webp",
         "mediaType": "image/webp",
-        "width": 1122,
-        "height": 1920,
-        "bytes": 642030,
-        "sha256": "c912181f841e42d74a039dc6ea13f05d5c77615c5f934852844b8ca177705188",
+        "width": 720,
+        "height": 1232,
+        "bytes": 252608,
+        "sha256": "f9c82fec230a9def092515e75a416814cf60882345e624b178d74b5be244833d",
         "originalFileName": null
       }
     },
@@ -173,10 +173,10 @@
       "web": {
         "file": "web/major-07.webp",
         "mediaType": "image/webp",
-        "width": 1111,
-        "height": 1919,
-        "bytes": 507380,
-        "sha256": "c84044a74f540cb8c319e50a1446087a57a600df45b57ce4351358cb0266c333",
+        "width": 720,
+        "height": 1244,
+        "bytes": 204790,
+        "sha256": "999e66ef3a159a4e1c9d334925743f9d8a4ac87b6f309bc84e2690b2cb8f1844",
         "originalFileName": null
       }
     },
@@ -195,10 +195,10 @@
       "web": {
         "file": "web/major-08.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 464072,
-        "sha256": "57393d19fdede9567b7c4e92df3af8cfe49bb6e5f91d7c834ac5722f3fd9db4b",
+        "width": 720,
+        "height": 1240,
+        "bytes": 173272,
+        "sha256": "b5f800ceae1f18435e956b535bbe294bf00e6fc4b80cf22404029989aefd289e",
         "originalFileName": null
       }
     },
@@ -217,10 +217,10 @@
       "web": {
         "file": "web/major-09.webp",
         "mediaType": "image/webp",
-        "width": 1123,
-        "height": 1920,
-        "bytes": 405692,
-        "sha256": "3ccd5d27634ed5d42cb2616345ae65b52f83bed780cd6db78930acc2d7ba16bf",
+        "width": 720,
+        "height": 1231,
+        "bytes": 136700,
+        "sha256": "206e3baa273ab22bc6fc5aa1b004ebefd8e35c2a832ddf6789b452a2126ba371",
         "originalFileName": null
       }
     },
@@ -239,10 +239,10 @@
       "web": {
         "file": "web/major-10.webp",
         "mediaType": "image/webp",
-        "width": 1104,
-        "height": 1920,
-        "bytes": 563570,
-        "sha256": "f5c6e9bfe34d4edd8d8b4140b009985a8ad4cbe21ded83e5ce08001eb341dded",
+        "width": 720,
+        "height": 1252,
+        "bytes": 226988,
+        "sha256": "d8c2f61e2804a5533c241b4118575ff7182b4e02e398df8c806f1e302117a5cd",
         "originalFileName": null
       }
     },
@@ -261,10 +261,10 @@
       "web": {
         "file": "web/major-11.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 551048,
-        "sha256": "064190cd9cadd9d4f04407121e84fb84fd95103cee45b972bcb7d3b980433b10",
+        "width": 720,
+        "height": 1240,
+        "bytes": 222448,
+        "sha256": "7abc621bd53fe44077c52f12a23440928d9e8cfde3e76429939452a0971b9bab",
         "originalFileName": null
       }
     },
@@ -283,10 +283,10 @@
       "web": {
         "file": "web/major-12.webp",
         "mediaType": "image/webp",
-        "width": 1092,
-        "height": 1920,
-        "bytes": 610304,
-        "sha256": "00f069dcd9644ad8a231d1621ece4511d78623c319d7830eb15248d886215ff2",
+        "width": 720,
+        "height": 1266,
+        "bytes": 244306,
+        "sha256": "e8346b782441c1fb846ab81b785d36e32dcc522335c3792c141d00f7e91eafb2",
         "originalFileName": null
       }
     },
@@ -305,10 +305,10 @@
       "web": {
         "file": "web/major-13.webp",
         "mediaType": "image/webp",
-        "width": 1111,
-        "height": 1919,
-        "bytes": 589216,
-        "sha256": "c820c1682ce941c2cd9036be5b988ce438c3c7f1f4d61265088d49d37f60b5c8",
+        "width": 720,
+        "height": 1244,
+        "bytes": 237288,
+        "sha256": "8a82af76bb9e33dec0b346e149f4835f03395afae353dbafb945f2ef9fcbce6e",
         "originalFileName": null
       }
     },
@@ -327,10 +327,10 @@
       "web": {
         "file": "web/major-14.webp",
         "mediaType": "image/webp",
-        "width": 1106,
-        "height": 1920,
-        "bytes": 622754,
-        "sha256": "be453db25502a55d7ec945187f2489cb4a79d269f48d6a8f9a4f082c7d1c5fb0",
+        "width": 720,
+        "height": 1250,
+        "bytes": 257056,
+        "sha256": "84d4522ed059b9588806a2d2ee7d2fcd606219cd6d41c606de29c3360a731d3d",
         "originalFileName": null
       }
     },
@@ -349,10 +349,10 @@
       "web": {
         "file": "web/major-15.webp",
         "mediaType": "image/webp",
-        "width": 1090,
-        "height": 1920,
-        "bytes": 471518,
-        "sha256": "ebd499af309c5ceb29d751fc48e96b818b47fe4c3e10a8d085f0f18fd5d653a8",
+        "width": 720,
+        "height": 1268,
+        "bytes": 190856,
+        "sha256": "682d87a2536188ae57504c6be5e626dd93df412857e5182ee6ea74055d7c0b6d",
         "originalFileName": null
       }
     },
@@ -371,10 +371,10 @@
       "web": {
         "file": "web/major-16.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 452206,
-        "sha256": "0a47bc3260e5cbf29294677452dcf04a36cd077f46147337faf30904a6fd1c91",
+        "width": 720,
+        "height": 1247,
+        "bytes": 171524,
+        "sha256": "07ed216f48f36695d1b2c273a50d8f3c531ab21d755e367cd080fad53e899240",
         "originalFileName": null
       }
     },
@@ -393,10 +393,10 @@
       "web": {
         "file": "web/major-17.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 510176,
-        "sha256": "1cd6ac19fbb0f00572c02b928b2cb4e023071b4b9965d7ee3018c94763127a24",
+        "width": 720,
+        "height": 1240,
+        "bytes": 194578,
+        "sha256": "a75d212f831babadffca5bcfdffc8ead51f1e257bead7c347ee220fee466b7cb",
         "originalFileName": null
       }
     },
@@ -415,10 +415,10 @@
       "web": {
         "file": "web/major-18.webp",
         "mediaType": "image/webp",
-        "width": 1111,
-        "height": 1919,
-        "bytes": 510374,
-        "sha256": "fee4a51d24747a0d47ed42cd94217ad079202d90d8d333e534e196c2cb3a6b40",
+        "width": 720,
+        "height": 1244,
+        "bytes": 198426,
+        "sha256": "465ea1e480066bf055233f5f5801746a0e44a6016e88553cc04f6e3731de1747",
         "originalFileName": null
       }
     },
@@ -437,10 +437,10 @@
       "web": {
         "file": "web/major-19.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 579490,
-        "sha256": "08fb06b55aa9b6ce195958dbf1adf4fa67c029561bd47726583a38118ccc1a63",
+        "width": 720,
+        "height": 1240,
+        "bytes": 231392,
+        "sha256": "42911f3bc936bf1f538ba5c46b473038152c819cd8d166b878282f4b921ce5a2",
         "originalFileName": null
       }
     },
@@ -459,10 +459,10 @@
       "web": {
         "file": "web/major-20.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 591952,
-        "sha256": "dfa0fe511c2b889d98a4fb9fb20b6d2804609b55c66f654f1de6f0446aa11d86",
+        "width": 720,
+        "height": 1240,
+        "bytes": 232204,
+        "sha256": "d455c159fe5d9aa513ae1541a5d83904b60c6d6ee1388a6ab5f2edc5001eb33a",
         "originalFileName": null
       }
     },
@@ -481,10 +481,10 @@
       "web": {
         "file": "web/major-21.webp",
         "mediaType": "image/webp",
-        "width": 1112,
-        "height": 1920,
-        "bytes": 579646,
-        "sha256": "97ba2d8214e16e32591ee7b30f85b97a67d6baddac5815b6e697162f5231f122",
+        "width": 720,
+        "height": 1243,
+        "bytes": 228400,
+        "sha256": "7f0be02e61ac3077a7676a4e2d7033a276bbf60d197a509f3ceeb0e73e5a60bb",
         "originalFileName": null
       }
     },
@@ -503,10 +503,10 @@
       "web": {
         "file": "web/minor-wands-ace.webp",
         "mediaType": "image/webp",
-        "width": 1106,
-        "height": 1920,
-        "bytes": 541606,
-        "sha256": "142d640263c43c41a17b88c173b0d72e1a76eac3d83cf4423817059953e5c8f3",
+        "width": 720,
+        "height": 1250,
+        "bytes": 215414,
+        "sha256": "c41097da90b81eb4eda8c9e925f07269a32d17c026371347b5f3f2809bf19364",
         "originalFileName": null
       }
     },
@@ -525,10 +525,10 @@
       "web": {
         "file": "web/minor-wands-two.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 546906,
-        "sha256": "2ac06227aa18964746704e16f76b20e58a825dc06334d85434b97b0587d5fca5",
+        "width": 720,
+        "height": 1240,
+        "bytes": 210284,
+        "sha256": "fd325f3163f15ee9e5a5c3f02579c1ece9c5fa6c29163a154fe3b8308feab32c",
         "originalFileName": null
       }
     },
@@ -547,10 +547,10 @@
       "web": {
         "file": "web/minor-wands-three.webp",
         "mediaType": "image/webp",
-        "width": 1103,
-        "height": 1920,
-        "bytes": 612048,
-        "sha256": "8b486634afbddc13679be6160cfa376d8d91d67c33ad78bdcf0257b8e85dab7c",
+        "width": 720,
+        "height": 1253,
+        "bytes": 236292,
+        "sha256": "012efaae4553a0bd92b390716f9998fa1e9c5a9fec03dc99021c174543d1eed5",
         "originalFileName": null
       }
     },
@@ -569,10 +569,10 @@
       "web": {
         "file": "web/minor-wands-four.webp",
         "mediaType": "image/webp",
-        "width": 1108,
-        "height": 1920,
-        "bytes": 462128,
-        "sha256": "113ee5b168ff72adf40abde94d16e727cefd93462779af3ca3f64b90064633b8",
+        "width": 720,
+        "height": 1248,
+        "bytes": 175530,
+        "sha256": "e4e893f7656c0c3df534c26b259944335e9b0598bd5b53dee030317fe0e41f8a",
         "originalFileName": null
       }
     },
@@ -591,10 +591,10 @@
       "web": {
         "file": "web/minor-wands-five.webp",
         "mediaType": "image/webp",
-        "width": 1108,
-        "height": 1920,
-        "bytes": 511548,
-        "sha256": "14a0d700fb96b2e4c6d10c68c72f5eab5a2c734d18cad2a678fcfc32cd8d5cbd",
+        "width": 720,
+        "height": 1248,
+        "bytes": 199096,
+        "sha256": "b677ca90e94ca790fbd89922ea0115ff6c5432e69450d3da2fb6df67fc2d404f",
         "originalFileName": null
       }
     },
@@ -613,10 +613,10 @@
       "web": {
         "file": "web/minor-wands-six.webp",
         "mediaType": "image/webp",
-        "width": 1118,
-        "height": 1920,
-        "bytes": 537206,
-        "sha256": "cab2fe547589990b2e16d989b157c43ed3eab3a887e25d9e3133efd1b1728729",
+        "width": 720,
+        "height": 1236,
+        "bytes": 210538,
+        "sha256": "ef025bf68fa2e0074594dac5d2e83f013faaa6efd7143a2a94dfe4a5694dbf67",
         "originalFileName": null
       }
     },
@@ -635,10 +635,10 @@
       "web": {
         "file": "web/minor-wands-seven.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 429456,
-        "sha256": "bc48851f86bbebe08e5749f2c2649b4bae894cc68244f6d2ad7378de9eaed488",
+        "width": 720,
+        "height": 1247,
+        "bytes": 159190,
+        "sha256": "8edb6fd6f19768b5765bdce6a7b966fdec5d824215ceb758792a6c094dae5dcf",
         "originalFileName": null
       }
     },
@@ -657,10 +657,10 @@
       "web": {
         "file": "web/minor-wands-eight.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 421910,
-        "sha256": "33c42b9b807a6b3d2950846dbee686d511dc9ae8e41ff824c4c38a25c693594c",
+        "width": 720,
+        "height": 1240,
+        "bytes": 151956,
+        "sha256": "4d83c66667fbd3cf0436a1980674d8a0278f51399a074b436cb130fc6fc86c6c",
         "originalFileName": null
       }
     },
@@ -679,10 +679,10 @@
       "web": {
         "file": "web/minor-wands-nine.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 546720,
-        "sha256": "e6a61117d0801b682a3ecc9ee6b50b78ac2474ff6f8d0783837be6be9bb303f5",
+        "width": 720,
+        "height": 1240,
+        "bytes": 212972,
+        "sha256": "0a1f958081fea65def26706c0605cf4fc66ba75777108e7c5bb6cdbad5387dc4",
         "originalFileName": null
       }
     },
@@ -701,10 +701,10 @@
       "web": {
         "file": "web/minor-wands-ten.webp",
         "mediaType": "image/webp",
-        "width": 1101,
-        "height": 1920,
-        "bytes": 492510,
-        "sha256": "9c2b63a49423d3c97bd37a0972bdf09ed51fab4130d0f374aa09f6260a004a85",
+        "width": 720,
+        "height": 1256,
+        "bytes": 188082,
+        "sha256": "ae842a9d325a322d8c82824ecd2f084a4bf998c95cd983c3ce2095f0a1b3c669",
         "originalFileName": null
       }
     },
@@ -723,10 +723,10 @@
       "web": {
         "file": "web/minor-wands-page.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 619664,
-        "sha256": "577b78e0d470746847218910f2ea3e08594850b97d355938740e0e45b113e37a",
+        "width": 720,
+        "height": 1247,
+        "bytes": 238184,
+        "sha256": "2def8e22a6638a984d0e48aad382e286af22d93d952111a7b586595f08d5a171",
         "originalFileName": null
       }
     },
@@ -745,10 +745,10 @@
       "web": {
         "file": "web/minor-wands-knight.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 640598,
-        "sha256": "fd957518ab48c405dd441acd7a8f87a00acb8648150fec77f437745de5ba5949",
+        "width": 720,
+        "height": 1240,
+        "bytes": 251530,
+        "sha256": "1bf57bff907aa63ca2d3c8483718d0239616abfd91ea969125b7e0c22617704f",
         "originalFileName": null
       }
     },
@@ -767,10 +767,10 @@
       "web": {
         "file": "web/minor-wands-queen.webp",
         "mediaType": "image/webp",
-        "width": 1118,
-        "height": 1920,
-        "bytes": 617884,
-        "sha256": "e50276e0f9f0783372c31762c07a2945abe1f82c265f44de2ad924fafde47026",
+        "width": 720,
+        "height": 1236,
+        "bytes": 243790,
+        "sha256": "d6cb36b9be36ce1a237b1c9dc75017888a04bdcc70c1bc2b506ee37e21a17cb9",
         "originalFileName": null
       }
     },
@@ -789,10 +789,10 @@
       "web": {
         "file": "web/minor-wands-king.webp",
         "mediaType": "image/webp",
-        "width": 1104,
-        "height": 1920,
-        "bytes": 653414,
-        "sha256": "20397211c174c5ae959f5806d120b7054f4f2bf69ebbbfa7ada38b17bba05532",
+        "width": 720,
+        "height": 1252,
+        "bytes": 265252,
+        "sha256": "44e14e204954d1430d5f4ee541916e94809a99a38b3c9f78f429ca4cafffac42",
         "originalFileName": null
       }
     },
@@ -811,10 +811,10 @@
       "web": {
         "file": "web/minor-cups-ace.webp",
         "mediaType": "image/webp",
-        "width": 1112,
-        "height": 1920,
-        "bytes": 612792,
-        "sha256": "a624430e73e1d816df3f41ba6094051ef3422df3bda542b6da86d12a24c4ba22",
+        "width": 720,
+        "height": 1243,
+        "bytes": 243416,
+        "sha256": "06ad7c0fc8bb1b5a27347b83bf23f3b36fe4cffe51e935b115a14f40d29b37b8",
         "originalFileName": null
       }
     },
@@ -833,10 +833,10 @@
       "web": {
         "file": "web/minor-cups-two.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 558340,
-        "sha256": "ed551075f890f791fc9264194858588ab182fa35c7969f61d6495aae98df916a",
+        "width": 720,
+        "height": 1247,
+        "bytes": 223656,
+        "sha256": "fc32372c06a997c9f1773421c38f7e678791246a65ca5508bf719d04da264563",
         "originalFileName": null
       }
     },
@@ -855,10 +855,10 @@
       "web": {
         "file": "web/minor-cups-three.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1919,
-        "bytes": 560204,
-        "sha256": "70a3b86e3f4604fa1ea69c1918eac9f77862ecf23229477cd74d5e776115b547",
+        "width": 720,
+        "height": 1237,
+        "bytes": 219786,
+        "sha256": "b5725adbf28ae76b38680ad9104e29a676d65b85e73862c7d51cb0b428961844",
         "originalFileName": null
       }
     },
@@ -877,10 +877,10 @@
       "web": {
         "file": "web/minor-cups-four.webp",
         "mediaType": "image/webp",
-        "width": 1118,
-        "height": 1920,
-        "bytes": 480406,
-        "sha256": "86cfff48ce6c69ec38905eed5e21dfaf097b9d6982a52cbf7eaece09d9398905",
+        "width": 720,
+        "height": 1236,
+        "bytes": 173504,
+        "sha256": "596370093154bc79a8deb8be6b67469770919d84bb8e304a522880207f560523",
         "originalFileName": null
       }
     },
@@ -899,10 +899,10 @@
       "web": {
         "file": "web/minor-cups-five.webp",
         "mediaType": "image/webp",
-        "width": 1121,
-        "height": 1920,
-        "bytes": 385324,
-        "sha256": "6a2b6a8b4078c30b0cacf592d1a066fb5c48f25bb6c1046d478d94d98d6ec3ac",
+        "width": 720,
+        "height": 1233,
+        "bytes": 136194,
+        "sha256": "ee7f3171fafb490a12f1fdf5653d7cbeab83e135f4899774fce0e0241466acec",
         "originalFileName": null
       }
     },
@@ -921,10 +921,10 @@
       "web": {
         "file": "web/minor-cups-six.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 635046,
-        "sha256": "95d04ce9a74d70dbbefd3eaf0d6b97d081ef9b85fa54084e4f1537396209a60b",
+        "width": 720,
+        "height": 1240,
+        "bytes": 252402,
+        "sha256": "b7018ec444825eb2f0c57a875d93a37f27e0edace0b314ab5430dda88e9fc29b",
         "originalFileName": null
       }
     },
@@ -943,10 +943,10 @@
       "web": {
         "file": "web/minor-cups-seven.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 471624,
-        "sha256": "841d069567ee6fb3bb128669d1da6c16ce673b5039d1c8e9a30c59f12c7cb2fd",
+        "width": 720,
+        "height": 1247,
+        "bytes": 180056,
+        "sha256": "69af9dabfd921e0494948ab12d0fb27ebf71471a14e6b5e21475d63a767cfbbb",
         "originalFileName": null
       }
     },
@@ -965,10 +965,10 @@
       "web": {
         "file": "web/minor-cups-eight.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 526510,
-        "sha256": "5e2b1e8e5a370bef998b913b6c1acac8f3b0a53a89cf69dad6829fda4eb30530",
+        "width": 720,
+        "height": 1240,
+        "bytes": 196844,
+        "sha256": "3925463d27a25810f815d03eb73c5c286bea674e0f19917a73c808db65e4c1bb",
         "originalFileName": null
       }
     },
@@ -987,10 +987,10 @@
       "web": {
         "file": "web/minor-cups-nine.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 466772,
-        "sha256": "bafe8550bc0e0136d70a7d5613a92370f108faff35082add7eac7461926b4b26",
+        "width": 720,
+        "height": 1240,
+        "bytes": 185292,
+        "sha256": "ccdb61bd31a1d396d803c1c372e68c527d5e92a2908950c102066f0b32979b31",
         "originalFileName": null
       }
     },
@@ -1009,10 +1009,10 @@
       "web": {
         "file": "web/minor-cups-ten.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 618554,
-        "sha256": "aaba5b4e7996d0ab70794a1ff0e44d9761d6ef28179f7062e980156d5cb537ef",
+        "width": 720,
+        "height": 1247,
+        "bytes": 244050,
+        "sha256": "d24c96dbc87bd74f968c6ae26e38f271bc092235f726b6559a05474dd729ef4c",
         "originalFileName": null
       }
     },
@@ -1031,10 +1031,10 @@
       "web": {
         "file": "web/minor-cups-page.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 634528,
-        "sha256": "d5da1a6e04467c576052909be2252221d7190336cea1447f678a9b51de81507f",
+        "width": 720,
+        "height": 1240,
+        "bytes": 249048,
+        "sha256": "aa2e1da553a0af32750152129d0493b4d9a98c764fc14caec55682a23e86c6b2",
         "originalFileName": null
       }
     },
@@ -1053,10 +1053,10 @@
       "web": {
         "file": "web/minor-cups-knight.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 586418,
-        "sha256": "efb9709a06d0a3656435263205db61ed68281bfeb542425707c4417b343e1961",
+        "width": 720,
+        "height": 1247,
+        "bytes": 231702,
+        "sha256": "38142f4b5ba6f56af8a774c47f00bbf1d42266e24f2300f87c39712704991767",
         "originalFileName": null
       }
     },
@@ -1075,10 +1075,10 @@
       "web": {
         "file": "web/minor-cups-queen.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 524102,
-        "sha256": "a01ef3ec19b1b09e5f3ac8e12bbe4ef9e24260e84a1a60f4bd3921e981d831fe",
+        "width": 720,
+        "height": 1240,
+        "bytes": 207152,
+        "sha256": "461f7b65fc3e85010e79f3a55ebdc647c5bc0052942ed9402d8f1795a2e380e1",
         "originalFileName": null
       }
     },
@@ -1097,10 +1097,10 @@
       "web": {
         "file": "web/minor-cups-king.webp",
         "mediaType": "image/webp",
-        "width": 1121,
-        "height": 1920,
-        "bytes": 581150,
-        "sha256": "a0e8f597f107750ace1cb1258dad52da40ea1b583e60361850da23f93d6049bf",
+        "width": 720,
+        "height": 1233,
+        "bytes": 225998,
+        "sha256": "edec85c9d7e59e0ca4eb7dda4dcc9d4f1fe6e823ffb84bd4340b3c455a2015b3",
         "originalFileName": null
       }
     },
@@ -1119,10 +1119,10 @@
       "web": {
         "file": "web/minor-swords-ace.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 542842,
-        "sha256": "0c5ab36457095b41285ba3abec0fb2489da1ad3c58f1742225a3ba24866ab713",
+        "width": 720,
+        "height": 1247,
+        "bytes": 215712,
+        "sha256": "f2bda5631efb4ea4c7454de7d9da39a1ba6a10822d01c9effed629331083250e",
         "originalFileName": null
       }
     },
@@ -1141,10 +1141,10 @@
       "web": {
         "file": "web/minor-swords-two.webp",
         "mediaType": "image/webp",
-        "width": 1121,
-        "height": 1920,
-        "bytes": 487600,
-        "sha256": "66e300cc5dda8b77fb8a2425053a21bd05b5e375947858f047b2eb5dd242dc26",
+        "width": 720,
+        "height": 1233,
+        "bytes": 183810,
+        "sha256": "9971f3416e4a1648dc687d8a481ce27fc32eb6f5a436be4ddeeee5a76a2ff4ce",
         "originalFileName": null
       }
     },
@@ -1163,10 +1163,10 @@
       "web": {
         "file": "web/minor-swords-three.webp",
         "mediaType": "image/webp",
-        "width": 1103,
-        "height": 1920,
-        "bytes": 410084,
-        "sha256": "8c34fd2a6a136d46660f7fcd2134f25ea5e232935a4e44fe18612d9fa7b3f173",
+        "width": 720,
+        "height": 1253,
+        "bytes": 158812,
+        "sha256": "26aa9a1348ce48e1bfb703be7538c2a3e948e751b43b5d851c8941c22660d08c",
         "originalFileName": null
       }
     },
@@ -1185,10 +1185,10 @@
       "web": {
         "file": "web/minor-swords-four.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1919,
-        "bytes": 521652,
-        "sha256": "e57e4cb1f297c38807887c2e96ced660c6b088ca212d3416973454c90b23436d",
+        "width": 720,
+        "height": 1237,
+        "bytes": 200474,
+        "sha256": "46c9ef5e81281d2a5810138f77f888de0621966267ee6b2df4ffa44552e7fd66",
         "originalFileName": null
       }
     },
@@ -1207,10 +1207,10 @@
       "web": {
         "file": "web/minor-swords-five.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 557986,
-        "sha256": "017fc2337f539d78545490ab0724b0cd5060dc11dc60d31e5013c2d4b217d808",
+        "width": 720,
+        "height": 1247,
+        "bytes": 216602,
+        "sha256": "2c2e1595e88e277404ef01ab3c2bd1bed3823f5535f0ff3e3fa39deb465dfa07",
         "originalFileName": null
       }
     },
@@ -1229,10 +1229,10 @@
       "web": {
         "file": "web/minor-swords-six.webp",
         "mediaType": "image/webp",
-        "width": 1111,
-        "height": 1919,
-        "bytes": 622838,
-        "sha256": "1995389281e571d048c79ebd55141aba2923cf5b6b0a348e648b58eb87aba2b1",
+        "width": 720,
+        "height": 1244,
+        "bytes": 234748,
+        "sha256": "e5f284a05c06affe9ce1dfb6721b7f01acf200baed82fd7d6d0b614b42c78f4a",
         "originalFileName": null
       }
     },
@@ -1251,10 +1251,10 @@
       "web": {
         "file": "web/minor-swords-seven.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 456270,
-        "sha256": "0101c51b4636f2f00bf6b1bce379512832ca84aa3d4a6b518d1d2b9cf8733eee",
+        "width": 720,
+        "height": 1240,
+        "bytes": 167776,
+        "sha256": "769f537fa0c67a7e6c182daf9fc5a3a04a5f0c5087fc0b9f2d9e4ec99a2b4edb",
         "originalFileName": null
       }
     },
@@ -1273,10 +1273,10 @@
       "web": {
         "file": "web/minor-swords-eight.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 564214,
-        "sha256": "54a970da75374ba07ce3718255112c37ea0fa8ac99e3a633c9e87a7fe8ad7515",
+        "width": 720,
+        "height": 1240,
+        "bytes": 226062,
+        "sha256": "503216e448ebfca6df2dde2eeaa48dd8f96e3a07660917ee28eccf9bcaceae42",
         "originalFileName": null
       }
     },
@@ -1295,10 +1295,10 @@
       "web": {
         "file": "web/minor-swords-nine.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 481746,
-        "sha256": "c1b460d8170cccd75ae28fa85ef8435a878018117df545569844d54b30927efa",
+        "width": 720,
+        "height": 1240,
+        "bytes": 183522,
+        "sha256": "0a20c8aa55b5c1a942d7ff9b6aa00fac1359bb52c5316e9efc9eb437e445bfe3",
         "originalFileName": null
       }
     },
@@ -1317,10 +1317,10 @@
       "web": {
         "file": "web/minor-swords-ten.webp",
         "mediaType": "image/webp",
-        "width": 1107,
-        "height": 1920,
-        "bytes": 417286,
-        "sha256": "ef864815ddcebfee77581824f6e6d5346e20b2168de77e85e9eedb84028f3e28",
+        "width": 720,
+        "height": 1249,
+        "bytes": 161866,
+        "sha256": "d16cfb86122a9dd6a6d9242f09d827210a27c7ad322d3dbf39f4fd34443baa8d",
         "originalFileName": null
       }
     },
@@ -1339,10 +1339,10 @@
       "web": {
         "file": "web/minor-swords-page.webp",
         "mediaType": "image/webp",
-        "width": 1108,
-        "height": 1920,
-        "bytes": 546728,
-        "sha256": "ebac7a65c46ac07cc96a6c6bcc3e2044b1b54163d054572d94afe6ee47d6e38c",
+        "width": 720,
+        "height": 1248,
+        "bytes": 212276,
+        "sha256": "00b9ba89ac262ef7bcf2226803ee3c0df8c20bcb6ed970ca0d994ee08d0d6749",
         "originalFileName": null
       }
     },
@@ -1361,10 +1361,10 @@
       "web": {
         "file": "web/minor-swords-knight.webp",
         "mediaType": "image/webp",
-        "width": 1112,
-        "height": 1920,
-        "bytes": 515508,
-        "sha256": "30a99cd2531317e5b48d10b34432ebf438302d8ef4f4e116b1c01dcac4809faa",
+        "width": 720,
+        "height": 1243,
+        "bytes": 205154,
+        "sha256": "e68d16c6b172d7135ff6c925baee0a3f323a6ca7f1407a0cedee12fec1179081",
         "originalFileName": null
       }
     },
@@ -1383,10 +1383,10 @@
       "web": {
         "file": "web/minor-swords-queen.webp",
         "mediaType": "image/webp",
-        "width": 1104,
-        "height": 1920,
-        "bytes": 487960,
-        "sha256": "c8e0133637678038153c2a355e9690163914ebfdab24f71a3fa1f96f70726879",
+        "width": 720,
+        "height": 1252,
+        "bytes": 187172,
+        "sha256": "77e244fe7c5fe2ae4865b77e9e34c1530768844e6c3c5e88d56fd40133951706",
         "originalFileName": null
       }
     },
@@ -1405,10 +1405,10 @@
       "web": {
         "file": "web/minor-swords-king.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1919,
-        "bytes": 585044,
-        "sha256": "f721c57883d7db9f72f27c01e1221acf2be1b9293557e8439ba9cebe54c5afcb",
+        "width": 720,
+        "height": 1237,
+        "bytes": 231088,
+        "sha256": "9995449d661b275141a24b8e28233c1dc5e8d3e9e664f573eabfcbd59b4a411a",
         "originalFileName": null
       }
     },
@@ -1427,10 +1427,10 @@
       "web": {
         "file": "web/minor-pentacles-ace.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 548880,
-        "sha256": "d5c41126fe1fea4fce15de3d23b8b43e1e3f0f0733e1c56436abb027a41d7c55",
+        "width": 720,
+        "height": 1247,
+        "bytes": 215368,
+        "sha256": "e75c024c2070469437e44e17a42d49e3a2cc37310d0a60f5730101f3c803ef55",
         "originalFileName": null
       }
     },
@@ -1449,10 +1449,10 @@
       "web": {
         "file": "web/minor-pentacles-two.webp",
         "mediaType": "image/webp",
-        "width": 1112,
-        "height": 1920,
-        "bytes": 572044,
-        "sha256": "0dcf295bd2a3bfa1328f4eac858852d14336e5b9ebad7568e37c97dc8fb7ff6e",
+        "width": 720,
+        "height": 1243,
+        "bytes": 219968,
+        "sha256": "0f1754b40d7f624edab9cefb3a5e396bab85c893de0e958887bbbf6f85655e8e",
         "originalFileName": null
       }
     },
@@ -1471,10 +1471,10 @@
       "web": {
         "file": "web/minor-pentacles-three.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1919,
-        "bytes": 555568,
-        "sha256": "18798a97061c6510048c09ab1b8630e889d67a105cd7ad4597a78b6994411663",
+        "width": 720,
+        "height": 1237,
+        "bytes": 217784,
+        "sha256": "3d699abbdff0853d1541e357b441f330fc982a0d091b0a15c80316d168ade156",
         "originalFileName": null
       }
     },
@@ -1493,10 +1493,10 @@
       "web": {
         "file": "web/minor-pentacles-four.webp",
         "mediaType": "image/webp",
-        "width": 1110,
-        "height": 1920,
-        "bytes": 517192,
-        "sha256": "1823ec3ab060791a4ae97d93a8768fd401470878a5e0e615aa5e53bc10ff731c",
+        "width": 720,
+        "height": 1245,
+        "bytes": 202948,
+        "sha256": "92fe622f15f02ac719450f8199cec6146874011d15fab2579553157b607ed435",
         "originalFileName": null
       }
     },
@@ -1515,10 +1515,10 @@
       "web": {
         "file": "web/minor-pentacles-five.webp",
         "mediaType": "image/webp",
-        "width": 1112,
-        "height": 1920,
-        "bytes": 546374,
-        "sha256": "80e78aa31bf40c37a76cd0c97a4974e1ced7b5228e44f39d9f9f45a9864397fe",
+        "width": 720,
+        "height": 1243,
+        "bytes": 218894,
+        "sha256": "28ad1c1690c011f31c0d65d8dcdce03dddc6b5ea0d5a351f3c15436bf5287fe2",
         "originalFileName": null
       }
     },
@@ -1537,10 +1537,10 @@
       "web": {
         "file": "web/minor-pentacles-six.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 556224,
-        "sha256": "07307351eda02203d1146d52de30ccdef421b06d3c92a251bbcd27f915e83240",
+        "width": 720,
+        "height": 1247,
+        "bytes": 217912,
+        "sha256": "8da5f4e81b67e3e5b36b97d9f2b965bf3bce5c0aca81ced98b636f7e73f3d9ad",
         "originalFileName": null
       }
     },
@@ -1559,10 +1559,10 @@
       "web": {
         "file": "web/minor-pentacles-seven.webp",
         "mediaType": "image/webp",
-        "width": 1114,
-        "height": 1919,
-        "bytes": 611672,
-        "sha256": "f602ced1050ce43077a164917c489b5ee70bd1110b928d072bb8c06adcb80447",
+        "width": 720,
+        "height": 1240,
+        "bytes": 238054,
+        "sha256": "efc7e4002d9a3a0d20d65d7ace627f49d48d111e25dd9452c98f90bd8f5e5296",
         "originalFileName": null
       }
     },
@@ -1581,10 +1581,10 @@
       "web": {
         "file": "web/minor-pentacles-eight.webp",
         "mediaType": "image/webp",
-        "width": 1117,
-        "height": 1920,
-        "bytes": 573618,
-        "sha256": "2d21afd0e3806c6b613516ef6a81f4d7ca0457530e3be923b986047db6f5d6fe",
+        "width": 720,
+        "height": 1238,
+        "bytes": 221858,
+        "sha256": "3a9e5c412a0f394f47f7fcee05ccfbf3eeae736916c03fdb3ead5311f776d0b0",
         "originalFileName": null
       }
     },
@@ -1603,10 +1603,10 @@
       "web": {
         "file": "web/minor-pentacles-nine.webp",
         "mediaType": "image/webp",
-        "width": 1108,
-        "height": 1920,
-        "bytes": 503380,
-        "sha256": "26e544f7f98bac3268b4a4fa6578597488648623ece0ad7fe201790d8f0cda8d",
+        "width": 720,
+        "height": 1248,
+        "bytes": 196964,
+        "sha256": "f723d0e49207429b5fc9056abb1fd0853a4a71f716c27281c65ec4dd6b1f7366",
         "originalFileName": null
       }
     },
@@ -1625,10 +1625,10 @@
       "web": {
         "file": "web/minor-pentacles-ten.webp",
         "mediaType": "image/webp",
-        "width": 1115,
-        "height": 1920,
-        "bytes": 621126,
-        "sha256": "cd20c20d8502faaf73a972c7eb03f51eb63ee584a197ae22e2e5e5b792680db3",
+        "width": 720,
+        "height": 1240,
+        "bytes": 244316,
+        "sha256": "0456cd21fc3ca9350cf2b8211d6fcd99803ab52f7ba546ca89ab4b97cb4450f8",
         "originalFileName": null
       }
     },
@@ -1647,10 +1647,10 @@
       "web": {
         "file": "web/minor-pentacles-page.webp",
         "mediaType": "image/webp",
-        "width": 1112,
-        "height": 1920,
-        "bytes": 424068,
-        "sha256": "42a7451eae6bf5c1871aae6496d2f1b487ec7c4e3efe5fc9fcd00ad910b36336",
+        "width": 720,
+        "height": 1243,
+        "bytes": 161456,
+        "sha256": "d4c0dc5cdcb12e4454949ca5ee6388632e88eae8dee98a268d785a9121f13dd9",
         "originalFileName": null
       }
     },
@@ -1669,10 +1669,10 @@
       "web": {
         "file": "web/minor-pentacles-knight.webp",
         "mediaType": "image/webp",
-        "width": 1111,
-        "height": 1919,
-        "bytes": 387600,
-        "sha256": "89853fba28eb023701a8f90986ae58f2e8b177928a5c8e592d15452f9a3cefd4",
+        "width": 720,
+        "height": 1244,
+        "bytes": 146856,
+        "sha256": "cf209596b7d7637110fe394259b5c3f8853585a4cc0e2c53725df0475e8d6ac0",
         "originalFileName": null
       }
     },
@@ -1691,10 +1691,10 @@
       "web": {
         "file": "web/minor-pentacles-queen.webp",
         "mediaType": "image/webp",
-        "width": 1109,
-        "height": 1920,
-        "bytes": 586606,
-        "sha256": "bf25cebf3fe9abcd3f245c2071c8ac03f0fcbf7c7a93004ab118779059113509",
+        "width": 720,
+        "height": 1247,
+        "bytes": 241132,
+        "sha256": "977b57522aed92bc62ccd2f5c7afafec6d1419a6fd65b079719df85691ffcc7f",
         "originalFileName": null
       }
     },
@@ -1713,10 +1713,10 @@
       "web": {
         "file": "web/minor-pentacles-king.webp",
         "mediaType": "image/webp",
-        "width": 1107,
-        "height": 1920,
-        "bytes": 485394,
-        "sha256": "ddecd14752018f66bdac0344743c005917d26b8b4ac66ec246472757afddf493",
+        "width": 720,
+        "height": 1249,
+        "bytes": 197400,
+        "sha256": "93b8987835bbf29e8acce90a7bb433bb3efa733cc7594814db65f3b45fba6a2f",
         "originalFileName": null
       }
     }

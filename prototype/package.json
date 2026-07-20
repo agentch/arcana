@@ -16,6 +16,7 @@
     "assets:download:commons": "node scripts/download-commons-rws-assets.mjs",
     "assets:verify": "node scripts/process-deck-assets.mjs verify",
     "assets:build:web": "node scripts/process-deck-assets.mjs build-web",
+    "assets:rebuild:web": "node scripts/process-deck-assets.mjs rebuild-web",
     "assets:review:sheet": "node scripts/create-rws-review-sheet.mjs",
     "assets:approve": "node scripts/process-deck-assets.mjs approve",
     "assets:sync:public": "node scripts/process-deck-assets.mjs sync-public",

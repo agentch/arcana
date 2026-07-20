@@ -218,6 +218,7 @@ npm run data:scaffold:rws
 npm run assets:download:commons
 npm run assets:verify
 npm run assets:build:web
+npm run assets:rebuild:web
 npm run assets:review:sheet
 npm run assets:approve
 npm run assets:sync:public
@@ -227,6 +228,7 @@ npm run assets:sync:public
 - `assets:download:commons` 只下载审计清单锁定的文件，并核对 Commons SHA-1、字节数、尺寸和格式。
 - `assets:verify` 按素材状态检查路径边界、文件存在性、格式、尺寸、大小、SHA-256 和授权门槛。
 - `assets:build:web` 只处理 `source-ready` 条目，按照 `deck.json` 固定参数生成 WebP，写回元数据后再次执行完整校验。
+- `assets:rebuild:web` 在转换参数调整后重建已有 WebP，并将素材退回 `web-ready` 等待重新验收。
 - `assets:review:sheet` 生成78张总览，供人工检查混版、缺牌、重复和异常裁切。
 - `assets:approve` 只允许来源和许可已批准、Web 文件完整的素材进入 `approved`。
 - `assets:sync:public` 根据牌组映射生成站点静态副本，不让业务逻辑引用归档原图。
