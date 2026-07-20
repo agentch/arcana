@@ -1,0 +1,613 @@
+:root {
+  --ink: #f4eedf;
+  --muted: #b8afc9;
+  --gold: #d6b978;
+  --gold-soft: #aa8d54;
+  --night: #0b0a18;
+  --night-2: #17132c;
+  --panel: rgba(28, 23, 49, 0.78);
+  --line: rgba(214, 185, 120, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--night);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 50% -10%, rgba(102, 73, 150, 0.38), transparent 42rem),
+    linear-gradient(180deg, var(--night-2), var(--night));
+  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  color: var(--night);
+  background: var(--gold);
+}
+
+.app-shell {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+.app-shell::before,
+.app-shell::after {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+}
+
+.app-shell::before {
+  opacity: 0.65;
+  background-image:
+    radial-gradient(circle, rgba(255, 246, 218, 0.72) 0 1px, transparent 1.2px),
+    radial-gradient(circle, rgba(214, 185, 120, 0.5) 0 0.8px, transparent 1px);
+  background-position: 0 0, 24px 18px;
+  background-size: 72px 72px, 98px 98px;
+}
+
+.app-shell::after {
+  background: linear-gradient(180deg, transparent 65%, rgba(4, 3, 12, 0.6));
+}
+
+.phone-stage {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 430px);
+  min-height: 100svh;
+  margin: 0 auto;
+  padding: 24px 22px 28px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 40px;
+}
+
+.wordmark {
+  margin: 0;
+  color: var(--gold);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+}
+
+.icon-button {
+  display: inline-grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--muted);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.screen {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  animation: enter 420ms ease both;
+}
+
+.eyebrow {
+  margin: 52px 0 12px;
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 0.24em;
+}
+
+.hero-title,
+.screen-title {
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.hero-title {
+  max-width: 330px;
+  font-size: clamp(34px, 10vw, 46px);
+  line-height: 1.28;
+}
+
+.hero-copy,
+.screen-copy {
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.hero-copy {
+  max-width: 310px;
+  margin: 22px 0 0;
+}
+
+.moon-orbit {
+  position: relative;
+  display: grid;
+  width: 198px;
+  height: 198px;
+  margin: 36px auto 30px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.moon-orbit::before,
+.moon-orbit::after {
+  position: absolute;
+  content: "";
+  border: 1px solid rgba(214, 185, 120, 0.15);
+  border-radius: 50%;
+}
+
+.moon-orbit::before {
+  inset: 14px -18px;
+  transform: rotate(32deg);
+}
+
+.moon-orbit::after {
+  inset: -12px 24px;
+  transform: rotate(-32deg);
+}
+
+.moon {
+  width: 112px;
+  height: 112px;
+  background: #e2cc91;
+  border-radius: 50%;
+  box-shadow: 0 0 54px rgba(214, 185, 120, 0.28);
+}
+
+.moon::after {
+  display: block;
+  width: 100%;
+  height: 100%;
+  content: "";
+  background: var(--night-2);
+  border-radius: 50%;
+  transform: translate(25px, -6px);
+}
+
+.primary-button,
+.secondary-button {
+  width: 100%;
+  min-height: 54px;
+  padding: 14px 20px;
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.primary-button {
+  color: #17101e;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ead59e, #c9a560);
+  border: 0;
+  box-shadow: 0 12px 34px rgba(201, 165, 96, 0.18);
+}
+
+.secondary-button {
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.text-button {
+  padding: 10px;
+  color: var(--muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.home-actions,
+.result-actions {
+  display: grid;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.mode-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+  padding: 18px;
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+}
+
+.mode-symbol {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  color: var(--gold);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.mode-card strong,
+.mode-card span {
+  display: block;
+}
+
+.mode-card small {
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+}
+
+.screen-title {
+  margin-top: 42px;
+  font-size: 30px;
+  line-height: 1.35;
+}
+
+.question-box {
+  width: 100%;
+  min-height: 148px;
+  margin: 34px 0 16px;
+  padding: 18px;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+}
+
+.question-box:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(214, 185, 120, 0.08);
+}
+
+.question-box::placeholder {
+  color: #80778f;
+}
+
+.prompt-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 26px;
+}
+
+.chip {
+  padding: 8px 12px;
+  color: var(--muted);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+}
+
+.draw-stage {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.deck {
+  position: relative;
+  width: 154px;
+  height: 252px;
+  margin: 22px 0 42px;
+}
+
+.deck-card,
+.tarot-card {
+  border: 1px solid var(--gold-soft);
+  border-radius: 12px;
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.38);
+}
+
+.deck-card {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  color: var(--gold);
+  background:
+    radial-gradient(circle, transparent 26%, rgba(214, 185, 120, 0.22) 27% 28%, transparent 29%),
+    repeating-linear-gradient(45deg, transparent 0 11px, rgba(214, 185, 120, 0.08) 12px 13px),
+    #19142f;
+  place-items: center;
+  transition: transform 500ms ease;
+}
+
+.deck-card::before {
+  width: 70%;
+  height: 84%;
+  content: "✦";
+  font-size: 26px;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  line-height: 208px;
+}
+
+.deck.shuffling .deck-card:nth-child(1) {
+  animation: shuffle-left 900ms ease-in-out infinite alternate;
+}
+
+.deck.shuffling .deck-card:nth-child(2) {
+  animation: shuffle-right 800ms 120ms ease-in-out infinite alternate;
+}
+
+.deck-card:nth-child(2) {
+  transform: translate(4px, 5px) rotate(2deg);
+}
+
+.deck-card:nth-child(3) {
+  transform: translate(-3px, 2px) rotate(-1deg);
+}
+
+.draw-hint {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.card-scene {
+  width: 180px;
+  height: 294px;
+  margin: 28px auto 24px;
+  perspective: 1200px;
+}
+
+.tarot-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 800ms cubic-bezier(0.2, 0.72, 0.2, 1);
+}
+
+.tarot-card.revealed {
+  transform: rotateY(180deg);
+}
+
+.tarot-card.reversed .card-face {
+  transform: rotateY(180deg) rotate(180deg);
+}
+
+.card-back,
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 11px;
+  backface-visibility: hidden;
+}
+
+.card-back {
+  color: var(--gold);
+  background:
+    repeating-linear-gradient(-45deg, transparent 0 12px, rgba(214, 185, 120, 0.08) 13px 14px),
+    #19142f;
+}
+
+.card-back::before {
+  display: grid;
+  width: 72%;
+  height: 80%;
+  content: "☾";
+  font-size: 52px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  place-items: center;
+}
+
+.card-face {
+  color: #24192b;
+  background: linear-gradient(145deg, #efe2bd, #cdb06d);
+  transform: rotateY(180deg);
+}
+
+.card-number {
+  position: absolute;
+  top: 16px;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+}
+
+.card-art {
+  display: grid;
+  width: 116px;
+  height: 166px;
+  margin-bottom: 14px;
+  font-size: 68px;
+  background: rgba(45, 30, 53, 0.08);
+  border: 1px solid rgba(45, 30, 53, 0.28);
+  border-radius: 60px 60px 12px 12px;
+  place-items: center;
+}
+
+.card-name {
+  font-size: 20px;
+}
+
+.card-en {
+  margin-top: 4px;
+  font-family: system-ui, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.reveal-label {
+  margin: 0;
+  color: var(--gold);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+
+.reading-panel {
+  margin: 20px 0 24px;
+  padding: 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+}
+
+.reading-panel h2 {
+  margin: 0 0 12px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-bottom: 16px;
+}
+
+.keyword {
+  padding: 5px 9px;
+  color: var(--gold);
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  background: rgba(214, 185, 120, 0.08);
+  border-radius: 999px;
+}
+
+.reading-text,
+.advice {
+  margin: 0;
+  color: #d8d1df;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.advice {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.history-list {
+  display: grid;
+  gap: 12px;
+  margin: 28px 0;
+}
+
+.history-item {
+  padding: 17px;
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.history-meta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--gold);
+  font-size: 12px;
+}
+
+.history-item p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.empty-state {
+  display: grid;
+  flex: 1;
+  color: var(--muted);
+  text-align: center;
+  place-items: center;
+}
+
+.disclaimer {
+  margin: 20px 0 0;
+  color: #776e85;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes shuffle-left {
+  to {
+    transform: translate(-48px, -3px) rotate(-8deg);
+  }
+}
+
+@keyframes shuffle-right {
+  to {
+    transform: translate(46px, 5px) rotate(8deg);
+  }
+}
+
+@media (min-width: 700px) {
+  .phone-stage {
+    min-height: 844px;
+    margin: 32px auto;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 32px;
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.34);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
