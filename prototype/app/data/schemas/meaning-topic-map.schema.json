@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/meaning-topic-map.schema.json",
+  "title": "Arcana Meaning Topic Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "version", "availableTopics", "categoryToTopic"],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "1.0"},
+    "version": {"type": "string", "minLength": 1},
+    "availableTopics": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["love", "career", "family", "mood", "finance", "growth"]
+      }
+    },
+    "categoryToTopic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["love", "career", "family", "mood"],
+      "properties": {
+        "love": {"const": "love"},
+        "career": {"const": "career"},
+        "family": {"const": "family"},
+        "mood": {"const": "mood"}
+      }
+    }
+  }
+}

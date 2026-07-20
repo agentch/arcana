@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
+import {migrateCatalogV1ToV2} from "./migrate-card-meanings-v1-to-v2.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -23,24 +24,33 @@ const [
   deck,
   spreads,
   questionPrompts,
+  meaningTopicMap,
+  foolV2,
   meaningsSchema,
+  meaningV2Schema,
   deckSchema,
   spreadsSchema,
   questionPromptsSchema,
+  meaningTopicMapSchema,
 ] = await Promise.all([
   readJson("app/data/card-meanings.json"),
   readJson("app/data/deck-manifests/arcana-symbolic.json"),
   readJson("app/data/spreads.json"),
   readJson("app/data/question-prompts.json"),
+  readJson("app/data/meaning-topic-map.json"),
+  readJson("app/data/cards/major-00.json"),
   readJson("app/data/schemas/card-meanings.schema.json"),
+  readJson("app/data/schemas/card-meaning-v2.schema.json"),
   readJson("app/data/schemas/deck-manifest.schema.json"),
   readJson("app/data/schemas/spreads.schema.json"),
   readJson("app/data/schemas/question-prompts.schema.json"),
+  readJson("app/data/schemas/meaning-topic-map.schema.json"),
 ]);
 
 const ajv = new Ajv2020({allErrors: true, strict: true});
 
 assertSchema(ajv, meaningsSchema, meanings, "card-meanings.json");
+assertSchema(ajv, meaningV2Schema, foolV2, "cards/major-00.json");
 assertSchema(ajv, deckSchema, deck, "arcana-symbolic.json");
 assertSchema(ajv, spreadsSchema, spreads, "spreads.json");
 assertSchema(
@@ -49,6 +59,22 @@ assertSchema(
   questionPrompts,
   "question-prompts.json",
 );
+assertSchema(
+  ajv,
+  meaningTopicMapSchema,
+  meaningTopicMap,
+  "meaning-topic-map.json",
+);
+
+const migratedDrafts = migrateCatalogV1ToV2(meanings);
+for (const card of migratedDrafts) {
+  assertSchema(
+    ajv,
+    meaningV2Schema,
+    card,
+    `migrated draft ${card.id}`,
+  );
+}
 
 const cardIds = meanings.cards.map((card) => card.id);
 assert.equal(new Set(cardIds).size, cardIds.length, "card IDs must be unique");
@@ -114,6 +140,18 @@ assert.equal(
   questionCategoryIds.length,
   "question category IDs must be unique",
 );
+assert.deepEqual(
+  Object.keys(meaningTopicMap.categoryToTopic),
+  questionCategoryIds,
+  "every active question category must have an explicit meaning topic mapping",
+);
+assert.equal(
+  Object.values(meaningTopicMap.categoryToTopic).every((topicId) =>
+    meaningTopicMap.availableTopics.includes(topicId),
+  ),
+  true,
+  "question categories must only map to available meaning topics",
+);
 for (const category of questionPrompts.categories) {
   assert.equal(
     category.options.length,
@@ -144,5 +182,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated ${meanings.cards.length} cards, ${Object.keys(deck.assets).length} deck assets, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, 1 complete v2 sample, ${Object.keys(deck.assets).length} deck assets, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );

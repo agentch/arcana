@@ -16,7 +16,6 @@ import {
 import type {
   Orientation,
   Reading,
-  SpreadDefinition,
 } from "./domain/tarot";
 
 type Screen = "home" | "question" | "draw" | "reveal" | "result" | "history";
@@ -157,7 +156,10 @@ export function ArcanaPrototype() {
   const [history, setHistory] = useState<Reading[]>([]);
 
   useEffect(() => {
-    setHistory(readHistory());
+    const timeoutId = window.setTimeout(() => {
+      setHistory(readHistory());
+    }, 0);
+    return () => window.clearTimeout(timeoutId);
   }, []);
 
   const activeQuestionCategory =

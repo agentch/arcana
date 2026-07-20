@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/card-meaning-v2.schema.json",
+  "title": "Arcana Layered Card Meaning",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "contentVersion",
+    "id",
+    "arcana",
+    "number",
+    "name",
+    "core",
+    "upright",
+    "reversed",
+    "topics",
+    "editorial"
+  ],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "2.0"},
+    "contentVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "id": {"type": "string", "pattern": "^(major|minor)-[a-z0-9-]+$"},
+    "arcana": {"type": "string", "enum": ["major", "minor"]},
+    "number": {"type": "integer", "minimum": 0, "maximum": 21},
+    "romanNumeral": {"type": "string", "minLength": 1},
+    "suit": {
+      "type": "string",
+      "enum": ["wands", "cups", "swords", "pentacles"]
+    },
+    "rank": {"type": "string", "minLength": 1},
+    "name": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["zh", "en"],
+      "properties": {
+        "zh": {"type": "string", "minLength": 1},
+        "en": {"type": "string", "minLength": 1}
+      }
+    },
+    "core": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "symbols", "element"],
+      "properties": {
+        "summary": {"type": "string", "minLength": 10, "maxLength": 80},
+        "symbols": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {"$ref": "#/$defs/symbol"},
+          "uniqueItems": true
+        },
+        "element": {"type": "string", "minLength": 1}
+      }
+    },
+    "upright": {"$ref": "#/$defs/orientationMeaning"},
+    "reversed": {"$ref": "#/$defs/orientationMeaning"},
+    "topics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["love", "career", "family", "mood"],
+      "properties": {
+        "love": {"$ref": "#/$defs/topicMeaning"},
+        "career": {"$ref": "#/$defs/topicMeaning"},
+        "family": {"$ref": "#/$defs/topicMeaning"},
+        "mood": {"$ref": "#/$defs/topicMeaning"},
+        "finance": {"$ref": "#/$defs/topicMeaning"},
+        "growth": {"$ref": "#/$defs/topicMeaning"}
+      }
+    },
+    "editorial": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "lastReviewedAt"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["draft", "in-review", "approved"]
+        },
+        "lastReviewedAt": {
+          "type": ["string", "null"],
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "sourceNotes": {"type": "string"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"arcana": {"const": "major"}},
+        "required": ["arcana"]
+      },
+      "then": {
+        "required": ["romanNumeral"],
+        "properties": {
+          "romanNumeral": {"type": "string", "minLength": 1},
+          "suit": false,
+          "rank": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {"arcana": {"const": "minor"}},
+        "required": ["arcana"]
+      },
+      "then": {
+        "required": ["suit", "rank"],
+        "properties": {
+          "suit": {
+            "type": "string",
+            "enum": ["wands", "cups", "swords", "pentacles"]
+          },
+          "rank": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "symbol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "meaning"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "meaning": {"type": "string", "minLength": 5, "maxLength": 120}
+      }
+    },
+    "orientationMeaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "keywords",
+        "overview",
+        "light",
+        "shadow",
+        "advice",
+        "reflection"
+      ],
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "overview": {"type": "string", "minLength": 40, "maxLength": 500},
+        "light": {"type": "string", "minLength": 20, "maxLength": 300},
+        "shadow": {"type": "string", "minLength": 20, "maxLength": 300},
+        "advice": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {"type": "string", "minLength": 10, "maxLength": 160}
+        },
+        "reflection": {"type": "string", "minLength": 10, "maxLength": 120}
+      }
+    },
+    "topicMeaning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["upright", "reversed"],
+      "properties": {
+        "upright": {"type": "string", "minLength": 20, "maxLength": 300},
+        "reversed": {"type": "string", "minLength": 20, "maxLength": 300}
+      }
+    }
+  }
+}

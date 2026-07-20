@@ -39,7 +39,13 @@ src/
 
 ```ts
 type Orientation = 'upright' | 'reversed'
-type TopicId = 'love' | 'career' | 'finance' | 'growth'
+type TopicId =
+  | 'love'
+  | 'career'
+  | 'family'
+  | 'mood'
+  | 'finance'
+  | 'growth'
 
 interface CardMeaning {
   id: string
@@ -52,7 +58,10 @@ interface CardMeaning {
   }
   core: {
     summary: string
-    symbols: string[]
+    symbols: Array<{
+      name: string
+      meaning: string
+    }>
     element?: string
   }
   upright: OrientationMeaning
@@ -124,7 +133,7 @@ interface Reading {
 
 正式牌义采用分层内容模型，不使用单个超长 `meaning` 字段。运行时通过“基础牌义 + 正逆位 + 问题主题 + 牌阵位置”生成单牌解读，再由各牌摘要和牌位关系形成多牌组合解读。详细字段、展示字数和迁移策略见 [`card-content-model.md`](card-content-model.md)。
 
-`TopicId` 当前记录的是正式内容候选枚举。Schema v2 实施前需要与问题引导中的感情、职场、家庭、心情分类完成显式映射或统一，页面不得自行推断。
+`TopicId` 包含当前感情、职场、家庭、心情四类主题，并预留财务与个人成长。`meaning-topic-map.json` 负责把问题分类显式映射到牌义主题，页面不得自行推断。
 
 牌阵同样使用版本化配置。页面不能通过 `if (spread === ...)` 写死牌位含义；抽牌数量、位置名称、排列顺序和解读提示均从 `SpreadDefinition` 读取。
 
@@ -134,6 +143,7 @@ interface Reading {
 data/
   cards/                   # 78 张牌的稳定分层语义，每张一份 JSON
     major-00.json
+  meaning-topic-map.json   # 问题分类 → 牌义主题
   spreads.json             # 牌阵与牌位配置
   question-prompts.json    # 问题分类、选项与开放式问题提示
   deck-manifests/

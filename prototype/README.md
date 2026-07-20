@@ -26,11 +26,13 @@ npm run build
 - 本地保存和最近记录
 - 移动端、键盘操作和减少动态效果
 
-当前已包含完整22张大阿卡纳结构化牌义与抽象占位牌面，不包含正式塔罗图片素材。
+当前已包含22张大阿卡纳 v1 原型短文案、1张“愚人”完整 v2 分层样例与抽象占位牌面，不包含正式塔罗图片素材。v2 样例仍处于内容草稿状态，不能视为已审核正式牌义。
 
 ## 数据边界
 
 - `app/data/card-meanings.json`：稳定的牌 ID、名称、关键词、正逆位牌义和建议
+- `app/data/cards/`：正式分层牌义，每张牌一份 v2 JSON
+- `app/data/meaning-topic-map.json`：问题分类到牌义主题的显式映射
 - `app/data/deck-manifests/`：牌组元数据与 `cardId → image` 素材映射
 - `app/data/spreads.json`：牌阵、牌位、顺序和解读提示
 - `app/data/question-prompts.json`：感情、职场、家庭、心情四类问题，每类包含4个可选主题
@@ -42,9 +44,12 @@ npm run build
 
 ```bash
 npm run data:validate
+npm run data:migrate:v2
 npm test
 ```
 
-`data:validate` 会执行 JSON Schema 校验，并检查 card ID 唯一性、牌组素材映射完整性、牌阵位置顺序、问题推荐牌阵和版本化边界。
+`data:validate` 会执行 v1/v2 JSON Schema 校验，并检查 card ID 唯一性、牌组素材映射完整性、牌阵位置顺序、主题映射、问题推荐牌阵和版本化边界。
+
+`data:migrate:v2` 默认将22张 v1 内容生成到标准输出；使用 `-- --output <目录>` 可以生成逐卡编辑草稿。自动迁移结果包含明确的待编辑内容，只能作为内容团队的脚手架，不能直接标记为正式牌义。
 
 原型通过评审后，正式产品将在 Taro + React 工程中实现。
