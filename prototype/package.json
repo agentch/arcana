@@ -12,6 +12,7 @@
     "data:validate": "node scripts/validate-data.mjs",
     "data:migrate:v2": "node scripts/migrate-card-meanings-v1-to-v2.mjs",
     "data:scaffold:rws": "node scripts/generate-rws-scaffold.mjs",
+    "assets:audit:commons": "node scripts/audit-commons-rws-source.mjs",
     "assets:verify": "node scripts/process-deck-assets.mjs verify",
     "assets:build:web": "node scripts/process-deck-assets.mjs build-web",
     "test": "npm run data:validate && npm run assets:verify && npm run build && node --test tests/*.test.mjs",

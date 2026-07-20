@@ -204,3 +204,14 @@
 - 转换：Web 图由固定参数生成 WebP，不覆盖、不裁切或重新上色原文件；生成后重新读取元数据和校验值。
 - 牌背：独立于78张牌面和牌义管理；来源不明确时使用后续审核的 Arcana 原创牌背。
 - 授权门槛：牌组来源和许可未通过审核时，任何牌面都不能标记为 `approved`。
+
+## D-027：RWS 候选来源选用 Commons TaionWC Pam-A 集合
+
+- 日期：2026-07-20
+- 状态：技术审计通过，许可待项目方最终接受
+- 候选：Wikimedia Commons 的 `Rider-Waite-Smith tarot deck (TaionWC)` 分类。
+- 完整性：分类明确为 TaionWC 成套上传的 Pam-A image set，共78个文件。
+- 一致性：78个文件均为 JPEG，宽1090–1144、高1919–1920；作者、原作日期和使用条款字段一致。
+- 权利元数据：78个文件均标记 Public domain、Public Domain Mark 和 `PD-old-80-expired`。
+- 固化：逐文件页面、下载地址、当前版本、SHA-1、尺寸和许可字段写入 `source-audit.json`，并生成不可变 `sourceBatchId`。
+- 边界：Wikimedia 不提供权利状态保证；在项目方接受该风险前，许可保持 `pending-review`，不把文件标记为正式批准素材。

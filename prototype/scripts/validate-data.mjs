@@ -30,6 +30,7 @@ const [
   formalDeck,
   formalDeckManifest,
   cardBacks,
+  sourceAudit,
   meaningsSchema,
   meaningV2Schema,
   deckSchema,
@@ -40,6 +41,7 @@ const [
   formalDeckSchema,
   formalDeckManifestSchema,
   cardBacksSchema,
+  sourceAuditSchema,
 ] = await Promise.all([
   readJson("app/data/card-meanings.json"),
   readJson("app/data/deck-manifests/arcana-symbolic.json"),
@@ -51,6 +53,7 @@ const [
   readJson("app/data/decks/rws-original/deck.json"),
   readJson("app/data/decks/rws-original/manifest.json"),
   readJson("app/data/decks/rws-original/card-backs.json"),
+  readJson("app/data/decks/rws-original/source-audit.json"),
   readJson("app/data/schemas/card-meanings.schema.json"),
   readJson("app/data/schemas/card-meaning-v2.schema.json"),
   readJson("app/data/schemas/deck-manifest.schema.json"),
@@ -61,6 +64,7 @@ const [
   readJson("app/data/schemas/formal-deck.schema.json"),
   readJson("app/data/schemas/formal-deck-manifest.schema.json"),
   readJson("app/data/schemas/card-backs.schema.json"),
+  readJson("app/data/schemas/deck-source-audit.schema.json"),
 ]);
 
 const ajv = new Ajv2020({allErrors: true, strict: true});
@@ -94,6 +98,12 @@ assertSchema(
   cardBacksSchema,
   cardBacks,
   "rws-original/card-backs.json",
+);
+assertSchema(
+  ajv,
+  sourceAuditSchema,
+  sourceAudit,
+  "rws-original/source-audit.json",
 );
 
 const migratedDrafts = migrateCatalogV1ToV2(meanings);
@@ -147,6 +157,21 @@ assert.equal(
   formalDeck.id,
   formalDeckManifest.deckId,
   "formal deck and manifest must use the same deck ID",
+);
+assert.equal(
+  formalDeck.sourceBatchId,
+  sourceAudit.sourceBatchId,
+  "formal deck must pin the audited Commons source batch",
+);
+assert.deepEqual(
+  sourceAudit.files.map((file) => file.cardId),
+  standardCardIds,
+  "source audit files must follow the complete standard card order",
+);
+assert.equal(
+  new Set(sourceAudit.files.map((file) => file.sha1)).size,
+  78,
+  "every audited Commons file must have a unique SHA-1",
 );
 assert.equal(
   formalDeck.id,

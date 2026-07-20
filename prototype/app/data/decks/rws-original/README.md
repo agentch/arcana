@@ -2,6 +2,8 @@
 
 当前目录只包含78张素材槽位和待核验元数据，不包含正式牌面文件。
 
+`source-audit.json` 已固化 Wikimedia Commons TaionWC Pam-A 候选集合的78个当前文件版本。该集合通过技术审计，但许可仍等待项目方最终接受，因此素材槽位继续保持 `pending-source`。
+
 来源与授权通过审核后：
 
 - 未修改的扫描原文件放入 `source/`；

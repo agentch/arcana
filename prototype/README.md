@@ -50,6 +50,7 @@ npm run build
 ```bash
 npm run data:validate
 npm run data:migrate:v2
+npm run assets:audit:commons -- --input <Commons API JSON>
 npm run assets:verify
 npm run assets:build:web
 npm test

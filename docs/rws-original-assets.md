@@ -2,7 +2,7 @@
 
 版本：v1.1
 制定日期：2026-07-20  
-状态：78张索引、Manifest 与素材管线已建立；具体扫描来源与授权待核验
+状态：TaionWC Pam-A 候选来源技术审计通过；许可待项目方最终接受
 
 ## 1. 牌组选择
 
@@ -224,3 +224,5 @@ npm run assets:build:web
 - `assets:build:web` 只处理 `source-ready` 条目，按照 `deck.json` 固定参数生成 WebP，写回元数据后再次执行完整校验。
 
 截至2026-07-20，78个槽位均为 `pending-source`，没有接入或发布任何未经核验的扫描文件。
+
+候选来源的详细核验记录见 [`rws-source-audit.md`](rws-source-audit.md)。

@@ -6,26 +6,26 @@
     "Arthur Edward Waite",
     "Pamela Colman Smith"
   ],
-  "edition": null,
+  "edition": "Pam-A",
   "publicationPeriod": "1909/1910",
   "source": {
-    "status": "pending-review",
-    "title": null,
-    "url": null,
-    "publisher": null,
-    "retrievedAt": null
+    "status": "verified",
+    "title": "Rider-Waite-Smith tarot deck (TaionWC)",
+    "url": "https://commons.wikimedia.org/wiki/Category:Rider-Waite-Smith_tarot_deck_(TaionWC)",
+    "publisher": "Wikimedia Commons",
+    "retrievedAt": "2026-07-20"
   },
   "license": {
     "status": "pending-review",
-    "name": null,
-    "url": null,
-    "commercialUse": "unknown",
-    "modification": "unknown",
-    "redistribution": "unknown",
-    "attributionRequired": "unknown",
-    "notes": "具体扫描文件尚未完成来源与授权核验，不得进入正式发布包。"
+    "name": "Public Domain Mark 1.0",
+    "url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "commercialUse": "allowed",
+    "modification": "allowed",
+    "redistribution": "allowed",
+    "attributionRequired": "no",
+    "notes": "Commons API 审计确认78个文件均标记 Public domain、CC-PD-Mark 和 PD-old-80-expired。Wikimedia 不提供权利状态保证；正式商业启用前仍需项目方最终接受，并建议保留 Pamela Colman Smith、Pam-A、Wikimedia Commons 和文件页来源信息。"
   },
-  "sourceBatchId": null,
+  "sourceBatchId": "commons-taionwc-185b38b7d45d4865ac4fd5f0d3420fa8dfbfa93556633841d11681694cc6acdc",
   "version": "1.0.0",
   "assetBuild": {
     "format": "webp",
