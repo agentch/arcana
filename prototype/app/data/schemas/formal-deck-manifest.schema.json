@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/formal-deck-manifest.schema.json",
+  "title": "Arcana Formal Deck Asset Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "deckId", "manifestVersion", "cardCount", "assets"],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "2.0"},
+    "deckId": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "manifestVersion": {"type": "string", "minLength": 1},
+    "cardCount": {"type": "integer", "const": 78},
+    "assets": {
+      "type": "object",
+      "minProperties": 78,
+      "maxProperties": 78,
+      "additionalProperties": {"$ref": "#/$defs/asset"}
+    }
+  },
+  "$defs": {
+    "nullableText": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "minLength": 1}
+      ]
+    },
+    "nullableInteger": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "integer", "minimum": 1}
+      ]
+    },
+    "file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "originalFileName",
+        "mediaType",
+        "width",
+        "height",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "file": {"$ref": "#/$defs/nullableText"},
+        "originalFileName": {"$ref": "#/$defs/nullableText"},
+        "mediaType": {"$ref": "#/$defs/nullableText"},
+        "width": {"$ref": "#/$defs/nullableInteger"},
+        "height": {"$ref": "#/$defs/nullableInteger"},
+        "bytes": {"$ref": "#/$defs/nullableInteger"},
+        "sha256": {
+          "oneOf": [
+            {"type": "null"},
+            {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+          ]
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cardId", "status", "source", "web"],
+      "properties": {
+        "cardId": {"type": "string", "pattern": "^(major|minor)-[a-z0-9-]+$"},
+        "status": {
+          "type": "string",
+          "enum": ["pending-source", "source-ready", "web-ready", "approved"]
+        },
+        "source": {"$ref": "#/$defs/file"},
+        "web": {"$ref": "#/$defs/file"}
+      }
+    }
+  }
+}

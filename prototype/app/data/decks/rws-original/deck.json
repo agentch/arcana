@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "id": "rws-original",
+  "name": "Rider–Waite–Smith Original",
+  "authors": [
+    "Arthur Edward Waite",
+    "Pamela Colman Smith"
+  ],
+  "edition": null,
+  "publicationPeriod": "1909/1910",
+  "source": {
+    "status": "pending-review",
+    "title": null,
+    "url": null,
+    "publisher": null,
+    "retrievedAt": null
+  },
+  "license": {
+    "status": "pending-review",
+    "name": null,
+    "url": null,
+    "commercialUse": "unknown",
+    "modification": "unknown",
+    "redistribution": "unknown",
+    "attributionRequired": "unknown",
+    "notes": "具体扫描文件尚未完成来源与授权核验，不得进入正式发布包。"
+  },
+  "sourceBatchId": null,
+  "version": "1.0.0",
+  "assetBuild": {
+    "format": "webp",
+    "maxWidth": 1200,
+    "quality": 84,
+    "fit": "inside",
+    "withoutEnlargement": true
+  }
+}

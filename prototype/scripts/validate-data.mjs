@@ -26,12 +26,20 @@ const [
   questionPrompts,
   meaningTopicMap,
   foolV2,
+  cardIndex,
+  formalDeck,
+  formalDeckManifest,
+  cardBacks,
   meaningsSchema,
   meaningV2Schema,
   deckSchema,
   spreadsSchema,
   questionPromptsSchema,
   meaningTopicMapSchema,
+  cardIndexSchema,
+  formalDeckSchema,
+  formalDeckManifestSchema,
+  cardBacksSchema,
 ] = await Promise.all([
   readJson("app/data/card-meanings.json"),
   readJson("app/data/deck-manifests/arcana-symbolic.json"),
@@ -39,12 +47,20 @@ const [
   readJson("app/data/question-prompts.json"),
   readJson("app/data/meaning-topic-map.json"),
   readJson("app/data/cards/major-00.json"),
+  readJson("app/data/card-index.json"),
+  readJson("app/data/decks/rws-original/deck.json"),
+  readJson("app/data/decks/rws-original/manifest.json"),
+  readJson("app/data/decks/rws-original/card-backs.json"),
   readJson("app/data/schemas/card-meanings.schema.json"),
   readJson("app/data/schemas/card-meaning-v2.schema.json"),
   readJson("app/data/schemas/deck-manifest.schema.json"),
   readJson("app/data/schemas/spreads.schema.json"),
   readJson("app/data/schemas/question-prompts.schema.json"),
   readJson("app/data/schemas/meaning-topic-map.schema.json"),
+  readJson("app/data/schemas/card-index.schema.json"),
+  readJson("app/data/schemas/formal-deck.schema.json"),
+  readJson("app/data/schemas/formal-deck-manifest.schema.json"),
+  readJson("app/data/schemas/card-backs.schema.json"),
 ]);
 
 const ajv = new Ajv2020({allErrors: true, strict: true});
@@ -65,6 +81,20 @@ assertSchema(
   meaningTopicMap,
   "meaning-topic-map.json",
 );
+assertSchema(ajv, cardIndexSchema, cardIndex, "card-index.json");
+assertSchema(ajv, formalDeckSchema, formalDeck, "rws-original/deck.json");
+assertSchema(
+  ajv,
+  formalDeckManifestSchema,
+  formalDeckManifest,
+  "rws-original/manifest.json",
+);
+assertSchema(
+  ajv,
+  cardBacksSchema,
+  cardBacks,
+  "rws-original/card-backs.json",
+);
 
 const migratedDrafts = migrateCatalogV1ToV2(meanings);
 for (const card of migratedDrafts) {
@@ -83,6 +113,66 @@ assert.deepEqual(
   [...cardIds].sort(),
   "cards must be sorted by stable ID",
 );
+
+const standardCardIds = cardIndex.cards.map((card) => card.id);
+assert.equal(
+  new Set(standardCardIds).size,
+  78,
+  "the standard card index must contain 78 unique IDs",
+);
+assert.deepEqual(
+  cardIndex.cards.map((card) => card.sortOrder),
+  Array.from({length: 78}, (_, index) => index),
+  "the standard card index must use continuous sortOrder values",
+);
+assert.deepEqual(
+  standardCardIds.slice(0, 22),
+  cardIds,
+  "the v1 major arcana IDs must match the first 22 standard card IDs",
+);
+assert.equal(
+  cardIndex.cards.filter((card) => card.arcana === "major").length,
+  22,
+  "the standard card index must contain 22 major arcana",
+);
+for (const suit of ["wands", "cups", "swords", "pentacles"]) {
+  assert.equal(
+    cardIndex.cards.filter((card) => card.suit === suit).length,
+    14,
+    `${suit} must contain 14 minor arcana`,
+  );
+}
+
+assert.equal(
+  formalDeck.id,
+  formalDeckManifest.deckId,
+  "formal deck and manifest must use the same deck ID",
+);
+assert.equal(
+  formalDeck.id,
+  cardBacks.deckId,
+  "formal deck and card backs must use the same deck ID",
+);
+assert.deepEqual(
+  Object.keys(formalDeckManifest.assets),
+  standardCardIds,
+  "the formal deck manifest must follow the complete standard card order",
+);
+for (const [cardId, asset] of Object.entries(formalDeckManifest.assets)) {
+  assert.equal(asset.cardId, cardId, `${cardId} manifest key must match cardId`);
+}
+if (cardBacks.defaultBackId === null) {
+  assert.equal(
+    cardBacks.backs.length,
+    0,
+    "a pending card back must not contain unverified assets",
+  );
+} else {
+  assert.ok(
+    cardBacks.backs.some((back) => back.id === cardBacks.defaultBackId),
+    "defaultBackId must reference a configured card back",
+  );
+}
 assert.deepEqual(
   Object.keys(deck.assets).sort(),
   [...cardIds].sort(),
@@ -182,5 +272,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, 1 complete v2 sample, ${Object.keys(deck.assets).length} deck assets, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, 1 complete v2 sample, ${Object.keys(deck.assets).length} prototype assets, ${Object.keys(formalDeckManifest.assets).length} RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );

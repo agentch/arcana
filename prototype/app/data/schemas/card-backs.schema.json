@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/card-backs.schema.json",
+  "title": "Arcana Deck Card Backs",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "deckId", "defaultBackId", "backs", "fallbackPolicy"],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "1.0"},
+    "deckId": {"type": "string", "minLength": 1},
+    "defaultBackId": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "minLength": 1}
+      ]
+    },
+    "backs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "origin", "source", "web"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "origin": {"type": "string", "enum": ["rws-source", "arcana-original"]},
+          "source": {"type": ["string", "null"]},
+          "web": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "fallbackPolicy": {"type": "string", "minLength": 1}
+  }
+}

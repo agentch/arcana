@@ -1,0 +1,201 @@
+import {createHash} from "node:crypto";
+import {mkdir, readFile, stat, writeFile} from "node:fs/promises";
+import {dirname, resolve, sep} from "node:path";
+import {fileURLToPath} from "node:url";
+import sharp from "sharp";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const deckRoot = resolve(root, "app/data/decks/rws-original");
+const deckPath = resolve(deckRoot, "deck.json");
+const manifestPath = resolve(deckRoot, "manifest.json");
+
+async function readJson(path) {
+  return JSON.parse(await readFile(path, "utf8"));
+}
+
+async function sha256(path) {
+  return createHash("sha256").update(await readFile(path)).digest("hex");
+}
+
+function resolveDeckFile(relativePath, expectedDirectory) {
+  if (
+    typeof relativePath !== "string" ||
+    !relativePath.startsWith(`${expectedDirectory}/`) ||
+    relativePath.includes("..")
+  ) {
+    throw new Error(
+      `Asset path must stay inside ${expectedDirectory}/: ${relativePath}`,
+    );
+  }
+
+  const absolutePath = resolve(deckRoot, relativePath);
+  if (!absolutePath.startsWith(`${resolve(deckRoot, expectedDirectory)}${sep}`)) {
+    throw new Error(`Asset path escapes the deck directory: ${relativePath}`);
+  }
+  return absolutePath;
+}
+
+function mediaTypeFor(format) {
+  const formats = {
+    jpeg: "image/jpeg",
+    png: "image/png",
+    tiff: "image/tiff",
+    webp: "image/webp",
+  };
+  const mediaType = formats[format];
+  if (!mediaType) throw new Error(`Unsupported image format: ${format}`);
+  return mediaType;
+}
+
+async function inspectFile(relativePath, expectedDirectory) {
+  const absolutePath = resolveDeckFile(relativePath, expectedDirectory);
+  const [fileStat, metadata, digest] = await Promise.all([
+    stat(absolutePath),
+    sharp(absolutePath).metadata(),
+    sha256(absolutePath),
+  ]);
+
+  if (!metadata.width || !metadata.height || !metadata.format) {
+    throw new Error(`Cannot read image metadata: ${relativePath}`);
+  }
+
+  return {
+    file: relativePath,
+    mediaType: mediaTypeFor(metadata.format),
+    width: metadata.width,
+    height: metadata.height,
+    bytes: fileStat.size,
+    sha256: digest,
+  };
+}
+
+function assertPendingFile(file, label) {
+  for (const [key, value] of Object.entries(file)) {
+    if (value !== null) {
+      throw new Error(`${label}.${key} must stay null while pending source review`);
+    }
+  }
+}
+
+function assertRecordedFile(recorded, actual, label) {
+  for (const key of ["file", "mediaType", "width", "height", "bytes", "sha256"]) {
+    if (recorded[key] !== actual[key]) {
+      throw new Error(
+        `${label}.${key} mismatch: manifest=${recorded[key]} actual=${actual[key]}`,
+      );
+    }
+  }
+}
+
+export async function verifyAssets() {
+  const [deck, manifest] = await Promise.all([
+    readJson(deckPath),
+    readJson(manifestPath),
+  ]);
+  const assets = Object.values(manifest.assets);
+
+  for (const asset of assets) {
+    if (asset.status === "pending-source") {
+      assertPendingFile(asset.source, `${asset.cardId}.source`);
+      assertPendingFile(asset.web, `${asset.cardId}.web`);
+      continue;
+    }
+
+    if (!asset.source.file) {
+      throw new Error(`${asset.cardId} is ${asset.status} without a source file`);
+    }
+    const sourceActual = await inspectFile(asset.source.file, "source");
+    assertRecordedFile(asset.source, sourceActual, `${asset.cardId}.source`);
+
+    if (asset.status === "source-ready") {
+      assertPendingFile(asset.web, `${asset.cardId}.web`);
+      continue;
+    }
+
+    if (!asset.web.file) {
+      throw new Error(`${asset.cardId} is ${asset.status} without a web file`);
+    }
+    const webActual = await inspectFile(asset.web.file, "web");
+    assertRecordedFile(asset.web, webActual, `${asset.cardId}.web`);
+    if (webActual.mediaType !== "image/webp") {
+      throw new Error(`${asset.cardId}.web must be image/webp`);
+    }
+
+    if (
+      asset.status === "approved" &&
+      (deck.source.status !== "verified" || deck.license.status !== "approved")
+    ) {
+      throw new Error(
+        `${asset.cardId} cannot be approved before source and license verification`,
+      );
+    }
+  }
+
+  return {
+    total: assets.length,
+    pending: assets.filter((asset) => asset.status === "pending-source").length,
+    sourceReady: assets.filter((asset) => asset.status === "source-ready").length,
+    webReady: assets.filter((asset) => asset.status === "web-ready").length,
+    approved: assets.filter((asset) => asset.status === "approved").length,
+  };
+}
+
+async function buildWebAssets() {
+  const [deck, manifest] = await Promise.all([
+    readJson(deckPath),
+    readJson(manifestPath),
+  ]);
+  let built = 0;
+  await mkdir(resolve(deckRoot, "web"), {recursive: true});
+
+  for (const asset of Object.values(manifest.assets)) {
+    if (asset.status !== "source-ready") continue;
+    if (!asset.source.file) {
+      throw new Error(`${asset.cardId} has no configured source file`);
+    }
+
+    const sourcePath = resolveDeckFile(asset.source.file, "source");
+    const webFile = `web/${asset.cardId}.webp`;
+    const webPath = resolveDeckFile(webFile, "web");
+
+    await sharp(sourcePath)
+      .rotate()
+      .resize({
+        width: deck.assetBuild.maxWidth,
+        fit: deck.assetBuild.fit,
+        withoutEnlargement: deck.assetBuild.withoutEnlargement,
+      })
+      .webp({quality: deck.assetBuild.quality})
+      .toFile(webPath);
+
+    asset.web = {
+      ...(await inspectFile(webFile, "web")),
+      originalFileName: null,
+    };
+    asset.status = "web-ready";
+    built += 1;
+  }
+
+  await writeFile(
+    manifestPath,
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
+  return built;
+}
+
+const command = process.argv[2] ?? "verify";
+if (command === "verify") {
+  const result = await verifyAssets();
+  process.stdout.write(
+    `Verified ${result.total} asset slots: ${result.pending} pending, ${result.sourceReady} source-ready, ${result.webReady} web-ready, ${result.approved} approved.\n`,
+  );
+} else if (command === "build-web") {
+  const built = await buildWebAssets();
+  const result = await verifyAssets();
+  process.stdout.write(
+    `Built ${built} WebP files. Verified ${result.total} asset slots.\n`,
+  );
+} else {
+  throw new Error(`Unknown command: ${command}`);
+}

@@ -1,8 +1,8 @@
 # Rider–Waite–Smith 原始牌面素材规范
 
-版本：v1.0  
+版本：v1.1
 制定日期：2026-07-20  
-状态：牌组方案已确定；具体扫描来源与授权待核验
+状态：78张索引、Manifest 与素材管线已建立；具体扫描来源与授权待核验
 
 ## 1. 牌组选择
 
@@ -51,6 +51,8 @@ data/
         ├── web/                   # Web 优化图片
         └── LICENSES/              # 授权文本和来源证据
 ```
+
+当前工程实现位于 `prototype/app/data/decks/rws-original/`。在正式 Taro 工程初始化后按相同相对结构迁移，不改变 `cardId` 或 Manifest 语义。
 
 牌义与图片严格分离：
 
@@ -209,3 +211,16 @@ Web 文件从 `source/` 通过可重复执行的脚本生成。
 
 只有全部完成后，`rws-original` 才能从 `pending-review` 改为 `approved`。
 
+## 11. 已实现命令
+
+```bash
+npm run data:scaffold:rws
+npm run assets:verify
+npm run assets:build:web
+```
+
+- `data:scaffold:rws` 只用于首次生成78张索引和空 Manifest；已有数据时默认拒绝覆盖，防止清除来源或授权审核记录。
+- `assets:verify` 按素材状态检查路径边界、文件存在性、格式、尺寸、大小、SHA-256 和授权门槛。
+- `assets:build:web` 只处理 `source-ready` 条目，按照 `deck.json` 固定参数生成 WebP，写回元数据后再次执行完整校验。
+
+截至2026-07-20，78个槽位均为 `pending-source`，没有接入或发布任何未经核验的扫描文件。

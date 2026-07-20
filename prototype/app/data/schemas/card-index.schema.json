@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://arcana.local/schemas/card-index.schema.json",
+  "title": "Arcana Standard 78 Card Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "version", "cards"],
+  "properties": {
+    "schemaVersion": {"type": "string", "const": "1.0"},
+    "version": {"type": "string", "minLength": 1},
+    "cards": {
+      "type": "array",
+      "minItems": 78,
+      "maxItems": 78,
+      "items": {"$ref": "#/$defs/card"}
+    }
+  },
+  "$defs": {
+    "card": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "arcana", "sortOrder", "name"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(major|minor)-[a-z0-9-]+$"},
+        "arcana": {"type": "string", "enum": ["major", "minor"]},
+        "number": {"type": "integer", "minimum": 0, "maximum": 21},
+        "suit": {
+          "type": "string",
+          "enum": ["wands", "cups", "swords", "pentacles"]
+        },
+        "rank": {
+          "type": "string",
+          "enum": [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "page",
+            "knight",
+            "queen",
+            "king"
+          ]
+        },
+        "sortOrder": {"type": "integer", "minimum": 0, "maximum": 77},
+        "name": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["zh", "en"],
+          "properties": {
+            "zh": {"type": "string", "minLength": 1},
+            "en": {"type": "string", "minLength": 1}
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"arcana": {"const": "major"}},
+            "required": ["arcana"]
+          },
+          "then": {
+            "required": ["number"],
+            "properties": {
+              "number": {"type": "integer", "minimum": 0, "maximum": 21},
+              "suit": false,
+              "rank": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"arcana": {"const": "minor"}},
+            "required": ["arcana"]
+          },
+          "then": {
+            "required": ["suit", "rank"],
+            "properties": {
+              "number": false,
+              "suit": {
+                "type": "string",
+                "enum": ["wands", "cups", "swords", "pentacles"]
+              },
+              "rank": {
+                "type": "string",
+                "enum": [
+                  "ace",
+                  "two",
+                  "three",
+                  "four",
+                  "five",
+                  "six",
+                  "seven",
+                  "eight",
+                  "nine",
+                  "ten",
+                  "page",
+                  "knight",
+                  "queen",
+                  "king"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
