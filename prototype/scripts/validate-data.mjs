@@ -26,7 +26,7 @@ async function readLayeredMeaningsByPattern(pattern) {
   );
 }
 
-const WANDS_RANKS = [
+const MINOR_RANKS = [
   "ace",
   "two",
   "three",
@@ -42,6 +42,32 @@ const WANDS_RANKS = [
   "queen",
   "king",
 ];
+
+const COMPLETE_MINOR_SUITS = [
+  {suit: "wands", element: "火"},
+  {suit: "cups", element: "水"},
+];
+
+function assertCompleteMinorSuit(minorMeanings, suit, element) {
+  const suitMeanings = minorMeanings
+    .filter(({meaning}) => meaning.suit === suit)
+    .sort(
+      (left, right) =>
+        MINOR_RANKS.indexOf(left.meaning.rank) -
+        MINOR_RANKS.indexOf(right.meaning.rank),
+    );
+  assert.deepEqual(
+    suitMeanings.map(({meaning}) => meaning.rank),
+    MINOR_RANKS,
+    `${suit} minor arcana must include all 14 ranks in stable order`,
+  );
+  for (const {meaning} of suitMeanings) {
+    assert.equal(meaning.arcana, "minor");
+    assert.equal(meaning.core.element, element);
+    assert.equal(meaning.id, `minor-${suit}-${meaning.rank}`);
+    assert.equal(meaning.number, MINOR_RANKS.indexOf(meaning.rank) + 1);
+  }
+}
 
 function assertSchema(ajv, schema, data, label) {
   const validate = ajv.compile(schema);
@@ -148,23 +174,8 @@ assert.equal(
     .join("\n"),
 );
 
-const wandsMeanings = minorLayeredMeanings
-  .filter(({meaning}) => meaning.suit === "wands")
-  .sort(
-    (left, right) =>
-      WANDS_RANKS.indexOf(left.meaning.rank) -
-      WANDS_RANKS.indexOf(right.meaning.rank),
-  );
-assert.deepEqual(
-  wandsMeanings.map(({meaning}) => meaning.rank),
-  WANDS_RANKS,
-  "wands minor arcana must include all 14 ranks in stable order",
-);
-for (const {meaning} of wandsMeanings) {
-  assert.equal(meaning.arcana, "minor");
-  assert.equal(meaning.core.element, "火");
-  assert.equal(meaning.id, `minor-wands-${meaning.rank}`);
-  assert.equal(meaning.number, WANDS_RANKS.indexOf(meaning.rank) + 1);
+for (const {suit, element} of COMPLETE_MINOR_SUITS) {
+  assertCompleteMinorSuit(minorLayeredMeanings, suit, element);
 }
 
 assertSchema(ajv, deckSchema, deck, "deck-manifests/rws-original.json");

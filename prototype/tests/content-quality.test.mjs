@@ -44,6 +44,17 @@ test("approved wands minor arcana pass content quality gates", async () => {
   );
 });
 
+test("approved cups minor arcana pass content quality gates", async () => {
+  const cards = await loadLayeredMeanings(/^minor-cups-[a-z]+\.json$/);
+  assert.equal(cards.length, 14);
+  const issues = detectContentQualityIssues(cards);
+  assert.equal(
+    issues.length,
+    0,
+    issues.map((issue) => `${issue.code}: ${issue.message}`).join("\n"),
+  );
+});
+
 test("the Fool sample remains free of shared topic skeletons", async () => {
   const fool = await readJson("../app/data/cards/major-00.json");
   const skeletons = Object.values(fool.topics).map((topic) =>

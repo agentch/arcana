@@ -56,48 +56,49 @@ test("all major arcana meanings satisfy the layered v2 schema", async () => {
   }
 });
 
-test("wands minor arcana meanings satisfy the layered v2 schema", async () => {
+const MINOR_RANK_ORDER = [
+  "ace",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "page",
+  "knight",
+  "queen",
+  "king",
+];
+
+async function assertMinorSuitMeanings(suit, element) {
   const [schema, cardIndex, filenames] = await Promise.all([
     readJson("../app/data/schemas/card-meaning-v2.schema.json"),
     readJson("../app/data/card-index.json"),
     readdir(new URL("../app/data/cards/", import.meta.url)),
   ]);
   const validate = new Ajv2020({allErrors: true, strict: true}).compile(schema);
-  const rankOrder = [
-    "ace",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "page",
-    "knight",
-    "queen",
-    "king",
-  ];
-  const wandsFilenames = filenames.filter((filename) =>
-    /^minor-wands-[a-z]+\.json$/.test(filename),
+  const suitFilenames = filenames.filter((filename) =>
+    new RegExp(`^minor-${suit}-[a-z]+\\.json$`).test(filename),
   );
   const meanings = (
     await Promise.all(
-      wandsFilenames.map((filename) =>
+      suitFilenames.map((filename) =>
         readJson(`../app/data/cards/${filename}`),
       ),
     )
   ).sort(
     (left, right) =>
-      rankOrder.indexOf(left.rank) - rankOrder.indexOf(right.rank),
+      MINOR_RANK_ORDER.indexOf(left.rank) - MINOR_RANK_ORDER.indexOf(right.rank),
   );
-  const indexWands = cardIndex.cards.filter((card) => card.suit === "wands");
+  const indexCards = cardIndex.cards.filter((card) => card.suit === suit);
 
   assert.equal(meanings.length, 14);
   assert.deepEqual(
     meanings.map((meaning) => meaning.id),
-    indexWands.map((card) => card.id),
+    indexCards.map((card) => card.id),
   );
   for (const meaning of meanings) {
     assert.equal(
@@ -106,8 +107,8 @@ test("wands minor arcana meanings satisfy the layered v2 schema", async () => {
       `${meaning.id}: ${JSON.stringify(validate.errors, null, 2)}`,
     );
     assert.equal(meaning.arcana, "minor");
-    assert.equal(meaning.suit, "wands");
-    assert.equal(meaning.core.element, "火");
+    assert.equal(meaning.suit, suit);
+    assert.equal(meaning.core.element, element);
     assert.deepEqual(Object.keys(meaning.topics), [
       "love",
       "career",
@@ -120,6 +121,14 @@ test("wands minor arcana meanings satisfy the layered v2 schema", async () => {
     assert.equal(meaning.contentVersion, "1.0.0");
     assert.equal(meaning.romanNumeral, undefined);
   }
+}
+
+test("wands minor arcana meanings satisfy the layered v2 schema", async () => {
+  await assertMinorSuitMeanings("wands", "火");
+});
+
+test("cups minor arcana meanings satisfy the layered v2 schema", async () => {
+  await assertMinorSuitMeanings("cups", "水");
 });
 
 test("v1 migration preserves identity and reviewed source copy", async () => {
