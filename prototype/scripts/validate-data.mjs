@@ -12,10 +12,10 @@ async function readJson(path) {
   return JSON.parse(await readFile(resolve(root, path), "utf8"));
 }
 
-async function readLayeredMeanings() {
+async function readLayeredMeaningsByPattern(pattern) {
   const cardsDirectory = resolve(root, "app/data/cards");
   const filenames = (await readdir(cardsDirectory))
-    .filter((filename) => /^major-\d{2}\.json$/.test(filename))
+    .filter((filename) => pattern.test(filename))
     .sort();
 
   return Promise.all(
@@ -25,6 +25,23 @@ async function readLayeredMeanings() {
     })),
   );
 }
+
+const WANDS_RANKS = [
+  "ace",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "page",
+  "knight",
+  "queen",
+  "king",
+];
 
 function assertSchema(ajv, schema, data, label) {
   const validate = ajv.compile(schema);
@@ -40,7 +57,8 @@ const [
   spreads,
   questionPrompts,
   meaningTopicMap,
-  layeredMeanings,
+  majorLayeredMeanings,
+  minorLayeredMeanings,
   cardIndex,
   formalDeck,
   formalDeckManifest,
@@ -63,7 +81,8 @@ const [
   readJson("app/data/spreads.json"),
   readJson("app/data/question-prompts.json"),
   readJson("app/data/meaning-topic-map.json"),
-  readLayeredMeanings(),
+  readLayeredMeaningsByPattern(/^major-\d{2}\.json$/),
+  readLayeredMeaningsByPattern(/^minor-[a-z]+-[a-z]+\.json$/),
   readJson("app/data/card-index.json"),
   readJson("app/data/decks/rws-original/deck.json"),
   readJson("app/data/decks/rws-original/manifest.json"),
@@ -85,6 +104,8 @@ const [
 const ajv = new Ajv2020({allErrors: true, strict: true});
 
 assertSchema(ajv, meaningsSchema, meanings, "card-meanings.json");
+
+const layeredMeanings = [...majorLayeredMeanings, ...minorLayeredMeanings];
 for (const {filename, meaning} of layeredMeanings) {
   assertSchema(ajv, meaningV2Schema, meaning, `cards/${filename}`);
   assert.doesNotMatch(
@@ -95,7 +116,7 @@ for (const {filename, meaning} of layeredMeanings) {
   assert.equal(
     meaning.editorial.status,
     "approved",
-    `${filename} major arcana meaning must be approved`,
+    `${filename} layered meaning must be approved`,
   );
   assert.ok(
     meaning.editorial.lastReviewedAt,
@@ -103,10 +124,18 @@ for (const {filename, meaning} of layeredMeanings) {
   );
 }
 assert.equal(
-  new Set(layeredMeanings.map(({meaning}) => meaning.contentVersion)).size,
+  new Set(majorLayeredMeanings.map(({meaning}) => meaning.contentVersion)).size,
   1,
-  "layered v2 meanings must use one content version",
+  "major arcana layered meanings must use one content version",
 );
+if (minorLayeredMeanings.length > 0) {
+  assert.equal(
+    new Set(minorLayeredMeanings.map(({meaning}) => meaning.contentVersion))
+      .size,
+    1,
+    "minor arcana layered meanings must use one content version",
+  );
+}
 
 const contentQualityIssues = detectContentQualityIssues(
   layeredMeanings.map(({meaning}) => meaning),
@@ -118,6 +147,25 @@ assert.equal(
     .map((issue) => `${issue.code}: ${issue.message}`)
     .join("\n"),
 );
+
+const wandsMeanings = minorLayeredMeanings
+  .filter(({meaning}) => meaning.suit === "wands")
+  .sort(
+    (left, right) =>
+      WANDS_RANKS.indexOf(left.meaning.rank) -
+      WANDS_RANKS.indexOf(right.meaning.rank),
+  );
+assert.deepEqual(
+  wandsMeanings.map(({meaning}) => meaning.rank),
+  WANDS_RANKS,
+  "wands minor arcana must include all 14 ranks in stable order",
+);
+for (const {meaning} of wandsMeanings) {
+  assert.equal(meaning.arcana, "minor");
+  assert.equal(meaning.core.element, "火");
+  assert.equal(meaning.id, `minor-wands-${meaning.rank}`);
+  assert.equal(meaning.number, WANDS_RANKS.indexOf(meaning.rank) + 1);
+}
 
 assertSchema(ajv, deckSchema, deck, "deck-manifests/rws-original.json");
 assertSchema(ajv, spreadsSchema, spreads, "spreads.json");
@@ -167,7 +215,7 @@ for (const card of migratedDrafts) {
 const cardIds = meanings.cards.map((card) => card.id);
 assert.equal(new Set(cardIds).size, cardIds.length, "card IDs must be unique");
 assert.deepEqual(
-  layeredMeanings.map(({meaning}) => meaning.id),
+  majorLayeredMeanings.map(({meaning}) => meaning.id),
   cardIds,
   "layered v2 meanings must cover every active major arcana in stable order",
 );
@@ -374,5 +422,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${layeredMeanings.length} approved v2 major arcana meanings, content-quality clean, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${majorLayeredMeanings.length} approved major + ${minorLayeredMeanings.length} approved minor layered meanings, content-quality clean, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );

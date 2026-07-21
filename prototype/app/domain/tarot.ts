@@ -49,15 +49,32 @@ export type LayeredOrientationMeaning = {
   reflection: string;
 };
 
+export type MinorRank =
+  | "ace"
+  | "two"
+  | "three"
+  | "four"
+  | "five"
+  | "six"
+  | "seven"
+  | "eight"
+  | "nine"
+  | "ten"
+  | "page"
+  | "knight"
+  | "queen"
+  | "king";
+
 export type LayeredCardMeaning = {
   schemaVersion: "2.0";
   contentVersion: string;
   id: string;
   arcana: "major" | "minor";
+  /** 大阿卡纳 0–21；小阿卡纳花色内序号 1–14 */
   number: number;
   romanNumeral?: string;
   suit?: "wands" | "cups" | "swords" | "pentacles";
-  rank?: string;
+  rank?: MinorRank;
   name: {
     zh: string;
     en: string;

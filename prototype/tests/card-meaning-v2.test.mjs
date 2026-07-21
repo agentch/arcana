@@ -56,6 +56,72 @@ test("all major arcana meanings satisfy the layered v2 schema", async () => {
   }
 });
 
+test("wands minor arcana meanings satisfy the layered v2 schema", async () => {
+  const [schema, cardIndex, filenames] = await Promise.all([
+    readJson("../app/data/schemas/card-meaning-v2.schema.json"),
+    readJson("../app/data/card-index.json"),
+    readdir(new URL("../app/data/cards/", import.meta.url)),
+  ]);
+  const validate = new Ajv2020({allErrors: true, strict: true}).compile(schema);
+  const rankOrder = [
+    "ace",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "page",
+    "knight",
+    "queen",
+    "king",
+  ];
+  const wandsFilenames = filenames.filter((filename) =>
+    /^minor-wands-[a-z]+\.json$/.test(filename),
+  );
+  const meanings = (
+    await Promise.all(
+      wandsFilenames.map((filename) =>
+        readJson(`../app/data/cards/${filename}`),
+      ),
+    )
+  ).sort(
+    (left, right) =>
+      rankOrder.indexOf(left.rank) - rankOrder.indexOf(right.rank),
+  );
+  const indexWands = cardIndex.cards.filter((card) => card.suit === "wands");
+
+  assert.equal(meanings.length, 14);
+  assert.deepEqual(
+    meanings.map((meaning) => meaning.id),
+    indexWands.map((card) => card.id),
+  );
+  for (const meaning of meanings) {
+    assert.equal(
+      validate(meaning),
+      true,
+      `${meaning.id}: ${JSON.stringify(validate.errors, null, 2)}`,
+    );
+    assert.equal(meaning.arcana, "minor");
+    assert.equal(meaning.suit, "wands");
+    assert.equal(meaning.core.element, "火");
+    assert.deepEqual(Object.keys(meaning.topics), [
+      "love",
+      "career",
+      "family",
+      "mood",
+      "finance",
+      "growth",
+    ]);
+    assert.equal(meaning.editorial.status, "approved");
+    assert.equal(meaning.contentVersion, "1.0.0");
+    assert.equal(meaning.romanNumeral, undefined);
+  }
+});
+
 test("v1 migration preserves identity and reviewed source copy", async () => {
   const catalog = await readJson("../app/data/card-meanings.json");
   const source = catalog.cards[0];

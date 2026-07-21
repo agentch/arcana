@@ -12,11 +12,11 @@ async function readJson(relativePath) {
   );
 }
 
-async function loadMajorArcana() {
+async function loadLayeredMeanings(pattern) {
   const filenames = (
     await readdir(new URL("../app/data/cards/", import.meta.url))
   )
-    .filter((filename) => /^major-\d{2}\.json$/.test(filename))
+    .filter((filename) => pattern.test(filename))
     .sort();
   return Promise.all(
     filenames.map((filename) => readJson(`../app/data/cards/${filename}`)),
@@ -24,7 +24,18 @@ async function loadMajorArcana() {
 }
 
 test("polished major arcana pass content quality gates", async () => {
-  const cards = await loadMajorArcana();
+  const cards = await loadLayeredMeanings(/^major-\d{2}\.json$/);
+  const issues = detectContentQualityIssues(cards);
+  assert.equal(
+    issues.length,
+    0,
+    issues.map((issue) => `${issue.code}: ${issue.message}`).join("\n"),
+  );
+});
+
+test("approved wands minor arcana pass content quality gates", async () => {
+  const cards = await loadLayeredMeanings(/^minor-wands-[a-z]+\.json$/);
+  assert.equal(cards.length, 14);
   const issues = detectContentQualityIssues(cards);
   assert.equal(
     issues.length,
