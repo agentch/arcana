@@ -92,6 +92,15 @@ for (const {filename, meaning} of layeredMeanings) {
     /待编辑|待补充/,
     `${filename} must not contain editorial placeholders`,
   );
+  assert.equal(
+    meaning.editorial.status,
+    "approved",
+    `${filename} major arcana meaning must be approved`,
+  );
+  assert.ok(
+    meaning.editorial.lastReviewedAt,
+    `${filename} must record lastReviewedAt`,
+  );
 }
 assert.equal(
   new Set(layeredMeanings.map(({meaning}) => meaning.contentVersion)).size,
@@ -365,5 +374,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${layeredMeanings.length} polished v2 major arcana drafts, content-quality clean, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${layeredMeanings.length} approved v2 major arcana meanings, content-quality clean, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );

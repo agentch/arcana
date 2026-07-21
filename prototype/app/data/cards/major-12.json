@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "contentVersion": "1.0.0",
+  "contentVersion": "1.1.0",
   "id": "major-12",
   "arcana": "major",
   "number": 12,
@@ -90,8 +90,8 @@
     }
   },
   "editorial": {
-    "status": "draft",
-    "lastReviewedAt": null,
-    "sourceNotes": "基于 Rider–Waite–Smith 象征体系编写的 Arcana 原创中文草稿，待独立内容审核。"
+    "status": "approved",
+    "lastReviewedAt": "2026-07-21",
+    "sourceNotes": "基于 Rider–Waite–Smith 象征体系编写的 Arcana 原创中文牌义；2026-07-21 完成代理内容审查与合规润色，标记为 approved。"
   }
 }

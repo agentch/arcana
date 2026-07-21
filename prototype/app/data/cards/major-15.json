@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "contentVersion": "1.0.0",
+  "contentVersion": "1.1.0",
   "id": "major-15",
   "arcana": "major",
   "number": 15,
@@ -77,7 +77,7 @@
       "reversed": "你开始能说出自己在某个家庭角色里的付出和消耗，但每次真正想要划出边界时，熟悉的责任感又把你拉回原来的位置。"
     },
     "mood": {
-      "upright": "某种情绪上的即时满足——比如刷手机、暴饮暴食或反复查看某条消息——可能已经成为你处理压力的默认方式，而不是主动的选择。",
+      "upright": "某种情绪上的即时满足——比如刷短视频、反复刷新消息或无意义地来回点开同一页面——可能已经成为你处理压力的默认方式，而不是主动的选择。",
       "reversed": "你已经注意到自己在用某种方式逃避不舒服的情绪，但真正改变这个反应之前，很可能还会经历几次“明知道却又做了”的反复。"
     },
     "finance": {
@@ -90,8 +90,8 @@
     }
   },
   "editorial": {
-    "status": "draft",
-    "lastReviewedAt": null,
-    "sourceNotes": "基于 Rider–Waite–Smith 象征体系编写的 Arcana 原创中文草稿，待独立内容审核。"
+    "status": "approved",
+    "lastReviewedAt": "2026-07-21",
+    "sourceNotes": "基于 Rider–Waite–Smith 象征体系编写的 Arcana 原创中文牌义；2026-07-21 完成代理内容审查与合规润色，标记为 approved。"
   }
 }

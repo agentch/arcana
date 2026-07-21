@@ -13,7 +13,7 @@ async function readJson(relativePath) {
   );
 }
 
-test("all major arcana drafts satisfy the layered v2 schema", async () => {
+test("all major arcana meanings satisfy the layered v2 schema", async () => {
   const [schema, catalog, filenames] = await Promise.all([
     readJson("../app/data/schemas/card-meaning-v2.schema.json"),
     readJson("../app/data/card-meanings.json"),
@@ -50,7 +50,9 @@ test("all major arcana drafts satisfy the layered v2 schema", async () => {
     ]);
     assert.equal(meaning.core.symbols.length, 4);
     assert.doesNotMatch(JSON.stringify(meaning), /待编辑|待补充/);
-    assert.equal(meaning.editorial.status, "draft");
+    assert.equal(meaning.editorial.status, "approved");
+    assert.equal(meaning.editorial.lastReviewedAt, "2026-07-21");
+    assert.equal(meaning.contentVersion, "1.1.0");
   }
 });
 
