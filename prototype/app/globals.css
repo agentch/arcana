@@ -542,6 +542,19 @@ button {
   margin-top: auto;
 }
 
+.secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.share-status {
+  margin: 10px 0 0;
+  color: var(--gold);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
 .mode-card {
   display: grid;
   grid-template-columns: auto 1fr auto;

@@ -51,12 +51,14 @@ import {
   composeSpreadSummary,
   resolveSpreadPosition,
 } from "./domain/interpretation";
+import {composeShareCardContent} from "./domain/share-card";
 import type {
   Orientation,
   Reading,
   RenderableCard,
 } from "./domain/tarot";
 import { triggerHaptic } from "./platform/haptics";
+import {shareCard} from "./platform/share";
 
 const cards = getCards();
 const enabledSpreads = getEnabledSpreads();
@@ -151,6 +153,8 @@ export function ArcanaPrototype() {
   const [choiceOptionA, setChoiceOptionA] = useState("");
   const [choiceOptionB, setChoiceOptionB] = useState("");
   const [isDailyMode, setIsDailyMode] = useState(false);
+  const [shareStatus, setShareStatus] = useState("");
+  const [sharing, setSharing] = useState(false);
   const [drawnCards, setDrawnCards] = useState<DrawnRenderableCard[]>([]);
   const [shuffledDeck, setShuffledDeck] = useState<RenderableCard[]>(cards);
   const [shuffling, setShuffling] = useState(false);
@@ -250,6 +254,8 @@ export function ArcanaPrototype() {
     setChoiceOptionA("");
     setChoiceOptionB("");
     setIsDailyMode(false);
+    setShareStatus("");
+    setSharing(false);
     dailyPick.current = null;
     dailyAutoDrawStarted.current = false;
     setDrawnCards([]);
@@ -634,6 +640,37 @@ export function ArcanaPrototype() {
       : null;
   const showReadingDetail =
     readingDetailOpen && drawnCards.length > 1 && flow.phase === "result";
+
+  async function shareReading() {
+    if (resultInterpretations.length === 0 || sharing) return;
+
+    setSharing(true);
+    setShareStatus("");
+    try {
+      const content = composeShareCardContent({
+        title: isDailyMode ? "今日一牌" : activeSpread.name,
+        question: question.trim() || DAILY_QUESTION,
+        interpretations: resultInterpretations,
+        summary: spreadSummary,
+      });
+      const result = await shareCard(content);
+      if (result.status === "shared") {
+        setShareStatus("分享卡片已送出");
+        triggerHaptic("success");
+      } else if (result.status === "copied") {
+        setShareStatus("已复制分享文案，可粘贴发送");
+        triggerHaptic("selection");
+      } else if (result.status === "cancelled") {
+        setShareStatus("已取消分享，解读仍可继续查看");
+      } else {
+        setShareStatus("分享未完成，解读与保存不受影响");
+      }
+    } catch {
+      setShareStatus("分享未完成，解读与保存不受影响");
+    } finally {
+      setSharing(false);
+    }
+  }
 
   return (
     <main className="app-shell">
@@ -1176,10 +1213,24 @@ export function ArcanaPrototype() {
               <button className="primary-button" onClick={saveReading}>
                 铭刻这次启示
               </button>
+              <button
+                className="secondary-button"
+                onClick={() => {
+                  void shareReading();
+                }}
+                disabled={sharing || resultInterpretations.length === 0}
+              >
+                {sharing ? "正在生成分享卡片…" : "生成分享卡片"}
+              </button>
               <button className="secondary-button" onClick={resetReading}>
                 再次叩问星轨
               </button>
             </div>
+            {shareStatus ? (
+              <p className="share-status" role="status" aria-live="polite">
+                {shareStatus}
+              </p>
+            ) : null}
             <p className="disclaimer">
               牌面是观察的镜子，不是写定的预言
             </p>
