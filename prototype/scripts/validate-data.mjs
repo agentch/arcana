@@ -3,6 +3,7 @@ import { readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
+import {detectContentQualityIssues} from "./content-quality.mjs";
 import {migrateCatalogV1ToV2} from "./migrate-card-meanings-v1-to-v2.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -97,6 +98,18 @@ assert.equal(
   1,
   "layered v2 meanings must use one content version",
 );
+
+const contentQualityIssues = detectContentQualityIssues(
+  layeredMeanings.map(({meaning}) => meaning),
+);
+assert.equal(
+  contentQualityIssues.length,
+  0,
+  contentQualityIssues
+    .map((issue) => `${issue.code}: ${issue.message}`)
+    .join("\n"),
+);
+
 assertSchema(ajv, deckSchema, deck, "deck-manifests/rws-original.json");
 assertSchema(ajv, spreadsSchema, spreads, "spreads.json");
 assertSchema(
@@ -352,5 +365,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${layeredMeanings.length} complete v2 major arcana drafts, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${layeredMeanings.length} polished v2 major arcana drafts, content-quality clean, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );
