@@ -20,6 +20,8 @@ export type ChatFlowState = {
 
 export type ChatFlowAction =
   | { type: "start" }
+  | { type: "start-daily" }
+  | { type: "reveal-daily" }
   | { type: "select-category"; label: string }
   | { type: "submit-question"; question: string }
   | { type: "select-spread"; label: string }
@@ -65,6 +67,24 @@ export function chatFlowReducer(
         {
           role: "assistant",
           text: "先告诉我——此刻搅动你心潮的，是哪一道命运的波纹？",
+        },
+      ]);
+    case "start-daily":
+      if (state.phase !== "welcome" && state.phase !== "complete") return state;
+      return appendMessages(state, "draw", [
+        { role: "user", text: "今日一牌" },
+        {
+          role: "assistant",
+          text: "今日之轮已为你停驻。洗牌之后，让今天的使者自行现身。",
+        },
+      ]);
+    case "reveal-daily":
+      if (state.phase !== "welcome" && state.phase !== "complete") return state;
+      return appendMessages(state, "result", [
+        { role: "user", text: "今日一牌" },
+        {
+          role: "assistant",
+          text: "今日的使者已在等候。且看它为你留下的那一页。",
         },
       ]);
     case "select-category":

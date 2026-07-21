@@ -33,6 +33,15 @@ import {
   getSpread,
 } from "./domain/catalog";
 import {
+  DAILY_CATEGORY_ID,
+  DAILY_OPTION_ID,
+  DAILY_QUESTION,
+  getLocalDateKey,
+  pickDailyCard,
+  readDailyCardRecord,
+  writeDailyCardRecord,
+} from "./domain/daily-card";
+import {
   createDrawnCard,
   shuffleDeck,
   type DrawnRenderableCard,
@@ -141,6 +150,7 @@ export function ArcanaPrototype() {
   const [spreadId, setSpreadId] = useState(singleCardSpread.id);
   const [choiceOptionA, setChoiceOptionA] = useState("");
   const [choiceOptionB, setChoiceOptionB] = useState("");
+  const [isDailyMode, setIsDailyMode] = useState(false);
   const [drawnCards, setDrawnCards] = useState<DrawnRenderableCard[]>([]);
   const [shuffledDeck, setShuffledDeck] = useState<RenderableCard[]>(cards);
   const [shuffling, setShuffling] = useState(false);
@@ -173,6 +183,11 @@ export function ArcanaPrototype() {
     moved: boolean;
   } | null>(null);
   const suppressCardClick = useRef(false);
+  const dailyPick = useRef<{
+    card: RenderableCard;
+    orientation: Orientation;
+  } | null>(null);
+  const dailyAutoDrawStarted = useRef(false);
   const activeQuestionCategory = questionCategories.find(
     (category) => category.id === questionCategoryId,
   );
@@ -234,11 +249,69 @@ export function ArcanaPrototype() {
     setSpreadId(singleCardSpread.id);
     setChoiceOptionA("");
     setChoiceOptionB("");
+    setIsDailyMode(false);
+    dailyPick.current = null;
+    dailyAutoDrawStarted.current = false;
     setDrawnCards([]);
     setActiveDrawPositionId("");
     setHistoryOpen(false);
     setReadingDetailOpen(false);
     dispatchFlow({ type: "reset" });
+  }
+
+  function prepareDailyContext() {
+    setIsDailyMode(true);
+    setQuestion(DAILY_QUESTION);
+    setQuestionCategoryId(DAILY_CATEGORY_ID);
+    setQuestionOptionId(DAILY_OPTION_ID);
+    setSpreadId(singleCardSpread.id);
+    setChoiceOptionA("");
+    setChoiceOptionB("");
+  }
+
+  function beginDailyReading() {
+    cancelDrawAnimation();
+    prepareDailyContext();
+    const dateKey = getLocalDateKey();
+    const existing = readDailyCardRecord();
+    if (existing?.dateKey === dateKey) {
+      const card = cards.find((item) => item.id === existing.cardId);
+      if (card) {
+        dailyPick.current = null;
+        dailyAutoDrawStarted.current = false;
+        setDrawnCards([
+          {
+            card,
+            orientation: existing.orientation,
+            position: singleCardSpread.positions[0],
+          },
+        ]);
+        setActiveDrawPositionId("");
+        dispatchFlow({ type: "reveal-daily" });
+        return;
+      }
+    }
+
+    dailyPick.current = pickDailyCard(cards, dateKey);
+    dailyAutoDrawStarted.current = false;
+    const shuffleDuration = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+      ? 150
+      : 3000;
+    setShuffledDeck(shuffleDeck(cards));
+    setShuffling(true);
+    setDeckRotation(0);
+    setDrawnCards([]);
+    setActiveDrawPositionId(singleCardSpread.positions[0].id);
+    setAnimatingDraw(null);
+    lastScrollHapticIndex.current = -1;
+    dispatchFlow({ type: "start-daily" });
+    shuffleTimeout.current = window.setTimeout(() => {
+      setShuffling(false);
+      triggerHaptic("selection");
+      shuffleTimeout.current = null;
+    }, shuffleDuration);
   }
 
   function beginDraw() {
@@ -270,7 +343,8 @@ export function ArcanaPrototype() {
 
   function selectCard(
     card: RenderableCard,
-    sourceElement: HTMLButtonElement,
+    sourceElement: HTMLButtonElement | null,
+    orientation?: Orientation,
   ) {
     if (
       animatingDraw ||
@@ -286,16 +360,16 @@ export function ArcanaPrototype() {
     );
     if (!position) return;
 
-    const drawn = createDrawnCard(card, position);
+    const drawn = createDrawnCard(card, position, Math.random, orientation);
     const targetFrame = drawPositionFrames.current.get(position.id);
-    const sourceRect = sourceElement.getBoundingClientRect();
-    const sourceTransform = getComputedStyle(sourceElement).transform;
-    const sourceMatrix =
-      sourceTransform === "none" ? null : new DOMMatrix(sourceTransform);
-    const sourceRotation = sourceMatrix
-      ? (Math.atan2(sourceMatrix.b, sourceMatrix.a) * 180) / Math.PI
-      : 0;
-    if (targetFrame) {
+    if (sourceElement && targetFrame) {
+      const sourceRect = sourceElement.getBoundingClientRect();
+      const sourceTransform = getComputedStyle(sourceElement).transform;
+      const sourceMatrix =
+        sourceTransform === "none" ? null : new DOMMatrix(sourceTransform);
+      const sourceRotation = sourceMatrix
+        ? (Math.atan2(sourceMatrix.b, sourceMatrix.a) * 180) / Math.PI
+        : 0;
       const targetRect = targetFrame.getBoundingClientRect();
       const animationContainer =
         targetFrame.closest<HTMLElement>(".selection-stage");
@@ -352,12 +426,100 @@ export function ArcanaPrototype() {
     setAnimatingDraw(null);
     triggerHaptic(completesSpread ? "success" : "selection");
     if (completesSpread) {
+      if (isDailyMode && updatedDrawnCards[0]) {
+        writeDailyCardRecord({
+          dateKey: getLocalDateKey(),
+          cardId: updatedDrawnCards[0].card.id,
+          orientation: updatedDrawnCards[0].orientation,
+          revealedAt: new Date().toISOString(),
+        });
+      }
       returnToChatTimeout.current = window.setTimeout(() => {
         dispatchFlow({ type: "complete-draw" });
         returnToChatTimeout.current = null;
       }, 700);
     }
   }
+
+  useEffect(() => {
+    if (
+      !isDailyMode ||
+      flow.phase !== "draw" ||
+      shuffling ||
+      animatingDraw ||
+      drawnCards.length > 0 ||
+      !dailyPick.current ||
+      dailyAutoDrawStarted.current
+    ) {
+      return;
+    }
+
+    dailyAutoDrawStarted.current = true;
+    const pick = dailyPick.current;
+    const position = singleCardSpread.positions[0];
+    const timeoutId = window.setTimeout(() => {
+      const sourceButton = document.querySelector<HTMLButtonElement>(
+        `.draw-deck-card[data-card-id="${pick.card.id}"]`,
+      );
+      const targetFrame = drawPositionFrames.current.get(position.id);
+      if (sourceButton && targetFrame) {
+        const sourceRect = sourceButton.getBoundingClientRect();
+        const sourceTransform = getComputedStyle(sourceButton).transform;
+        const sourceMatrix =
+          sourceTransform === "none" ? null : new DOMMatrix(sourceTransform);
+        const sourceRotation = sourceMatrix
+          ? (Math.atan2(sourceMatrix.b, sourceMatrix.a) * 180) / Math.PI
+          : 0;
+        const targetRect = targetFrame.getBoundingClientRect();
+        const animationContainer =
+          targetFrame.closest<HTMLElement>(".selection-stage");
+        const containerRect =
+          animationContainer &&
+          getComputedStyle(animationContainer).transform !== "none"
+            ? animationContainer.getBoundingClientRect()
+            : null;
+        const sourceCenterX = containerRect
+          ? containerRect.left + containerRect.width / 2
+          : window.innerWidth / 2;
+        const sourceCenterY = containerRect
+          ? containerRect.top + containerRect.height / 2
+          : window.innerHeight / 2;
+        setDrawAnimationGeometry({
+          sourceX: sourceRect.left + sourceRect.width / 2 - sourceCenterX,
+          sourceY: sourceRect.top + sourceRect.height / 2 - sourceCenterY,
+          sourceScale: sourceButton.offsetWidth / 154,
+          sourceRotation,
+          targetX: targetRect.left + targetRect.width / 2 - sourceCenterX,
+          targetY: targetRect.top + targetRect.height / 2 - sourceCenterY,
+          targetScale: targetRect.width / 154,
+        });
+      } else {
+        setDrawAnimationGeometry({
+          sourceX: 0,
+          sourceY: 110,
+          sourceScale: 0.58,
+          sourceRotation: 0,
+          targetX: 0,
+          targetY: -180,
+          targetScale: 0.38,
+        });
+      }
+      triggerHaptic("impact");
+      setActiveDrawPositionId(position.id);
+      setAnimatingDraw({
+        card: pick.card,
+        orientation: pick.orientation,
+        position,
+      });
+    }, 280);
+    return () => window.clearTimeout(timeoutId);
+  }, [
+    isDailyMode,
+    flow.phase,
+    shuffling,
+    animatingDraw,
+    drawnCards.length,
+  ]);
 
   function startDeckDrag(event: ReactPointerEvent<HTMLDivElement>) {
     if (event.pointerType === "mouse" && event.button !== 0) return;
@@ -526,12 +688,20 @@ export function ArcanaPrototype() {
             {flow.phase === "welcome" && (
               <AssistantCard>
                 <p className="message-card-label">命运之门已半开</p>
-                <button
-                  className="primary-button"
-                  onClick={() => dispatchFlow({ type: "start" })}
-                >
-                  开始一次占卜
-                </button>
+                <div className="home-actions">
+                  <button
+                    className="primary-button"
+                    onClick={() => dispatchFlow({ type: "start" })}
+                  >
+                    开始一次占卜
+                  </button>
+                  <button
+                    className="secondary-button"
+                    onClick={beginDailyReading}
+                  >
+                    今日一牌
+                  </button>
+                </div>
               </AssistantCard>
             )}
 
@@ -759,7 +929,11 @@ export function ArcanaPrototype() {
                 ? "阵已圆满，回响落定"
                 : animatingDraw
                   ? `“${animatingDraw.position.name}”的使者正在现身…`
-                  : `转动命运之轮，为“${activeDrawPosition?.name}”召来一张牌`}
+                  : isDailyMode
+                    ? shuffling
+                      ? "今日之轮正在翻涌…"
+                      : "今日之牌将自行现身…"
+                    : `转动命运之轮，为“${activeDrawPosition?.name}”召来一张牌`}
             </p>
             <div
               className="draw-deck-wheel"
@@ -786,6 +960,7 @@ export function ArcanaPrototype() {
                     <button
                       className="draw-deck-card"
                       key={card.id}
+                      data-card-id={card.id}
                       style={
                         {
                           "--wheel-angle": `${angle}deg`,
@@ -793,6 +968,10 @@ export function ArcanaPrototype() {
                         } as CSSProperties
                       }
                       onClick={(event) => {
+                        if (isDailyMode) {
+                          event.preventDefault();
+                          return;
+                        }
                         if (suppressCardClick.current) {
                           event.preventDefault();
                           suppressCardClick.current = false;
@@ -801,11 +980,16 @@ export function ArcanaPrototype() {
                         selectCard(card, event.currentTarget);
                       }}
                       disabled={
+                        isDailyMode ||
                         shuffling ||
                         Boolean(animatingDraw) ||
                         drawnCards.length >= activeSpread.positions.length
                       }
-                      aria-label={`第 ${index + 1} 张牌，点击抽取`}
+                      aria-label={
+                        isDailyMode
+                          ? `第 ${index + 1} 张牌`
+                          : `第 ${index + 1} 张牌，点击抽取`
+                      }
                     >
                       <span className="draw-deck-card-pattern">✦</span>
                     </button>
@@ -893,8 +1077,12 @@ export function ArcanaPrototype() {
         {flow.phase === "result" && drawnCards.length > 0 && (
           <AssistantCard>
           <section className="chat-step result-step">
-            <p className="message-card-label">牌语回响 · {activeSpread.name}</p>
-            <h2 className="message-card-title">命运为你铺开这一阵</h2>
+            <p className="message-card-label">
+              牌语回响 · {isDailyMode ? "今日一牌" : activeSpread.name}
+            </p>
+            <h2 className="message-card-title">
+              {isDailyMode ? "今日的使者已经抵达" : "命运为你铺开这一阵"}
+            </h2>
             <div
               className={`spread-card-grid result count-${drawnCards.length}${
                 activeSpread.id === "choice-five" ? " layout-choice" : ""

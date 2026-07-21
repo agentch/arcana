@@ -66,3 +66,15 @@ test("reset returns to a clean welcome conversation", () => {
 
   assert.deepEqual(reset, initialChatFlowState);
 });
+
+test("start-daily enters the draw phase directly", () => {
+  const state = chatFlowReducer(initialChatFlowState, {type: "start-daily"});
+  assert.equal(state.phase, "draw");
+  assert.equal(state.messages.at(-2)?.text, "今日一牌");
+});
+
+test("reveal-daily returns to an existing daily result", () => {
+  const state = chatFlowReducer(initialChatFlowState, {type: "reveal-daily"});
+  assert.equal(state.phase, "result");
+  assert.equal(state.messages.at(-2)?.text, "今日一牌");
+});

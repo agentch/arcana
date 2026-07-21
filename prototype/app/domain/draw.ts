@@ -30,10 +30,11 @@ export function createDrawnCard(
   card: RenderableCard,
   position: SpreadPosition,
   random: () => number = Math.random,
+  orientation?: Orientation,
 ): DrawnRenderableCard {
   return {
     card,
-    orientation: random() >= 0.5 ? "upright" : "reversed",
+    orientation: orientation ?? (random() >= 0.5 ? "upright" : "reversed"),
     position,
   };
 }
