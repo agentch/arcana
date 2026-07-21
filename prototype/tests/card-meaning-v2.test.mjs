@@ -32,7 +32,9 @@ test("all major arcana meanings satisfy the layered v2 schema", async () => {
   assert.equal(meanings.length, 22);
   assert.deepEqual(
     meanings.map((meaning) => meaning.id),
-    catalog.cards.map((card) => card.id),
+    catalog.cards
+      .filter((card) => card.arcana === "major")
+      .map((card) => card.id),
   );
   for (const meaning of meanings) {
     assert.equal(

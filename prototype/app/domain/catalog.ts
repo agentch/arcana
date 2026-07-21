@@ -30,14 +30,26 @@ for (const card of cardMeanings) {
     throw new Error(`Missing layered card meaning for ${card.id}`);
   }
 }
-const layeredContentVersions = new Set(
-  layeredCardMeanings.map((meaning) => meaning.contentVersion),
+const majorContentVersions = new Set(
+  layeredCardMeanings
+    .filter((meaning) => meaning.arcana === "major")
+    .map((meaning) => meaning.contentVersion),
 );
-if (layeredContentVersions.size !== 1) {
-  throw new Error("Layered card meanings must use one content version");
+const minorContentVersions = new Set(
+  layeredCardMeanings
+    .filter((meaning) => meaning.arcana === "minor")
+    .map((meaning) => meaning.contentVersion),
+);
+if (majorContentVersions.size !== 1) {
+  throw new Error("Major layered meanings must use one content version");
+}
+if (minorContentVersions.size > 1) {
+  throw new Error("Minor layered meanings must use one content version");
 }
 const layeredContentVersion =
-  layeredCardMeanings[0]?.contentVersion ?? cardMeaningsJson.contentVersion;
+  cardMeaningsJson.contentVersion ??
+  [...majorContentVersions][0] ??
+  [...minorContentVersions][0];
 const categoryToTopic = meaningTopicMapJson.categoryToTopic as Record<
   QuestionCategory["id"],
   MeaningTopicId

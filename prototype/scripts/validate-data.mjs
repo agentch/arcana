@@ -226,17 +226,25 @@ for (const card of migratedDrafts) {
 }
 
 const cardIds = meanings.cards.map((card) => card.id);
+const indexIds = cardIndex.cards.map((card) => card.id);
+assert.equal(cardIds.length, 78, "runtime card meanings must cover all 78 cards");
 assert.equal(new Set(cardIds).size, cardIds.length, "card IDs must be unique");
 assert.deepEqual(
-  majorLayeredMeanings.map(({meaning}) => meaning.id),
   cardIds,
-  "layered v2 meanings must cover every active major arcana in stable order",
+  indexIds,
+  "runtime card meanings must follow the standard card-index order",
+);
+const layeredById = new Map(
+  layeredMeanings.map(({meaning}) => [meaning.id, meaning]),
 );
 assert.deepEqual(
-  cardIds,
-  [...cardIds].sort(),
-  "cards must be sorted by stable ID",
+  [...layeredById.keys()].sort(),
+  [...indexIds].sort(),
+  "layered v2 meanings must cover every runtime card exactly once",
 );
+for (const cardId of indexIds) {
+  assert.ok(layeredById.has(cardId), `missing layered meaning for ${cardId}`);
+}
 
 const standardCardIds = cardIndex.cards.map((card) => card.id);
 assert.equal(
@@ -251,8 +259,8 @@ assert.deepEqual(
 );
 assert.deepEqual(
   standardCardIds.slice(0, 22),
-  cardIds,
-  "the v1 major arcana IDs must match the first 22 standard card IDs",
+  cardIds.slice(0, 22),
+  "the first 22 runtime cards must be the major arcana",
 );
 assert.equal(
   cardIndex.cards.filter((card) => card.arcana === "major").length,

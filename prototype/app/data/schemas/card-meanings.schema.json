@@ -52,7 +52,6 @@
         "id",
         "arcana",
         "number",
-        "romanNumeral",
         "name",
         "englishName",
         "keywords",
@@ -70,11 +69,59 @@
           "type": "string",
           "enum": ["wands", "cups", "swords", "pentacles"]
         },
-        "rank": {"type": "string", "minLength": 1},
+        "rank": {
+          "type": "string",
+          "enum": [
+            "ace",
+            "two",
+            "three",
+            "four",
+            "five",
+            "six",
+            "seven",
+            "eight",
+            "nine",
+            "ten",
+            "page",
+            "knight",
+            "queen",
+            "king"
+          ]
+        },
         "keywords": {"$ref": "#/$defs/orientationKeywords"},
         "meaning": {"$ref": "#/$defs/orientationText"},
         "advice": {"$ref": "#/$defs/orientationText"}
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"arcana": {"const": "major"}},
+            "required": ["arcana"]
+          },
+          "then": {
+            "required": ["romanNumeral"],
+            "properties": {
+              "number": {"type": "integer", "minimum": 0, "maximum": 21},
+              "romanNumeral": {"type": "string", "minLength": 1},
+              "suit": false,
+              "rank": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"arcana": {"const": "minor"}},
+            "required": ["arcana"]
+          },
+          "then": {
+            "required": ["suit", "rank"],
+            "properties": {
+              "number": {"type": "integer", "minimum": 1, "maximum": 14},
+              "romanNumeral": false
+            }
+          }
+        }
+      ]
     }
   }
 }

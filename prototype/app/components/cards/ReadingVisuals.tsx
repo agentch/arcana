@@ -71,7 +71,9 @@ export function CardVisual({
           />
         ) : (
           <>
-            <span className="card-number">{drawn.card.romanNumeral}</span>
+            <span className="card-number">
+              {drawn.card.romanNumeral ?? drawn.card.rank ?? drawn.card.number}
+            </span>
             <span className="card-art">
               {drawn.card.asset.fallbackSymbol ?? "✦"}
             </span>

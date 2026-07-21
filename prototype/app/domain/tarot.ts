@@ -7,11 +7,29 @@ export type MeaningTopicId =
   | "finance"
   | "growth";
 
+export type MinorRank =
+  | "ace"
+  | "two"
+  | "three"
+  | "four"
+  | "five"
+  | "six"
+  | "seven"
+  | "eight"
+  | "nine"
+  | "ten"
+  | "page"
+  | "knight"
+  | "queen"
+  | "king";
+
 export type CardMeaning = {
   id: string;
   arcana: "major" | "minor";
   number: number;
-  romanNumeral: string;
+  romanNumeral?: string;
+  suit?: "wands" | "cups" | "swords" | "pentacles";
+  rank?: MinorRank;
   name: string;
   englishName: string;
   keywords: Record<Orientation, string[]>;
@@ -48,22 +66,6 @@ export type LayeredOrientationMeaning = {
   advice: string[];
   reflection: string;
 };
-
-export type MinorRank =
-  | "ace"
-  | "two"
-  | "three"
-  | "four"
-  | "five"
-  | "six"
-  | "seven"
-  | "eight"
-  | "nine"
-  | "ten"
-  | "page"
-  | "knight"
-  | "queen"
-  | "king";
 
 export type LayeredCardMeaning = {
   schemaVersion: "2.0";

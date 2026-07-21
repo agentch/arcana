@@ -42,7 +42,7 @@ test("keeps meanings, deck assets, and spreads referentially valid", async () =>
     readFile(new URL("../app/data/card-meanings.json", import.meta.url), "utf8"),
     readFile(
       new URL(
-        "../app/data/deck-manifests/arcana-symbolic.json",
+        "../app/data/deck-manifests/rws-original.json",
         import.meta.url,
       ),
       "utf8",
