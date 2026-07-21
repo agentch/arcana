@@ -245,6 +245,56 @@ function composeTriangleSummary(
   };
 }
 
+/** 恋爱关系五牌阵：照耀双方与关系张力，建议取自发展趋势。 */
+function composeRelationshipSummary(
+  spreadName: string,
+  spreadDescription: string,
+  interpretations: InterpretationView[],
+): SpreadSummaryView {
+  const [self, other, connection, challenge, direction] = interpretations;
+
+  const illuminationLines: SpreadSummaryLine[] = [];
+  if (self) {
+    illuminationLines.push({label: "我", text: pickIllumination(self)});
+  }
+  if (other) {
+    illuminationLines.push({label: "对方", text: pickIllumination(other)});
+  }
+  if (connection) {
+    illuminationLines.push({
+      label: "关系",
+      text: pickIllumination(connection),
+    });
+  }
+  if (challenge) {
+    illuminationLines.push({
+      label: "挑战",
+      text: pickIllumination(challenge),
+    });
+  }
+
+  const guidanceLines: SpreadSummaryLine[] = [];
+  if (direction) {
+    const trend = pickIllumination(direction);
+    if (trend) {
+      guidanceLines.push({label: "趋势", text: trend});
+    }
+    const action = pickAdvice(direction);
+    if (action) {
+      guidanceLines.push({label: "可以尝试", text: action});
+    }
+  }
+
+  const closing = `${spreadDescription}。「对方」牌位是你对关系互动的观察角度，不是对他人内心的事实判定。牌面提供的是观察角度，不是写定的预言。`;
+
+  return {
+    title: `${spreadName} · 照耀与建议`,
+    illumination: {title: "照耀", lines: illuminationLines},
+    guidance: {title: "建议", lines: guidanceLines},
+    closing,
+  };
+}
+
 /** 多牌阵消息流摘要：按牌阵语义组织照耀与建议。 */
 export function composeSpreadSummary({
   spreadId,
@@ -254,6 +304,14 @@ export function composeSpreadSummary({
 }: ComposeSpreadSummaryInput): SpreadSummaryView {
   if (spreadId === "sacred-triangle") {
     return composeTriangleSummary(
+      spreadName,
+      spreadDescription,
+      interpretations,
+    );
+  }
+
+  if (spreadId === "relationship-five") {
+    return composeRelationshipSummary(
       spreadName,
       spreadDescription,
       interpretations,

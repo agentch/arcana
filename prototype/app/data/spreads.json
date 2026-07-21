@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.4",
+  "spreadsVersion": "2026.07.5",
   "spreads": [
     {
       "id": "single-card",
@@ -62,7 +62,7 @@
       "id": "relationship-five",
       "name": "恋爱关系五牌阵",
       "description": "观察双方状态、关系动力与发展趋势",
-      "enabled": false,
+      "enabled": true,
       "supportedTopics": ["love"],
       "visual": {
         "cards": [

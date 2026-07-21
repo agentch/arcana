@@ -231,6 +231,104 @@ test("composes a sacred-triangle spread summary", async () => {
   assert.doesNotMatch(JSON.stringify(summary), /过去|未来/);
 });
 
+test("composes a relationship-five spread summary", async () => {
+  const [catalog, foolV2, magicianV2, deathV2, towerV2, worldV2] =
+    await Promise.all([
+      readJson("../app/data/card-meanings.json"),
+      readJson("../app/data/cards/major-00.json"),
+      readJson("../app/data/cards/major-01.json"),
+      readJson("../app/data/cards/major-13.json"),
+      readJson("../app/data/cards/major-16.json"),
+      readJson("../app/data/cards/major-21.json"),
+    ]);
+
+  const makeCard = (index, symbol, alt) => ({
+    ...catalog.cards[index],
+    asset: {image: null, fallbackSymbol: symbol, alt},
+  });
+
+  const interpretations = [
+    composeInterpretation({
+      card: makeCard(0, "✦", "愚人"),
+      layeredMeaning: foolV2,
+      orientation: "upright",
+      topicId: "love",
+      position: {
+        id: "self",
+        name: "我的状态",
+        prompt: "我的需要、感受与关系模式",
+        order: 1,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(1, "✧", "魔术师"),
+      layeredMeaning: magicianV2,
+      orientation: "reversed",
+      topicId: "love",
+      position: {
+        id: "other",
+        name: "对方状态",
+        prompt: "我所感受到的对方立场",
+        order: 2,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(13, "†", "死神"),
+      layeredMeaning: deathV2,
+      orientation: "upright",
+      topicId: "love",
+      position: {
+        id: "connection",
+        name: "关系现状",
+        prompt: "双方当前形成的互动动力",
+        order: 3,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(16, "⚡", "高塔"),
+      layeredMeaning: towerV2,
+      orientation: "reversed",
+      topicId: "love",
+      position: {
+        id: "challenge",
+        name: "关系挑战",
+        prompt: "冲突、误解、边界或外部压力",
+        order: 4,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(21, "◎", "世界"),
+      layeredMeaning: worldV2,
+      orientation: "upright",
+      topicId: "love",
+      position: {
+        id: "direction",
+        name: "发展趋势",
+        prompt: "维持当前互动方式时的可能方向",
+        order: 5,
+      },
+    }),
+  ];
+
+  const summary = composeSpreadSummary({
+    spreadId: "relationship-five",
+    spreadName: "恋爱关系五牌阵",
+    spreadDescription: "观察双方状态、关系动力与发展趋势",
+    interpretations,
+  });
+
+  assert.deepEqual(
+    summary.illumination.lines.map((line) => line.label),
+    ["我", "对方", "关系", "挑战"],
+  );
+  assert.deepEqual(
+    summary.guidance.lines.map((line) => line.label),
+    ["趋势", "可以尝试"],
+  );
+  assert.match(summary.closing, /不是对他人内心的事实判定/);
+  assert.ok(summary.guidance.lines[1].text.includes(worldV2.upright.advice[0]));
+});
+
 test("adapts legacy cards to the same display model without placeholders", async () => {
   const catalog = await readJson("../app/data/card-meanings.json");
   const magician = {

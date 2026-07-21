@@ -1142,6 +1142,24 @@ button {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.spread-card-grid.count-5 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.spread-card-grid.count-5 .spread-card-item:nth-child(1),
+.spread-card-grid.count-5 .spread-card-item:nth-child(4) {
+  grid-column: span 3;
+}
+
+.spread-card-grid.count-5 .spread-card-item:nth-child(2),
+.spread-card-grid.count-5 .spread-card-item:nth-child(5) {
+  grid-column: span 3;
+}
+
+.spread-card-grid.count-5 .spread-card-item:nth-child(3) {
+  grid-column: 2 / span 4;
+}
+
 .spread-card-grid.result {
   margin-top: 18px;
 }
