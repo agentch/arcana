@@ -1,5 +1,5 @@
 import cardMeaningsJson from "../data/card-meanings.json";
-import foolMeaningV2Json from "../data/cards/major-00.json";
+import {layeredCardMeanings} from "../data/cards/registry";
 import activeDeckJson from "../data/deck-manifests/rws-original.json";
 import meaningTopicMapJson from "../data/meaning-topic-map.json";
 import questionPromptsJson from "../data/question-prompts.json";
@@ -20,18 +20,31 @@ const spreads = spreadsJson.spreads as SpreadDefinition[];
 const questionCategories =
   questionPromptsJson.categories as QuestionCategory[];
 const layeredMeanings = new Map(
-  [foolMeaningV2Json as LayeredCardMeaning].map((meaning) => [
+  layeredCardMeanings.map((meaning) => [
     meaning.id,
     meaning,
   ]),
 );
+for (const card of cardMeanings) {
+  if (!layeredMeanings.has(card.id)) {
+    throw new Error(`Missing layered card meaning for ${card.id}`);
+  }
+}
+const layeredContentVersions = new Set(
+  layeredCardMeanings.map((meaning) => meaning.contentVersion),
+);
+if (layeredContentVersions.size !== 1) {
+  throw new Error("Layered card meanings must use one content version");
+}
+const layeredContentVersion =
+  layeredCardMeanings[0]?.contentVersion ?? cardMeaningsJson.contentVersion;
 const categoryToTopic = meaningTopicMapJson.categoryToTopic as Record<
   QuestionCategory["id"],
   MeaningTopicId
 >;
 
 export const catalogVersions = {
-  content: cardMeaningsJson.contentVersion,
+  content: layeredContentVersion,
   deck: deck.version,
   spreads: spreadsJson.spreadsVersion,
   prompts: questionPromptsJson.promptsVersion,

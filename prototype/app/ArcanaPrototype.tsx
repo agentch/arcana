@@ -16,6 +16,7 @@ import {
   CardVisual,
   SpreadIcon,
 } from "./components/cards/ReadingVisuals";
+import {InterpretationDetails} from "./components/cards/InterpretationDetails";
 import {
   chatFlowReducer,
   initialChatFlowState,
@@ -823,65 +824,24 @@ export function ArcanaPrototype() {
                       {interpretation.summary}
                     </p>
                     {showFullReading ? (
-                      <>
-                        <div className="reading-section">
-                          <h3>详细解读</h3>
-                          <p className="reading-text">
-                            {interpretation.overview}
-                          </p>
-                          {interpretation.topicText && (
-                            <p className="reading-text topic-text">
-                              {interpretation.topicText}
-                            </p>
-                          )}
-                          <p className="position-context">
-                            {interpretation.positionText}
-                          </p>
-                        </div>
-                        {interpretation.symbols.length > 0 && (
-                          <div className="reading-section">
-                            <h3>牌面象征</h3>
-                            <dl className="symbol-list">
-                              {interpretation.symbols.map((symbol) => (
-                                <div key={symbol.name}>
-                                  <dt>{symbol.name}</dt>
-                                  <dd>{symbol.meaning}</dd>
-                                </div>
-                              ))}
-                            </dl>
-                          </div>
-                        )}
-                        {interpretation.light && interpretation.shadow && (
-                          <div className="meaning-polarity">
-                            <div>
-                              <h3>可以运用</h3>
-                              <p>{interpretation.light}</p>
-                            </div>
-                            <div>
-                              <h3>需要留意</h3>
-                              <p>{interpretation.shadow}</p>
-                            </div>
-                          </div>
-                        )}
-                        <div className="advice">
-                          <strong>可以尝试：</strong>
-                          <ul>
-                            {interpretation.advice.map((item) => (
-                              <li key={item}>{item}</li>
-                            ))}
-                          </ul>
-                        </div>
-                        {interpretation.reflection && (
-                          <blockquote className="reflection-question">
-                            {interpretation.reflection}
-                          </blockquote>
-                        )}
-                      </>
+                      <InterpretationDetails interpretation={interpretation} />
                     ) : (
-                      <div className="advice compact">
-                        <strong>{drawn.position.name}可以观察：</strong>
-                        <p>{interpretation.advice[0]}</p>
-                      </div>
+                      <details className="reading-details">
+                        <summary>
+                          <span>
+                            <span className="reading-details-label-closed">
+                              {`展开“${interpretation.positionName} · ${interpretation.cardName}”完整解读`}
+                            </span>
+                            <span className="reading-details-label-open">
+                              {`收起“${interpretation.positionName} · ${interpretation.cardName}”完整解读`}
+                            </span>
+                          </span>
+                          <span aria-hidden="true" className="reading-details-icon">
+                            +
+                          </span>
+                        </summary>
+                        <InterpretationDetails interpretation={interpretation} />
+                      </details>
                     )}
                   </article>
                 );

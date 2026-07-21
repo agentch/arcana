@@ -45,29 +45,29 @@ test("composes layered meaning from orientation, topic, and spread position", as
   assert.equal(result.reflection, foolV2.upright.reflection);
 });
 
-test("selects reversed topic copy independently", async () => {
-  const [catalog, foolV2] = await Promise.all([
+test("composes a non-Fool reversed topic independently", async () => {
+  const [catalog, magicianV2] = await Promise.all([
     readJson("../app/data/card-meanings.json"),
-    readJson("../app/data/cards/major-00.json"),
+    readJson("../app/data/cards/major-01.json"),
   ]);
-  const foolV1 = {
-    ...catalog.cards[0],
-    asset: {image: null, fallbackSymbol: "✦", alt: "愚人占位牌面"},
+  const magicianV1 = {
+    ...catalog.cards[1],
+    asset: {image: null, fallbackSymbol: "✧", alt: "魔术师占位牌面"},
   };
 
   const result = composeInterpretation({
-    card: foolV1,
-    layeredMeaning: foolV2,
+    card: magicianV1,
+    layeredMeaning: magicianV2,
     orientation: "reversed",
     topicId: "career",
     position,
   });
 
   assert.equal(result.orientationName, "逆位");
-  assert.equal(result.overview, foolV2.reversed.overview);
-  assert.equal(result.topicText, foolV2.topics.career.reversed);
-  assert.equal(result.light, foolV2.reversed.light);
-  assert.equal(result.shadow, foolV2.reversed.shadow);
+  assert.equal(result.overview, magicianV2.reversed.overview);
+  assert.equal(result.topicText, magicianV2.topics.career.reversed);
+  assert.equal(result.light, magicianV2.reversed.light);
+  assert.equal(result.shadow, magicianV2.reversed.shadow);
 });
 
 test("adapts legacy cards to the same display model without placeholders", async () => {

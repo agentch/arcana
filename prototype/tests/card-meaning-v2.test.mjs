@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import {readFile} from "node:fs/promises";
+import {readdir, readFile} from "node:fs/promises";
 import test from "node:test";
 import Ajv2020 from "ajv/dist/2020.js";
 import {
@@ -13,27 +13,45 @@ async function readJson(relativePath) {
   );
 }
 
-test("the complete Fool sample satisfies the layered v2 schema", async () => {
-  const [schema, fool] = await Promise.all([
+test("all major arcana drafts satisfy the layered v2 schema", async () => {
+  const [schema, catalog, filenames] = await Promise.all([
     readJson("../app/data/schemas/card-meaning-v2.schema.json"),
-    readJson("../app/data/cards/major-00.json"),
+    readJson("../app/data/card-meanings.json"),
+    readdir(new URL("../app/data/cards/", import.meta.url)),
   ]);
   const validate = new Ajv2020({allErrors: true, strict: true}).compile(schema);
-
-  assert.equal(
-    validate(fool),
-    true,
-    JSON.stringify(validate.errors, null, 2),
+  const majorFilenames = filenames
+    .filter((filename) => /^major-\d{2}\.json$/.test(filename))
+    .sort();
+  const meanings = await Promise.all(
+    majorFilenames.map((filename) =>
+      readJson(`../app/data/cards/${filename}`),
+    ),
   );
-  assert.deepEqual(Object.keys(fool.topics), [
-    "love",
-    "career",
-    "family",
-    "mood",
-    "finance",
-    "growth",
-  ]);
-  assert.equal(fool.core.symbols.length, 4);
+
+  assert.equal(meanings.length, 22);
+  assert.deepEqual(
+    meanings.map((meaning) => meaning.id),
+    catalog.cards.map((card) => card.id),
+  );
+  for (const meaning of meanings) {
+    assert.equal(
+      validate(meaning),
+      true,
+      `${meaning.id}: ${JSON.stringify(validate.errors, null, 2)}`,
+    );
+    assert.deepEqual(Object.keys(meaning.topics), [
+      "love",
+      "career",
+      "family",
+      "mood",
+      "finance",
+      "growth",
+    ]);
+    assert.equal(meaning.core.symbols.length, 4);
+    assert.doesNotMatch(JSON.stringify(meaning), /待编辑|待补充/);
+    assert.equal(meaning.editorial.status, "draft");
+  }
 });
 
 test("v1 migration preserves identity and reviewed source copy", async () => {

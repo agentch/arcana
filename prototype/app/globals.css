@@ -1253,6 +1253,68 @@ button {
   line-height: 1.7;
 }
 
+.reading-details {
+  margin-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.reading-details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 48px;
+  color: var(--gold);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  list-style: none;
+}
+
+.reading-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.reading-details-label-open {
+  display: none;
+}
+
+.reading-details[open] .reading-details-label-closed {
+  display: none;
+}
+
+.reading-details[open] .reading-details-label-open {
+  display: inline;
+}
+
+.reading-details-icon {
+  display: grid;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  color: var(--paper);
+  font-size: 18px;
+  line-height: 1;
+  background: rgba(214, 185, 120, 0.1);
+  border-radius: 50%;
+  transition: transform 240ms ease;
+}
+
+.reading-details[open] .reading-details-icon {
+  transform: rotate(45deg);
+}
+
+.reading-details-content {
+  animation: enter 320ms ease both;
+}
+
+.reading-details .reading-section:first-child {
+  margin-top: 0;
+}
+
 .reading-section {
   margin-top: 18px;
   padding-top: 18px;

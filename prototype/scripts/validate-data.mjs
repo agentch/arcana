@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv2020 from "ajv/dist/2020.js";
@@ -9,6 +9,20 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 async function readJson(path) {
   return JSON.parse(await readFile(resolve(root, path), "utf8"));
+}
+
+async function readLayeredMeanings() {
+  const cardsDirectory = resolve(root, "app/data/cards");
+  const filenames = (await readdir(cardsDirectory))
+    .filter((filename) => /^major-\d{2}\.json$/.test(filename))
+    .sort();
+
+  return Promise.all(
+    filenames.map(async (filename) => ({
+      filename,
+      meaning: await readJson(`app/data/cards/${filename}`),
+    })),
+  );
 }
 
 function assertSchema(ajv, schema, data, label) {
@@ -25,7 +39,7 @@ const [
   spreads,
   questionPrompts,
   meaningTopicMap,
-  foolV2,
+  layeredMeanings,
   cardIndex,
   formalDeck,
   formalDeckManifest,
@@ -48,7 +62,7 @@ const [
   readJson("app/data/spreads.json"),
   readJson("app/data/question-prompts.json"),
   readJson("app/data/meaning-topic-map.json"),
-  readJson("app/data/cards/major-00.json"),
+  readLayeredMeanings(),
   readJson("app/data/card-index.json"),
   readJson("app/data/decks/rws-original/deck.json"),
   readJson("app/data/decks/rws-original/manifest.json"),
@@ -70,7 +84,19 @@ const [
 const ajv = new Ajv2020({allErrors: true, strict: true});
 
 assertSchema(ajv, meaningsSchema, meanings, "card-meanings.json");
-assertSchema(ajv, meaningV2Schema, foolV2, "cards/major-00.json");
+for (const {filename, meaning} of layeredMeanings) {
+  assertSchema(ajv, meaningV2Schema, meaning, `cards/${filename}`);
+  assert.doesNotMatch(
+    JSON.stringify(meaning),
+    /待编辑|待补充/,
+    `${filename} must not contain editorial placeholders`,
+  );
+}
+assert.equal(
+  new Set(layeredMeanings.map(({meaning}) => meaning.contentVersion)).size,
+  1,
+  "layered v2 meanings must use one content version",
+);
 assertSchema(ajv, deckSchema, deck, "deck-manifests/rws-original.json");
 assertSchema(ajv, spreadsSchema, spreads, "spreads.json");
 assertSchema(
@@ -118,6 +144,11 @@ for (const card of migratedDrafts) {
 
 const cardIds = meanings.cards.map((card) => card.id);
 assert.equal(new Set(cardIds).size, cardIds.length, "card IDs must be unique");
+assert.deepEqual(
+  layeredMeanings.map(({meaning}) => meaning.id),
+  cardIds,
+  "layered v2 meanings must cover every active major arcana in stable order",
+);
 assert.deepEqual(
   cardIds,
   [...cardIds].sort(),
@@ -321,5 +352,5 @@ assert.deepEqual(
 );
 
 console.log(
-  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, 1 complete v2 sample, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
+  `Validated 78 stable card IDs, ${meanings.cards.length} v1 cards, ${migratedDrafts.length} v2 migration drafts, ${layeredMeanings.length} complete v2 major arcana drafts, ${Object.keys(deck.assets).length} active RWS assets, ${Object.keys(formalDeckManifest.assets).length} formal RWS asset slots, ${spreads.spreads.length} spreads, and ${questionPrompts.categories.length} question categories.`,
 );
