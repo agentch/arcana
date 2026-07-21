@@ -131,6 +131,10 @@ test("cups minor arcana meanings satisfy the layered v2 schema", async () => {
   await assertMinorSuitMeanings("cups", "水");
 });
 
+test("swords minor arcana meanings satisfy the layered v2 schema", async () => {
+  await assertMinorSuitMeanings("swords", "风");
+});
+
 test("v1 migration preserves identity and reviewed source copy", async () => {
   const catalog = await readJson("../app/data/card-meanings.json");
   const source = catalog.cards[0];

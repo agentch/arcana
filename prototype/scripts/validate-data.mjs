@@ -46,6 +46,7 @@ const MINOR_RANKS = [
 const COMPLETE_MINOR_SUITS = [
   {suit: "wands", element: "火"},
   {suit: "cups", element: "水"},
+  {suit: "swords", element: "风"},
 ];
 
 function assertCompleteMinorSuit(minorMeanings, suit, element) {
