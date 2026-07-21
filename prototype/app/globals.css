@@ -202,6 +202,7 @@ button {
   color: var(--ink);
   font-size: 20px;
   font-weight: 500;
+  line-height: 1.45;
   text-align: center;
 }
 
@@ -277,6 +278,110 @@ button {
 
 .draw-page .selection-stage {
   flex: 1;
+  padding-top: 10px;
+  overflow: visible;
+}
+
+.draw-page .selection-stage .message-card-title {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2px;
+  padding: 2px 8px 0;
+  overflow: visible;
+  line-height: 1.5;
+}
+
+.reading-detail-page-shell .chat-thread {
+  display: none;
+}
+
+.reading-detail-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding: 8px 0 20px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: enter 320ms ease both;
+}
+
+.reading-detail-back {
+  align-self: flex-start;
+  margin-bottom: 10px;
+}
+
+.reading-detail-page .message-card-label {
+  text-align: center;
+}
+
+.reading-detail-page .message-card-title {
+  margin-bottom: 18px;
+}
+
+.reading-detail-list {
+  gap: 16px;
+}
+
+.reading-detail-card {
+  display: grid;
+  width: min(118px, 42%);
+  margin: 4px auto 14px;
+  place-items: center;
+}
+
+.reading-detail-back-bottom {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.spread-summary .primary-button {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.spread-summary-section {
+  margin-top: 18px;
+}
+
+.spread-summary-section h3 {
+  margin: 0 0 10px;
+  color: var(--gold);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.spread-summary-lines {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.spread-summary-lines div {
+  display: grid;
+  gap: 4px;
+}
+
+.spread-summary-lines dt {
+  color: var(--ink);
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.spread-summary-lines dd {
+  margin: 0;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.spread-summary-closing {
+  margin-top: 14px;
 }
 
 .wordmark {
@@ -299,6 +404,11 @@ button {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   place-items: center;
+}
+
+.icon-button:disabled {
+  cursor: default;
+  opacity: 0.35;
 }
 
 .screen {

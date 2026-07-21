@@ -35,8 +35,8 @@ export function ChatThread({
   return (
     <div className="chat-thread" role="log" aria-live="polite">
       <div className="chat-intro">
-        <p className="eyebrow">A quiet space for reflection</p>
-        <h1 className="chat-title">在牌面中，看见此刻的自己</h1>
+        <p className="eyebrow">星轨低语 · 牌面应心</p>
+        <h1 className="chat-title">在牌面中，与命运短暂对视</h1>
       </div>
       {messages.map((message, index) => (
         <div
@@ -53,7 +53,9 @@ export function ChatThread({
       <div className="chat-active-step" ref={activeStep}>
         {children}
       </div>
-      <p className="chat-disclaimer">仅供娱乐与自我探索，不替代专业建议</p>
+      <p className="chat-disclaimer">
+        牌语仅供娱乐与自我探索，不替代专业建议
+      </p>
     </div>
   );
 }

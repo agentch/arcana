@@ -33,7 +33,7 @@ export const initialChatFlowState: ChatFlowState = {
     {
       id: "message-0",
       role: "assistant",
-      text: "欢迎来到 Arcana。带着一个问题而来，让牌面陪你看见此刻的感受与可能。",
+      text: "夜色沉静，星轨微响。欢迎来到 Arcana——把你的问题交给沉默的牌面，听命运轻轻应一声。",
     },
   ],
 };
@@ -62,7 +62,10 @@ export function chatFlowReducer(
       if (state.phase !== "welcome" && state.phase !== "complete") return state;
       return appendMessages(state, "category", [
         { role: "user", text: "开始一次占卜" },
-        { role: "assistant", text: "此刻，你最想探索哪个方面？" },
+        {
+          role: "assistant",
+          text: "先告诉我——此刻搅动你心潮的，是哪一道命运的波纹？",
+        },
       ]);
     case "select-category":
       if (state.phase !== "category") return state;
@@ -70,14 +73,17 @@ export function chatFlowReducer(
         { role: "user", text: action.label },
         {
           role: "assistant",
-          text: "选择一个更贴近你的问题，也可以直接写下自己的问题。",
+          text: "把问题写进光里。可以选择更贴近你的问法，也可以亲自低语一句属于你的句子。",
         },
       ]);
     case "submit-question":
       if (state.phase !== "question" || !action.question.trim()) return state;
       return appendMessages(state, "spread", [
         { role: "user", text: action.question.trim() },
-        { role: "assistant", text: "选择一种牌阵来展开这个问题。" },
+        {
+          role: "assistant",
+          text: "选定阵形，如同在星图上落下一枚坐标。让这个问题有自己的展开方式。",
+        },
       ]);
     case "select-spread":
       if (state.phase !== "spread") return state;
@@ -85,18 +91,24 @@ export function chatFlowReducer(
         { role: "user", text: `使用${action.label}` },
         {
           role: "assistant",
-          text: "左右滑动牌组，凭直觉为每个牌位选择一张牌。",
+          text: "牌圈已在你指尖苏醒。凭直觉拨动命运之轮，为每一个位置召来它的使者。",
         },
       ]);
     case "complete-draw":
       if (state.phase !== "draw") return state;
       return appendMessages(state, "result", [
-        { role: "assistant", text: "牌阵已经完整展开，下面是这次牌面带来的观察。" },
+        {
+          role: "assistant",
+          text: "阵已合拢，回响初成。且看牌面为你揭开的那一页。",
+        },
       ]);
     case "save":
       if (state.phase !== "result") return state;
       return appendMessages(state, "complete", [
-        { role: "assistant", text: "这次启示已保存。你可以随时开始新的对话。" },
+        {
+          role: "assistant",
+          text: "这段启示已铭刻于你的记录之中。星轨未熄，你随时可以再次启程。",
+        },
       ]);
     case "reset":
       return initialChatFlowState;

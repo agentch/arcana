@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 import test from "node:test";
-import {composeInterpretation} from "../app/domain/interpretation.ts";
+import {
+  composeInterpretation,
+  composeSpreadSummary,
+} from "../app/domain/interpretation.ts";
 
 async function readJson(relativePath) {
   return JSON.parse(
@@ -68,6 +71,89 @@ test("composes a non-Fool reversed topic independently", async () => {
   assert.equal(result.topicText, magicianV2.topics.career.reversed);
   assert.equal(result.light, magicianV2.reversed.light);
   assert.equal(result.shadow, magicianV2.reversed.shadow);
+});
+
+test("composes a fused multi-card spread summary", async () => {
+  const [catalog, foolV2, magicianV2, worldV2] = await Promise.all([
+    readJson("../app/data/card-meanings.json"),
+    readJson("../app/data/cards/major-00.json"),
+    readJson("../app/data/cards/major-01.json"),
+    readJson("../app/data/cards/major-21.json"),
+  ]);
+  const fool = {
+    ...catalog.cards[0],
+    asset: {image: null, fallbackSymbol: "✦", alt: "愚人占位牌面"},
+  };
+  const magician = {
+    ...catalog.cards[1],
+    asset: {image: null, fallbackSymbol: "✧", alt: "魔术师占位牌面"},
+  };
+  const world = {
+    ...catalog.cards[21],
+    asset: {image: null, fallbackSymbol: "◎", alt: "世界占位牌面"},
+  };
+  const interpretations = [
+    composeInterpretation({
+      card: fool,
+      layeredMeaning: foolV2,
+      orientation: "upright",
+      topicId: "mood",
+      position: {
+        id: "past",
+        name: "过去",
+        prompt: "已形成影响的背景",
+        order: 1,
+      },
+    }),
+    composeInterpretation({
+      card: magician,
+      layeredMeaning: magicianV2,
+      orientation: "reversed",
+      topicId: "mood",
+      position: {
+        id: "present",
+        name: "现在",
+        prompt: "当前最重要的力量",
+        order: 2,
+      },
+    }),
+    composeInterpretation({
+      card: world,
+      layeredMeaning: worldV2,
+      orientation: "upright",
+      topicId: "mood",
+      position: {
+        id: "future",
+        name: "未来趋势",
+        prompt: "沿当前路径继续时可能出现的倾向",
+        order: 3,
+      },
+    }),
+  ];
+
+  const summary = composeSpreadSummary({
+    spreadName: "时间流",
+    spreadDescription: "理解一件事如何从过去发展到未来",
+    interpretations,
+  });
+
+  assert.match(summary.title, /照耀与建议/);
+  assert.equal(summary.illumination.title, "照耀");
+  assert.deepEqual(
+    summary.illumination.lines.map((line) => line.label),
+    ["过去", "现在", "未来"],
+  );
+  assert.equal(summary.guidance.title, "建议");
+  assert.deepEqual(
+    summary.guidance.lines.map((line) => line.label),
+    ["现在", "未来"],
+  );
+  assert.ok(summary.illumination.lines[0].text.length > 0);
+  assert.ok(summary.guidance.lines[0].text.includes(magicianV2.reversed.advice[0]));
+  assert.ok(summary.guidance.lines[1].text.includes(worldV2.upright.advice[0]));
+  assert.doesNotMatch(JSON.stringify(summary), /围绕你写下的问题/);
+  assert.doesNotMatch(JSON.stringify(summary), /过去由/);
+  assert.doesNotMatch(JSON.stringify(summary), /「愚人」/);
 });
 
 test("adapts legacy cards to the same display model without placeholders", async () => {

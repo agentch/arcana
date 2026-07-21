@@ -17,6 +17,7 @@ import {
   SpreadIcon,
 } from "./components/cards/ReadingVisuals";
 import {InterpretationDetails} from "./components/cards/InterpretationDetails";
+import {ReadingDetailPage} from "./components/cards/ReadingDetailPage";
 import {
   chatFlowReducer,
   initialChatFlowState,
@@ -36,7 +37,10 @@ import {
   shuffleDeck,
   type DrawnRenderableCard,
 } from "./domain/draw";
-import { composeInterpretation } from "./domain/interpretation";
+import {
+  composeInterpretation,
+  composeSpreadSummary,
+} from "./domain/interpretation";
 import type {
   Orientation,
   Reading,
@@ -152,6 +156,7 @@ export function ArcanaPrototype() {
   });
   const [history, setHistory] = useState<Reading[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [readingDetailOpen, setReadingDetailOpen] = useState(false);
   const lastScrollHapticIndex = useRef(-1);
   const returnToChatTimeout = useRef<number | null>(null);
   const shuffleTimeout = useRef<number | null>(null);
@@ -212,6 +217,7 @@ export function ArcanaPrototype() {
     setDrawnCards([]);
     setActiveDrawPositionId("");
     setHistoryOpen(false);
+    setReadingDetailOpen(false);
     dispatchFlow({ type: "reset" });
   }
 
@@ -411,35 +417,82 @@ export function ArcanaPrototype() {
     resetReading();
   }
 
+  const resultInterpretations =
+    flow.phase === "result" || readingDetailOpen
+      ? drawnCards.map((drawn) =>
+          composeInterpretation({
+            card: drawn.card,
+            layeredMeaning: getLayeredMeaning(drawn.card.id),
+            orientation: drawn.orientation,
+            topicId: getMeaningTopic(questionCategoryId),
+            position: drawn.position,
+          }),
+        )
+      : [];
+  const spreadSummary =
+    resultInterpretations.length > 1
+      ? composeSpreadSummary({
+          spreadName: activeSpread.name,
+          spreadDescription: activeSpread.description,
+          interpretations: resultInterpretations,
+        })
+      : null;
+  const showReadingDetail =
+    readingDetailOpen && drawnCards.length > 1 && flow.phase === "result";
+
   return (
     <main className="app-shell">
       <div
         className={`phone-stage ${
-          flow.phase === "draw" ? "draw-page" : ""
+          flow.phase === "draw"
+            ? "draw-page"
+            : showReadingDetail
+              ? "reading-detail-page-shell"
+              : ""
         }`}
       >
         <header className="topbar">
-          <button className="text-button" onClick={goHome} aria-label="返回首页">
-            ☾
+          <button
+            className="text-button"
+            onClick={() => {
+              if (showReadingDetail) {
+                setReadingDetailOpen(false);
+                return;
+              }
+              goHome();
+            }}
+            aria-label={showReadingDetail ? "返回消息流" : "返回首页"}
+          >
+            {showReadingDetail ? "←" : "☾"}
           </button>
           <p className="wordmark">Arcana</p>
           <button
             className="icon-button"
             onClick={() => setHistoryOpen(true)}
             aria-label="查看占卜记录"
+            disabled={showReadingDetail}
           >
             ◷
           </button>
         </header>
 
-        {!historyOpen && (
+        {showReadingDetail ? (
+          <ReadingDetailPage
+            spreadName={activeSpread.name}
+            drawnCards={drawnCards}
+            topicId={getMeaningTopic(questionCategoryId)}
+            onBack={() => setReadingDetailOpen(false)}
+          />
+        ) : null}
+
+        {!historyOpen && !showReadingDetail && (
           <ChatThread
             messages={flow.messages}
-            activeKey={`${flow.phase}-${drawnCards.length}`}
+            activeKey={`${flow.phase}-${drawnCards.length}-${readingDetailOpen}`}
           >
             {flow.phase === "welcome" && (
               <AssistantCard>
-                <p className="message-card-label">准备好了吗？</p>
+                <p className="message-card-label">命运之门已半开</p>
                 <button
                   className="primary-button"
                   onClick={() => dispatchFlow({ type: "start" })}
@@ -520,7 +573,7 @@ export function ArcanaPrototype() {
                       setQuestionOptionId("");
                     }
                   }}
-                  placeholder="也可以直接写下你自己的问题"
+                  placeholder="把你的低语写在这里…"
                   aria-label="输入你想探索的问题"
                 />
                 <button
@@ -533,13 +586,13 @@ export function ArcanaPrototype() {
                     })
                   }
                 >
-                  确认这个问题
+                  把问题交给牌面
                 </button>
               </div>
             )}
             {flow.phase === "spread" && activeQuestionCategory && (
               <div className="question-step">
-                <p className="section-label">选择牌阵</p>
+                <p className="section-label">落定你的星图阵形</p>
                 <div className="spread-options" aria-label="选择牌阵">
                   {enabledSpreads.map((spread) => (
                     <button
@@ -566,7 +619,7 @@ export function ArcanaPrototype() {
                 </div>
                 <div className="home-actions">
                   <button className="primary-button" onClick={beginDraw}>
-                    使用{activeSpread.name}洗牌
+                    以「{activeSpread.name}」唤醒牌序
                   </button>
                 </div>
               </div>
@@ -578,9 +631,9 @@ export function ArcanaPrototype() {
         {flow.phase === "draw" && (
           <AssistantCard>
           <section className="chat-step draw-stage selection-stage">
-            <h2 className="message-card-title">凭直觉选择你的牌</h2>
+            <h2 className="message-card-title">倾听直觉，召出你的牌</h2>
             <p className="draw-progress" aria-live="polite">
-              已选择 {drawnCards.length} / {activeSpread.positions.length}
+              命运之印 {drawnCards.length} / {activeSpread.positions.length}
             </p>
             <div
               className="draw-position-slots"
@@ -635,10 +688,10 @@ export function ArcanaPrototype() {
             </div>
             <p className="draw-hint">
               {drawnCards.length === activeSpread.positions.length
-                ? "牌阵已经完整展开"
+                ? "阵已圆满，回响落定"
                 : animatingDraw
-                  ? `正在翻开“${animatingDraw.position.name}”的牌…`
-                  : `左右拖动转动牌圈，为“${activeDrawPosition?.name}”选择一张牌`}
+                  ? `“${animatingDraw.position.name}”的使者正在现身…`
+                  : `转动命运之轮，为“${activeDrawPosition?.name}”召来一张牌`}
             </p>
             <div
               className="draw-deck-wheel"
@@ -696,7 +749,7 @@ export function ArcanaPrototype() {
                 className="primary-button draw-complete-button"
                 onClick={() => dispatchFlow({ type: "complete-draw" })}
               >
-                返回对话查看解读
+                收束牌阵，聆听回响
               </button>
             )}
             {shuffling && (
@@ -706,7 +759,7 @@ export function ArcanaPrototype() {
                   <span className="shuffle-card" />
                   <span className="shuffle-card" />
                 </div>
-                <p>让牌序重新流动…</p>
+                <p>牌序正在重写命运的篇章…</p>
                 <button
                   className="text-button"
                   onClick={() => {
@@ -717,7 +770,7 @@ export function ArcanaPrototype() {
                     setShuffling(false);
                   }}
                 >
-                  跳过洗牌
+                  打断洗牌仪式
                 </button>
               </div>
             )}
@@ -772,8 +825,8 @@ export function ArcanaPrototype() {
         {flow.phase === "result" && drawnCards.length > 0 && (
           <AssistantCard>
           <section className="chat-step result-step">
-            <p className="message-card-label">Your reflection · {activeSpread.name}</p>
-            <h2 className="message-card-title">牌面为你展开</h2>
+            <p className="message-card-label">牌语回响 · {activeSpread.name}</p>
+            <h2 className="message-card-title">命运为你铺开这一阵</h2>
             <div className={`spread-card-grid result count-${drawnCards.length}`}>
               {drawnCards.map((drawn) => (
                 <div className="spread-card-item" key={drawn.position.id}>
@@ -791,81 +844,84 @@ export function ArcanaPrototype() {
                 </div>
               ))}
             </div>
-            <div className="reading-list">
-              {drawnCards.map((drawn) => {
-                const interpretation = composeInterpretation({
-                  card: drawn.card,
-                  layeredMeaning: getLayeredMeaning(drawn.card.id),
-                  orientation: drawn.orientation,
-                  topicId: getMeaningTopic(questionCategoryId),
-                  position: drawn.position,
-                });
-                const showFullReading = drawnCards.length === 1;
-                return (
-                  <article
-                    className="reading-panel"
-                    key={drawn.position.id}
-                  >
-                    <p className="reading-position">
-                      {interpretation.positionName}
-                    </p>
-                    <h2>
-                      {interpretation.cardName} ·{" "}
-                      {interpretation.orientationName}
-                    </h2>
-                    <div className="keywords">
-                      {interpretation.keywords.map((keyword) => (
-                        <span className="keyword" key={keyword}>
-                          {keyword}
-                        </span>
+            {drawnCards.length === 1 && resultInterpretations[0] ? (
+              <div className="reading-list">
+                <article className="reading-panel">
+                  <p className="reading-position">
+                    {resultInterpretations[0].positionName}
+                  </p>
+                  <h2>
+                    {resultInterpretations[0].cardName} ·{" "}
+                    {resultInterpretations[0].orientationName}
+                  </h2>
+                  <div className="keywords">
+                    {resultInterpretations[0].keywords.map((keyword) => (
+                      <span className="keyword" key={keyword}>
+                        {keyword}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="reading-summary">
+                    {resultInterpretations[0].summary}
+                  </p>
+                  <InterpretationDetails
+                    interpretation={resultInterpretations[0]}
+                  />
+                </article>
+              </div>
+            ) : null}
+            {spreadSummary && (
+              <article className="reading-panel overview spread-summary">
+                <p className="reading-position">阵中回响</p>
+                <h2>{spreadSummary.title}</h2>
+                <section className="spread-summary-section">
+                  <h3>{spreadSummary.illumination.title}</h3>
+                  <dl className="spread-summary-lines">
+                    {spreadSummary.illumination.lines.map((line) => (
+                      <div key={`illumination-${line.label}`}>
+                        <dt>{line.label}</dt>
+                        <dd>{line.text}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </section>
+                {spreadSummary.guidance.lines.length > 0 && (
+                  <section className="spread-summary-section">
+                    <h3>{spreadSummary.guidance.title}</h3>
+                    <dl className="spread-summary-lines">
+                      {spreadSummary.guidance.lines.map((line) => (
+                        <div key={`guidance-${line.label}`}>
+                          <dt>{line.label}</dt>
+                          <dd>{line.text}</dd>
+                        </div>
                       ))}
-                    </div>
-                    <p className="reading-summary">
-                      {interpretation.summary}
-                    </p>
-                    {showFullReading ? (
-                      <InterpretationDetails interpretation={interpretation} />
-                    ) : (
-                      <details className="reading-details">
-                        <summary>
-                          <span>
-                            <span className="reading-details-label-closed">
-                              {`展开“${interpretation.positionName} · ${interpretation.cardName}”完整解读`}
-                            </span>
-                            <span className="reading-details-label-open">
-                              {`收起“${interpretation.positionName} · ${interpretation.cardName}”完整解读`}
-                            </span>
-                          </span>
-                          <span aria-hidden="true" className="reading-details-icon">
-                            +
-                          </span>
-                        </summary>
-                        <InterpretationDetails interpretation={interpretation} />
-                      </details>
-                    )}
-                  </article>
-                );
-              })}
-            </div>
-            {drawnCards.length > 1 && (
-              <article className="reading-panel overview">
-                <p className="reading-position">整体观察</p>
-                <h2>{activeSpread.name}</h2>
-                <p className="reading-text">
-                  {activeSpread.description}。请把三张牌看作一段连续的变化，而不是三个彼此孤立的结论；未来位置表达的是沿当前路径发展的可能倾向。
+                    </dl>
+                  </section>
+                )}
+                <p className="reading-text spread-summary-closing">
+                  {spreadSummary.closing}
                 </p>
+                <button
+                  className="primary-button"
+                  onClick={() => {
+                    setReadingDetailOpen(true);
+                    triggerHaptic("selection");
+                  }}
+                >
+                  进入详细解读
+                </button>
               </article>
             )}
             <div className="result-actions">
               <button className="primary-button" onClick={saveReading}>
-                保存这次启示
+                铭刻这次启示
               </button>
               <button className="secondary-button" onClick={resetReading}>
-                重新提问
+                再次叩问星轨
               </button>
             </div>
             <p className="disclaimer">
-              牌面提供的是观察角度，而不是确定的未来
+              牌面是观察的镜子，不是写定的预言
             </p>
           </section>
           </AssistantCard>
@@ -883,7 +939,7 @@ export function ArcanaPrototype() {
                 );
               }}
             >
-              开始新的对话
+              再次踏上牌语之旅
             </button>
           </AssistantCard>
         )}
@@ -898,8 +954,8 @@ export function ArcanaPrototype() {
             >
               ← 返回对话
             </button>
-            <p className="eyebrow">Your journey</p>
-            <h1 className="screen-title">最近的启示</h1>
+            <p className="eyebrow">星尘轨迹</p>
+            <h1 className="screen-title">铭刻过的启示</h1>
             {history.length === 0 ? (
               <div className="empty-state">
                 <div>
