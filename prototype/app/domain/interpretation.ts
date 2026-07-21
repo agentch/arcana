@@ -114,6 +114,7 @@ export type SpreadSummaryView = {
 };
 
 type ComposeSpreadSummaryInput = {
+  spreadId?: string;
   spreadName: string;
   spreadDescription: string;
   interpretations: InterpretationView[];
@@ -141,12 +142,16 @@ function pickAdvice(item: InterpretationView): string {
   return item.reflection?.trim() ?? "";
 }
 
-/** 多牌阵消息流摘要：照耀（过去/现在/未来）+ 建议（现在/未来该怎么做）。 */
-export function composeSpreadSummary({
-  spreadName,
-  spreadDescription,
-  interpretations,
-}: ComposeSpreadSummaryInput): SpreadSummaryView {
+function closingText(spreadDescription: string): string {
+  return `${spreadDescription}。牌面提供的是观察角度，不是写定的预言。`;
+}
+
+/** 时间流：照耀过去/现在/未来 + 建议现在/未来。 */
+function composeTimelineSummary(
+  spreadName: string,
+  spreadDescription: string,
+  interpretations: InterpretationView[],
+): SpreadSummaryView {
   const past = interpretations[0];
   const present = interpretations[1] ?? interpretations[0];
   const future =
@@ -186,25 +191,97 @@ export function composeSpreadSummary({
     if (futureAdvice) {
       guidanceLines.push({ label: "未来", text: futureAdvice });
     }
-  } else if (present && interpretations.length === 1) {
-    const soleAdvice = pickAdvice(present);
-    if (soleAdvice) {
-      guidanceLines.push({ label: "此刻", text: soleAdvice });
-    }
   }
-
-  const closing = `${spreadDescription}。牌面提供的是观察角度，不是写定的预言。`;
 
   return {
     title: `${spreadName} · 照耀与建议`,
-    illumination: {
-      title: "照耀",
-      lines: illuminationLines,
-    },
-    guidance: {
-      title: "建议",
-      lines: guidanceLines,
-    },
-    closing,
+    illumination: {title: "照耀", lines: illuminationLines},
+    guidance: {title: "建议", lines: guidanceLines},
+    closing: closingText(spreadDescription),
   };
+}
+
+/** 圣三角：照耀现状/挑战 + 建议方向与可行动作。 */
+function composeTriangleSummary(
+  spreadName: string,
+  spreadDescription: string,
+  interpretations: InterpretationView[],
+): SpreadSummaryView {
+  const situation = interpretations[0];
+  const challenge = interpretations[1];
+  const guidance = interpretations[2];
+
+  const illuminationLines: SpreadSummaryLine[] = [];
+  if (situation) {
+    illuminationLines.push({
+      label: "现状",
+      text: pickIllumination(situation),
+    });
+  }
+  if (challenge) {
+    illuminationLines.push({
+      label: "挑战",
+      text: pickIllumination(challenge),
+    });
+  }
+
+  const guidanceLines: SpreadSummaryLine[] = [];
+  if (guidance) {
+    const direction = pickIllumination(guidance);
+    if (direction) {
+      guidanceLines.push({label: "可行方向", text: direction});
+    }
+    const action = pickAdvice(guidance);
+    if (action) {
+      guidanceLines.push({label: "可以尝试", text: action});
+    }
+  }
+
+  return {
+    title: `${spreadName} · 照耀与建议`,
+    illumination: {title: "照耀", lines: illuminationLines},
+    guidance: {title: "建议", lines: guidanceLines},
+    closing: closingText(spreadDescription),
+  };
+}
+
+/** 多牌阵消息流摘要：按牌阵语义组织照耀与建议。 */
+export function composeSpreadSummary({
+  spreadId,
+  spreadName,
+  spreadDescription,
+  interpretations,
+}: ComposeSpreadSummaryInput): SpreadSummaryView {
+  if (spreadId === "sacred-triangle") {
+    return composeTriangleSummary(
+      spreadName,
+      spreadDescription,
+      interpretations,
+    );
+  }
+
+  if (interpretations.length === 1) {
+    const sole = interpretations[0];
+    const soleAdvice = pickAdvice(sole);
+    return {
+      title: `${spreadName} · 照耀与建议`,
+      illumination: {
+        title: "照耀",
+        lines: sole
+          ? [{label: "此刻", text: pickIllumination(sole)}]
+          : [],
+      },
+      guidance: {
+        title: "建议",
+        lines: soleAdvice ? [{label: "此刻", text: soleAdvice}] : [],
+      },
+      closing: closingText(spreadDescription),
+    };
+  }
+
+  return composeTimelineSummary(
+    spreadName,
+    spreadDescription,
+    interpretations,
+  );
 }

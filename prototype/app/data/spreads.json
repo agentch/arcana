@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.3",
+  "spreadsVersion": "2026.07.4",
   "spreads": [
     {
       "id": "single-card",
@@ -43,8 +43,8 @@
       "id": "sacred-triangle",
       "name": "圣三角",
       "description": "分析现状、核心挑战与可行建议",
-      "enabled": false,
-      "supportedTopics": ["general", "career", "growth"],
+      "enabled": true,
+      "supportedTopics": ["general", "love", "career", "growth"],
       "visual": {
         "cards": [
           {"x": 36, "y": 13},

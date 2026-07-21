@@ -438,8 +438,8 @@ for (const category of questionPrompts.categories) {
 
 assert.deepEqual(
   enabledSpreadIds,
-  ["single-card", "timeline"],
-  "only the completed single-card and timeline spreads may be enabled",
+  ["single-card", "timeline", "sacred-triangle"],
+  "only completed single-card, timeline, and sacred-triangle spreads may be enabled",
 );
 
 console.log(

@@ -432,6 +432,7 @@ export function ArcanaPrototype() {
   const spreadSummary =
     resultInterpretations.length > 1
       ? composeSpreadSummary({
+          spreadId: activeSpread.id,
           spreadName: activeSpread.name,
           spreadDescription: activeSpread.description,
           interpretations: resultInterpretations,

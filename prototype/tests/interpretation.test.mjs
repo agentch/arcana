@@ -132,6 +132,7 @@ test("composes a fused multi-card spread summary", async () => {
   ];
 
   const summary = composeSpreadSummary({
+    spreadId: "timeline",
     spreadName: "时间流",
     spreadDescription: "理解一件事如何从过去发展到未来",
     interpretations,
@@ -154,6 +155,80 @@ test("composes a fused multi-card spread summary", async () => {
   assert.doesNotMatch(JSON.stringify(summary), /围绕你写下的问题/);
   assert.doesNotMatch(JSON.stringify(summary), /过去由/);
   assert.doesNotMatch(JSON.stringify(summary), /「愚人」/);
+});
+
+test("composes a sacred-triangle spread summary", async () => {
+  const [catalog, foolV2, magicianV2, worldV2] = await Promise.all([
+    readJson("../app/data/card-meanings.json"),
+    readJson("../app/data/cards/major-00.json"),
+    readJson("../app/data/cards/major-01.json"),
+    readJson("../app/data/cards/major-21.json"),
+  ]);
+  const interpretations = [
+    composeInterpretation({
+      card: {
+        ...catalog.cards[0],
+        asset: {image: null, fallbackSymbol: "✦", alt: "愚人"},
+      },
+      layeredMeaning: foolV2,
+      orientation: "upright",
+      topicId: "career",
+      position: {
+        id: "situation",
+        name: "现状",
+        prompt: "当前可见与未充分看见的状态",
+        order: 1,
+      },
+    }),
+    composeInterpretation({
+      card: {
+        ...catalog.cards[1],
+        asset: {image: null, fallbackSymbol: "✧", alt: "魔术师"},
+      },
+      layeredMeaning: magicianV2,
+      orientation: "reversed",
+      topicId: "career",
+      position: {
+        id: "challenge",
+        name: "挑战",
+        prompt: "阻力、矛盾、盲点或需要整合的部分",
+        order: 2,
+      },
+    }),
+    composeInterpretation({
+      card: {
+        ...catalog.cards[21],
+        asset: {image: null, fallbackSymbol: "◎", alt: "世界"},
+      },
+      layeredMeaning: worldV2,
+      orientation: "upright",
+      topicId: "career",
+      position: {
+        id: "guidance",
+        name: "建议",
+        prompt: "可以尝试的态度、行动或观察角度",
+        order: 3,
+      },
+    }),
+  ];
+
+  const summary = composeSpreadSummary({
+    spreadId: "sacred-triangle",
+    spreadName: "圣三角",
+    spreadDescription: "分析现状、核心挑战与可行建议",
+    interpretations,
+  });
+
+  assert.deepEqual(
+    summary.illumination.lines.map((line) => line.label),
+    ["现状", "挑战"],
+  );
+  assert.deepEqual(
+    summary.guidance.lines.map((line) => line.label),
+    ["可行方向", "可以尝试"],
+  );
+  assert.ok(summary.guidance.lines[1].text.includes(worldV2.upright.advice[0]));
+  assert.doesNotMatch(JSON.stringify(summary), /过去|未来/);
 });
 
 test("adapts legacy cards to the same display model without placeholders", async () => {

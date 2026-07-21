@@ -80,6 +80,6 @@ test("keeps meanings, deck assets, and spreads referentially valid", async () =>
 
   assert.deepEqual(
     spreads.spreads.filter((spread) => spread.enabled).map((spread) => spread.id),
-    ["single-card", "timeline"],
+    ["single-card", "timeline", "sacred-triangle"],
   );
 });
