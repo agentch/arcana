@@ -155,4 +155,7 @@ export type Reading = {
   deckVersion: string;
   spreadId: string;
   spreadVersion: string;
+  /** 二选一牌阵在抽牌前固定的选项标签 */
+  choiceOptionA?: string;
+  choiceOptionB?: string;
 };

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.5",
+  "spreadsVersion": "2026.07.6",
   "spreads": [
     {
       "id": "single-card",
@@ -85,7 +85,7 @@
       "id": "choice-five",
       "name": "二选一牌阵",
       "description": "对比两种选择的过程与可能倾向",
-      "enabled": false,
+      "enabled": true,
       "supportedTopics": ["general", "love", "career", "growth"],
       "visual": {
         "cards": [

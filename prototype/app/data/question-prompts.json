@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "promptsVersion": "2026.07.4",
+  "promptsVersion": "2026.07.5",
   "categories": [
     {
       "id": "love",
@@ -19,7 +19,7 @@
       "description": "工作选择、合作与成长",
       "options": [
         {"id": "current-work", "name": "当前工作", "prompt": "我目前的工作重点应该放在哪里？", "recommendedSpreadId": "sacred-triangle"},
-        {"id": "job-change", "name": "求职转行", "prompt": "面对职业方向的变化，我可以如何准备？", "recommendedSpreadId": "timeline"},
+        {"id": "job-change", "name": "求职转行", "prompt": "面对留下与转行这两条路，我该关注哪些差异？", "recommendedSpreadId": "choice-five"},
         {"id": "collaboration", "name": "合作关系", "prompt": "我该如何改善当前的职场合作？", "recommendedSpreadId": "sacred-triangle"},
         {"id": "growth", "name": "能力成长", "prompt": "当前阻碍我成长的模式是什么？", "recommendedSpreadId": "sacred-triangle"}
       ]
@@ -42,7 +42,7 @@
       "options": [
         {"id": "anxiety", "name": "焦虑不安", "prompt": "这份焦虑正在提醒我关注什么？", "recommendedSpreadId": "single-card"},
         {"id": "low-mood", "name": "低落疲惫", "prompt": "我现在最需要照顾的感受是什么？", "recommendedSpreadId": "single-card"},
-        {"id": "confusion", "name": "迷茫纠结", "prompt": "面对目前的迷茫，我可以先看清什么？", "recommendedSpreadId": "sacred-triangle"},
+        {"id": "confusion", "name": "迷茫纠结", "prompt": "面对眼前的两条路，我可以先看清什么？", "recommendedSpreadId": "choice-five"},
         {"id": "recovery", "name": "恢复平衡", "prompt": "我可以如何找回一点内在平衡？", "recommendedSpreadId": "timeline"}
       ]
     }

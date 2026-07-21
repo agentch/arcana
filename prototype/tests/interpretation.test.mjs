@@ -329,6 +329,105 @@ test("composes a relationship-five spread summary", async () => {
   assert.ok(summary.guidance.lines[1].text.includes(worldV2.upright.advice[0]));
 });
 
+test("composes a choice-five spread summary without declaring a winner", async () => {
+  const [catalog, foolV2, magicianV2, deathV2, towerV2, worldV2] =
+    await Promise.all([
+      readJson("../app/data/card-meanings.json"),
+      readJson("../app/data/cards/major-00.json"),
+      readJson("../app/data/cards/major-01.json"),
+      readJson("../app/data/cards/major-13.json"),
+      readJson("../app/data/cards/major-16.json"),
+      readJson("../app/data/cards/major-21.json"),
+    ]);
+
+  const makeCard = (index, symbol, alt) => ({
+    ...catalog.cards[index],
+    asset: {image: null, fallbackSymbol: symbol, alt},
+  });
+
+  const interpretations = [
+    composeInterpretation({
+      card: makeCard(0, "✦", "愚人"),
+      layeredMeaning: foolV2,
+      orientation: "upright",
+      topicId: "career",
+      position: {
+        id: "context",
+        name: "当前处境",
+        prompt: "做出选择时真正重要的背景与需要",
+        order: 1,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(1, "✧", "魔术师"),
+      layeredMeaning: magicianV2,
+      orientation: "reversed",
+      topicId: "career",
+      position: {
+        id: "option-a-process",
+        name: "留下 的过程",
+        prompt: "选择 A 可能面对的体验、资源和挑战",
+        order: 2,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(13, "†", "死神"),
+      layeredMeaning: deathV2,
+      orientation: "upright",
+      topicId: "career",
+      position: {
+        id: "option-a-direction",
+        name: "留下 的倾向",
+        prompt: "沿 A 路径发展的可能方向",
+        order: 3,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(16, "⚡", "高塔"),
+      layeredMeaning: towerV2,
+      orientation: "reversed",
+      topicId: "career",
+      position: {
+        id: "option-b-process",
+        name: "转行 的过程",
+        prompt: "选择 B 可能面对的体验、资源和挑战",
+        order: 4,
+      },
+    }),
+    composeInterpretation({
+      card: makeCard(21, "◎", "世界"),
+      layeredMeaning: worldV2,
+      orientation: "upright",
+      topicId: "career",
+      position: {
+        id: "option-b-direction",
+        name: "转行 的倾向",
+        prompt: "沿 B 路径发展的可能方向",
+        order: 5,
+      },
+    }),
+  ];
+
+  const summary = composeSpreadSummary({
+    spreadId: "choice-five",
+    spreadName: "二选一牌阵",
+    spreadDescription: "对比两种选择的过程与可能倾向",
+    interpretations,
+    choiceOptions: {optionA: "留下", optionB: "转行"},
+  });
+
+  assert.deepEqual(
+    summary.illumination.lines.map((line) => line.label),
+    ["处境", "留下 的过程", "转行 的过程"],
+  );
+  assert.deepEqual(
+    summary.guidance.lines.map((line) => line.label),
+    ["留下 的倾向", "转行 的倾向"],
+  );
+  assert.match(summary.closing, /不替你宣布胜者/);
+  assert.doesNotMatch(JSON.stringify(summary), /必须选|应该选|胜者是/);
+});
+
 test("adapts legacy cards to the same display model without placeholders", async () => {
   const catalog = await readJson("../app/data/card-meanings.json");
   const magician = {

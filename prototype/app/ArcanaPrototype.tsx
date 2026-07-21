@@ -40,6 +40,7 @@ import {
 import {
   composeInterpretation,
   composeSpreadSummary,
+  resolveSpreadPosition,
 } from "./domain/interpretation";
 import type {
   Orientation,
@@ -138,6 +139,8 @@ export function ArcanaPrototype() {
   const [questionCategoryId, setQuestionCategoryId] = useState<string>("");
   const [questionOptionId, setQuestionOptionId] = useState("");
   const [spreadId, setSpreadId] = useState(singleCardSpread.id);
+  const [choiceOptionA, setChoiceOptionA] = useState("");
+  const [choiceOptionB, setChoiceOptionB] = useState("");
   const [drawnCards, setDrawnCards] = useState<DrawnRenderableCard[]>([]);
   const [shuffledDeck, setShuffledDeck] = useState<RenderableCard[]>(cards);
   const [shuffling, setShuffling] = useState(false);
@@ -177,9 +180,24 @@ export function ArcanaPrototype() {
     (option) => option.id === questionOptionId,
   );
   const activeSpread = getSpread(spreadId);
-  const orderedActivePositions = [...activeSpread.positions].sort(
-    (left, right) => left.order - right.order,
-  );
+  const choiceOptionsReady =
+    spreadId !== "choice-five" ||
+    (choiceOptionA.trim().length > 0 && choiceOptionB.trim().length > 0);
+  const activeChoiceOptions =
+    spreadId === "choice-five" && choiceOptionsReady
+      ? {
+          optionA: choiceOptionA.trim(),
+          optionB: choiceOptionB.trim(),
+        }
+      : undefined;
+  const orderedActivePositions = [...activeSpread.positions]
+    .sort((left, right) => left.order - right.order)
+    .map((position) =>
+      resolveSpreadPosition(position, {
+        spreadId: activeSpread.id,
+        choiceOptions: activeChoiceOptions,
+      }),
+    );
   const activeDrawPosition = orderedActivePositions.find(
     (position) => position.id === activeDrawPositionId,
   );
@@ -214,6 +232,8 @@ export function ArcanaPrototype() {
     setQuestionCategoryId("");
     setQuestionOptionId("");
     setSpreadId(singleCardSpread.id);
+    setChoiceOptionA("");
+    setChoiceOptionB("");
     setDrawnCards([]);
     setActiveDrawPositionId("");
     setHistoryOpen(false);
@@ -222,6 +242,7 @@ export function ArcanaPrototype() {
   }
 
   function beginDraw() {
+    if (!choiceOptionsReady) return;
     cancelDrawAnimation();
     const shuffleDuration = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -235,7 +256,11 @@ export function ArcanaPrototype() {
     setActiveDrawPositionId(orderedActivePositions[0].id);
     setAnimatingDraw(null);
     lastScrollHapticIndex.current = -1;
-    dispatchFlow({ type: "select-spread", label: activeSpread.name });
+    const spreadLabel =
+      activeSpread.id === "choice-five" && activeChoiceOptions
+        ? `${activeSpread.name}（A：${activeChoiceOptions.optionA} / B：${activeChoiceOptions.optionB}）`
+        : activeSpread.name;
+    dispatchFlow({ type: "select-spread", label: spreadLabel });
     shuffleTimeout.current = window.setTimeout(() => {
       setShuffling(false);
       triggerHaptic("selection");
@@ -406,6 +431,12 @@ export function ArcanaPrototype() {
       spreadVersion: catalogVersions.spreads,
       questionCategoryId,
       questionOptionId: questionOptionId || "custom",
+      ...(activeChoiceOptions
+        ? {
+            choiceOptionA: activeChoiceOptions.optionA,
+            choiceOptionB: activeChoiceOptions.optionB,
+          }
+        : {}),
     };
     const updated = [next, ...history].slice(0, 12);
     setHistory(updated);
@@ -436,6 +467,7 @@ export function ArcanaPrototype() {
           spreadName: activeSpread.name,
           spreadDescription: activeSpread.description,
           interpretations: resultInterpretations,
+          choiceOptions: activeChoiceOptions,
         })
       : null;
   const showReadingDetail =
@@ -618,8 +650,43 @@ export function ArcanaPrototype() {
                     </button>
                   ))}
                 </div>
+                {spreadId === "choice-five" && (
+                  <div className="choice-options" aria-label="填写两个选项">
+                    <p className="section-label">先写清你要对照的两条路</p>
+                    <label className="choice-option-field">
+                      <span>选项 A</span>
+                      <input
+                        type="text"
+                        value={choiceOptionA}
+                        maxLength={40}
+                        placeholder="例如：留下继续做"
+                        onChange={(event) =>
+                          setChoiceOptionA(event.target.value)
+                        }
+                        aria-label="选项 A"
+                      />
+                    </label>
+                    <label className="choice-option-field">
+                      <span>选项 B</span>
+                      <input
+                        type="text"
+                        value={choiceOptionB}
+                        maxLength={40}
+                        placeholder="例如：转行重新开始"
+                        onChange={(event) =>
+                          setChoiceOptionB(event.target.value)
+                        }
+                        aria-label="选项 B"
+                      />
+                    </label>
+                  </div>
+                )}
                 <div className="home-actions">
-                  <button className="primary-button" onClick={beginDraw}>
+                  <button
+                    className="primary-button"
+                    onClick={beginDraw}
+                    disabled={!choiceOptionsReady}
+                  >
                     以「{activeSpread.name}」唤醒牌序
                   </button>
                 </div>
@@ -828,7 +895,11 @@ export function ArcanaPrototype() {
           <section className="chat-step result-step">
             <p className="message-card-label">牌语回响 · {activeSpread.name}</p>
             <h2 className="message-card-title">命运为你铺开这一阵</h2>
-            <div className={`spread-card-grid result count-${drawnCards.length}`}>
+            <div
+              className={`spread-card-grid result count-${drawnCards.length}${
+                activeSpread.id === "choice-five" ? " layout-choice" : ""
+              }`}
+            >
               {drawnCards.map((drawn) => (
                 <div className="spread-card-item" key={drawn.position.id}>
                   <p className="position-label">{drawn.position.name}</p>

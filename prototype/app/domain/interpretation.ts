@@ -113,12 +113,39 @@ export type SpreadSummaryView = {
   closing: string;
 };
 
+export type ChoiceOptions = {
+  optionA: string;
+  optionB: string;
+};
+
 type ComposeSpreadSummaryInput = {
   spreadId?: string;
   spreadName: string;
   spreadDescription: string;
   interpretations: InterpretationView[];
+  choiceOptions?: ChoiceOptions;
 };
+
+/** 二选一牌阵：把 A/B 标签写入牌位显示名（抽牌前已固定）。 */
+export function resolveSpreadPosition(
+  position: SpreadPosition,
+  options?: {spreadId?: string; choiceOptions?: ChoiceOptions},
+): SpreadPosition {
+  if (options?.spreadId !== "choice-five" || !options.choiceOptions) {
+    return position;
+  }
+
+  const optionA = options.choiceOptions.optionA.trim() || "A";
+  const optionB = options.choiceOptions.optionB.trim() || "B";
+  const nameById: Record<string, string> = {
+    "option-a-process": `${optionA} 的过程`,
+    "option-a-direction": `${optionA} 的倾向`,
+    "option-b-process": `${optionB} 的过程`,
+    "option-b-direction": `${optionB} 的倾向`,
+  };
+  const name = nameById[position.id];
+  return name ? {...position, name} : position;
+}
 
 /** 取首句，避免消息流摘要被整段 overview 撑满。 */
 function firstSentence(text: string): string {
@@ -295,12 +322,65 @@ function composeRelationshipSummary(
   };
 }
 
+/** 二选一：照耀处境与两条过程，建议并列两条倾向，不宣布胜者。 */
+function composeChoiceSummary(
+  spreadName: string,
+  spreadDescription: string,
+  interpretations: InterpretationView[],
+  choiceOptions?: ChoiceOptions,
+): SpreadSummaryView {
+  const [context, aProcess, aDirection, bProcess, bDirection] = interpretations;
+  const optionA = choiceOptions?.optionA.trim() || "A";
+  const optionB = choiceOptions?.optionB.trim() || "B";
+
+  const illuminationLines: SpreadSummaryLine[] = [];
+  if (context) {
+    illuminationLines.push({label: "处境", text: pickIllumination(context)});
+  }
+  if (aProcess) {
+    illuminationLines.push({
+      label: `${optionA} 的过程`,
+      text: pickIllumination(aProcess),
+    });
+  }
+  if (bProcess) {
+    illuminationLines.push({
+      label: `${optionB} 的过程`,
+      text: pickIllumination(bProcess),
+    });
+  }
+
+  const guidanceLines: SpreadSummaryLine[] = [];
+  if (aDirection) {
+    guidanceLines.push({
+      label: `${optionA} 的倾向`,
+      text: pickIllumination(aDirection),
+    });
+  }
+  if (bDirection) {
+    guidanceLines.push({
+      label: `${optionB} 的倾向`,
+      text: pickIllumination(bDirection),
+    });
+  }
+
+  const closing = `${spreadDescription}。两条路径并列呈现，牌面不替你宣布胜者。牌面提供的是观察角度，不是写定的预言。`;
+
+  return {
+    title: `${spreadName} · 照耀与建议`,
+    illumination: {title: "照耀", lines: illuminationLines},
+    guidance: {title: "建议", lines: guidanceLines},
+    closing,
+  };
+}
+
 /** 多牌阵消息流摘要：按牌阵语义组织照耀与建议。 */
 export function composeSpreadSummary({
   spreadId,
   spreadName,
   spreadDescription,
   interpretations,
+  choiceOptions,
 }: ComposeSpreadSummaryInput): SpreadSummaryView {
   if (spreadId === "sacred-triangle") {
     return composeTriangleSummary(
@@ -315,6 +395,15 @@ export function composeSpreadSummary({
       spreadName,
       spreadDescription,
       interpretations,
+    );
+  }
+
+  if (spreadId === "choice-five") {
+    return composeChoiceSummary(
+      spreadName,
+      spreadDescription,
+      interpretations,
+      choiceOptions,
     );
   }
 

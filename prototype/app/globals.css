@@ -28,6 +28,7 @@ body {
 }
 
 button,
+input,
 textarea {
   font: inherit;
 }
@@ -1160,8 +1161,74 @@ button {
   grid-column: 2 / span 4;
 }
 
+/* 二选一：处境居中，A/B 左右并列 */
+.spread-card-grid.count-5.layout-choice {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "context context"
+    "a-process b-process"
+    "a-direction b-direction";
+}
+
+.spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(1) {
+  grid-area: context;
+}
+
+.spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(2) {
+  grid-area: a-process;
+}
+
+.spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(3) {
+  grid-area: a-direction;
+}
+
+.spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(4) {
+  grid-area: b-process;
+}
+
+.spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(5) {
+  grid-area: b-direction;
+}
+
 .spread-card-grid.result {
   margin-top: 18px;
+}
+
+.choice-options {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0 4px;
+}
+
+.choice-option-field {
+  display: grid;
+  gap: 6px;
+}
+
+.choice-option-field span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+}
+
+.choice-option-field input {
+  width: 100%;
+  min-height: 44px;
+  padding: 12px 14px;
+  color: var(--ink);
+  outline: none;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.choice-option-field input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(214, 185, 120, 0.08);
+}
+
+.choice-option-field input::placeholder {
+  color: #80778f;
 }
 
 .spread-card-item {
