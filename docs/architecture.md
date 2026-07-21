@@ -113,6 +113,13 @@ interface SpreadDefinition {
   description: string
   supportedTopics: string[]
   positions: SpreadPosition[]
+  visual?: {
+    cards: Array<{
+      x: number
+      y: number
+      rotation?: number
+    }>
+  }
   version: string
 }
 
@@ -136,6 +143,36 @@ interface Reading {
 `TopicId` 包含当前感情、职场、家庭、心情四类主题，并预留财务与个人成长。`meaning-topic-map.json` 负责把问题分类显式映射到牌义主题，页面不得自行推断。
 
 牌阵同样使用版本化配置。页面不能通过 `if (spread === ...)` 写死牌位含义；抽牌数量、位置名称、排列顺序和解读提示均从 `SpreadDefinition` 读取。
+
+### 原型交互架构（2026-07-21）
+
+当前 Web 原型已验证以下 UI 分层，正式跨端工程应保留职责边界，但不直接复制 DOM 实现：
+
+```text
+ChatFlow reducer
+  → 对话消息与当前阶段
+  → 分类 / 问题 / 牌阵交互卡片
+  → 独立抽牌工作区
+  → 抽牌完成事件
+  → 对话内牌阵与解读卡片
+
+Draw domain
+  → Fisher–Yates 洗牌
+  → 无放回抽牌
+  → 正逆位与牌位绑定
+
+Platform adapters
+  → Haptics
+  → Storage
+  → 后续分享与安全区
+```
+
+- `chat-flow.ts` 是纯 TypeScript reducer，只描述阶段和消息，不访问 DOM、存储或平台 API。
+- `ChatThread` 负责消息语义、自动滚动和 assistant/user 布局。
+- 抽牌页面保持独立工作区；离开时只向对话层提交完整 `DrawnRenderableCard[]`。
+- 牌阵示意图读取 `SpreadDefinition.visual.cards`；未配置时可以生成默认布局。
+- Web 圆环牌组通过 Pointer Events 和几何变换实现；迁移小程序时需用跨端事件与动画能力重写视图层，领域抽牌结果不变。
+- 翻牌起点和目标牌框在 Web 原型中使用 DOM 几何测量；该能力属于交互视图，不得进入领域层。
 
 ### 数据文件边界
 
@@ -166,8 +203,9 @@ data/
 - 登录与用户授权
 - 埋点与错误上报
 - 安全区域、导航栏、系统主题
+- 触觉反馈与振动
 
-领域层不得使用 `window`、`document` 或微信全局 API。动效优先使用跨端 CSS 能力；复杂 Canvas 效果作为渐进增强，不作为完成占卜的前置条件。
+领域层不得使用 `window`、`document` 或微信全局 API。动效优先使用跨端 CSS 能力；复杂 Canvas 效果作为渐进增强，不作为完成占卜的前置条件。Web 原型的 `navigator.vibrate` 只能由 Haptics 适配器调用；微信端后续映射到对应的小程序振动 API，不允许业务组件直接分支判断平台。
 
 ## 6. 数据策略
 

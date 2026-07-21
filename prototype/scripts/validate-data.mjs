@@ -257,6 +257,13 @@ for (const spread of spreads.spreads) {
     spread.positions.map((_, index) => index + 1),
     `${spread.id} positions must use continuous order values`,
   );
+  if (spread.visual) {
+    assert.equal(
+      spread.visual.cards.length,
+      spread.positions.length,
+      `${spread.id} visual must contain one card for every position`,
+    );
+  }
 }
 
 const questionCategoryIds = questionPrompts.categories.map(

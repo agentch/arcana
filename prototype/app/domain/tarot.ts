@@ -96,6 +96,13 @@ export type SpreadDefinition = {
   enabled: boolean;
   supportedTopics: string[];
   positions: SpreadPosition[];
+  visual?: {
+    cards: Array<{
+      x: number;
+      y: number;
+      rotation?: number;
+    }>;
+  };
 };
 
 export type QuestionCategory = {

@@ -11,6 +11,33 @@ export type DrawnRenderableCard = {
   position: SpreadPosition;
 };
 
+export function shuffleDeck<T>(
+  cards: readonly T[],
+  random: () => number = Math.random,
+): T[] {
+  const shuffled = [...cards];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [
+      shuffled[swapIndex],
+      shuffled[index],
+    ];
+  }
+  return shuffled;
+}
+
+export function createDrawnCard(
+  card: RenderableCard,
+  position: SpreadPosition,
+  random: () => number = Math.random,
+): DrawnRenderableCard {
+  return {
+    card,
+    orientation: random() >= 0.5 ? "upright" : "reversed",
+    position,
+  };
+}
+
 export function drawForSpread(
   cards: RenderableCard[],
   spread: SpreadDefinition,
@@ -22,20 +49,11 @@ export function drawForSpread(
     );
   }
 
-  const shuffled = [...cards];
-  for (let index = shuffled.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(random() * (index + 1));
-    [shuffled[index], shuffled[swapIndex]] = [
-      shuffled[swapIndex],
-      shuffled[index],
-    ];
-  }
+  const shuffled = shuffleDeck(cards, random);
 
   return [...spread.positions]
     .sort((left, right) => left.order - right.order)
-    .map((position, index) => ({
-      card: shuffled[index],
-      orientation: random() >= 0.5 ? "upright" : "reversed",
-      position,
-    }));
+    .map((position, index) =>
+      createDrawnCard(shuffled[index], position, random),
+    );
 }

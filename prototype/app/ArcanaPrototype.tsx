@@ -1,6 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
+import {
+  AssistantCard,
+  ChatThread,
+} from "./components/chat/ChatThread";
+import {
+  CardVisual,
+  SpreadIcon,
+} from "./components/cards/ReadingVisuals";
+import {
+  chatFlowReducer,
+  initialChatFlowState,
+} from "./domain/chat-flow";
 import {
   activeDeck,
   catalogVersions,
@@ -12,16 +31,17 @@ import {
   getSpread,
 } from "./domain/catalog";
 import {
-  drawForSpread,
+  createDrawnCard,
+  shuffleDeck,
   type DrawnRenderableCard,
 } from "./domain/draw";
 import { composeInterpretation } from "./domain/interpretation";
 import type {
   Orientation,
   Reading,
+  RenderableCard,
 } from "./domain/tarot";
-
-type Screen = "home" | "question" | "draw" | "reveal" | "result" | "history";
+import { triggerHaptic } from "./platform/haptics";
 
 const cards = getCards();
 const enabledSpreads = getEnabledSpreads();
@@ -104,74 +124,64 @@ function getSpreadName(spreadId: string): string {
   }
 }
 
-function CardVisual({
-  drawn,
-  revealed,
-  compact,
-  onReveal,
-}: {
-  drawn: DrawnRenderableCard;
-  revealed: boolean;
-  compact: boolean;
-  onReveal?: () => void;
-}) {
-  const className = `tarot-card ${revealed ? "revealed" : ""} ${
-    drawn.orientation === "reversed" ? "reversed" : ""
-  } ${compact ? "compact" : ""}`;
-  const contents = (
-    <>
-      <span className="card-back" />
-      <span className="card-face">
-        {drawn.card.asset.image ? (
-          // The deck pipeline already produces immutable, optimized WebP files.
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            className="card-image"
-            src={drawn.card.asset.image}
-            alt={drawn.card.asset.alt}
-          />
-        ) : (
-          <>
-            <span className="card-number">{drawn.card.romanNumeral}</span>
-            <span className="card-art">
-              {drawn.card.asset.fallbackSymbol ?? "✦"}
-            </span>
-            <span className="card-name">{drawn.card.name}</span>
-            <span className="card-en">{drawn.card.englishName}</span>
-          </>
-        )}
-      </span>
-    </>
-  );
-
-  if (onReveal) {
-    return (
-      <button
-        className={className}
-        onClick={onReveal}
-        aria-label={`翻开${drawn.position.name}位置的塔罗牌`}
-      >
-        {contents}
-      </button>
-    );
-  }
-
-  return <div className={className}>{contents}</div>;
-}
-
 export function ArcanaPrototype() {
-  const [screen, setScreen] = useState<Screen>("home");
-  const [question, setQuestion] = useState("");
-  const [questionCategoryId, setQuestionCategoryId] = useState(
-    questionCategories[0].id,
+  const [flow, dispatchFlow] = useReducer(
+    chatFlowReducer,
+    initialChatFlowState,
   );
+  const [question, setQuestion] = useState("");
+  const [questionCategoryId, setQuestionCategoryId] = useState<string>("");
   const [questionOptionId, setQuestionOptionId] = useState("");
   const [spreadId, setSpreadId] = useState(singleCardSpread.id);
   const [drawnCards, setDrawnCards] = useState<DrawnRenderableCard[]>([]);
-  const [revealedPositionIds, setRevealedPositionIds] = useState<string[]>([]);
+  const [shuffledDeck, setShuffledDeck] = useState<RenderableCard[]>(cards);
   const [shuffling, setShuffling] = useState(false);
+  const [deckRotation, setDeckRotation] = useState(0);
+  const [activeDrawPositionId, setActiveDrawPositionId] = useState("");
+  const [animatingDraw, setAnimatingDraw] =
+    useState<DrawnRenderableCard | null>(null);
+  const [drawAnimationGeometry, setDrawAnimationGeometry] = useState({
+    sourceX: 0,
+    sourceY: 110,
+    sourceScale: 0.58,
+    sourceRotation: 0,
+    targetX: 0,
+    targetY: -180,
+    targetScale: 0.38,
+  });
   const [history, setHistory] = useState<Reading[]>([]);
-
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const lastScrollHapticIndex = useRef(-1);
+  const returnToChatTimeout = useRef<number | null>(null);
+  const shuffleTimeout = useRef<number | null>(null);
+  const drawPositionFrames = useRef(
+    new Map<string, HTMLSpanElement>(),
+  );
+  const deckDrag = useRef<{
+    pointerId: number;
+    startX: number;
+    startRotation: number;
+    moved: boolean;
+  } | null>(null);
+  const suppressCardClick = useRef(false);
+  const activeQuestionCategory = questionCategories.find(
+    (category) => category.id === questionCategoryId,
+  );
+  const activeQuestionOption = activeQuestionCategory?.options.find(
+    (option) => option.id === questionOptionId,
+  );
+  const activeSpread = getSpread(spreadId);
+  const orderedActivePositions = [...activeSpread.positions].sort(
+    (left, right) => left.order - right.order,
+  );
+  const activeDrawPosition = orderedActivePositions.find(
+    (position) => position.id === activeDrawPositionId,
+  );
+  const availableDeckCards = shuffledDeck.filter(
+    (card) =>
+      !drawnCards.some((drawn) => drawn.card.id === card.id) &&
+      animatingDraw?.card.id !== card.id,
+  );
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       setHistory(readHistory());
@@ -179,53 +189,195 @@ export function ArcanaPrototype() {
     return () => window.clearTimeout(timeoutId);
   }, []);
 
-  const activeQuestionCategory =
-    questionCategories.find(
-      (category) => category.id === questionCategoryId,
-    ) ?? questionCategories[0];
-  const activeQuestionOption = activeQuestionCategory.options.find(
-    (option) => option.id === questionOptionId,
-  );
-  const activeSpread = getSpread(spreadId);
-  const allCardsRevealed =
-    drawnCards.length > 0 &&
-    drawnCards.every((drawn) =>
-      revealedPositionIds.includes(drawn.position.id),
-    );
+  function cancelDrawAnimation() {
+    if (shuffleTimeout.current !== null) {
+      window.clearTimeout(shuffleTimeout.current);
+      shuffleTimeout.current = null;
+    }
+    if (returnToChatTimeout.current !== null) {
+      window.clearTimeout(returnToChatTimeout.current);
+      returnToChatTimeout.current = null;
+    }
+    setShuffling(false);
+    setAnimatingDraw(null);
+  }
 
-  function startReading() {
+  function resetReading() {
+    cancelDrawAnimation();
     setQuestion("");
+    setQuestionCategoryId("");
     setQuestionOptionId("");
     setSpreadId(singleCardSpread.id);
     setDrawnCards([]);
-    setRevealedPositionIds([]);
-    setScreen("question");
+    setActiveDrawPositionId("");
+    setHistoryOpen(false);
+    dispatchFlow({ type: "reset" });
   }
 
   function beginDraw() {
+    cancelDrawAnimation();
+    const shuffleDuration = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+      ? 150
+      : 3000;
+    setShuffledDeck(shuffleDeck(cards));
     setShuffling(true);
+    setDeckRotation(0);
     setDrawnCards([]);
-    setRevealedPositionIds([]);
-    setScreen("draw");
-    window.setTimeout(() => setShuffling(false), 1500);
+    setActiveDrawPositionId(orderedActivePositions[0].id);
+    setAnimatingDraw(null);
+    lastScrollHapticIndex.current = -1;
+    dispatchFlow({ type: "select-spread", label: activeSpread.name });
+    shuffleTimeout.current = window.setTimeout(() => {
+      setShuffling(false);
+      triggerHaptic("selection");
+      shuffleTimeout.current = null;
+    }, shuffleDuration);
   }
 
-  function drawCards() {
-    setDrawnCards(drawForSpread(cards, activeSpread));
-    setRevealedPositionIds([]);
-    setScreen("reveal");
-  }
+  function selectCard(
+    card: RenderableCard,
+    sourceElement: HTMLButtonElement,
+  ) {
+    if (
+      animatingDraw ||
+      !activeDrawPositionId ||
+      drawnCards.length >= activeSpread.positions.length ||
+      drawnCards.some((drawn) => drawn.card.id === card.id)
+    ) {
+      return;
+    }
 
-  function revealCard(positionId: string) {
-    setRevealedPositionIds((current) =>
-      current.includes(positionId) ? current : [...current, positionId],
+    const position = orderedActivePositions.find(
+      (item) => item.id === activeDrawPositionId,
     );
+    if (!position) return;
+
+    const drawn = createDrawnCard(card, position);
+    const targetFrame = drawPositionFrames.current.get(position.id);
+    const sourceRect = sourceElement.getBoundingClientRect();
+    const sourceTransform = getComputedStyle(sourceElement).transform;
+    const sourceMatrix =
+      sourceTransform === "none" ? null : new DOMMatrix(sourceTransform);
+    const sourceRotation = sourceMatrix
+      ? (Math.atan2(sourceMatrix.b, sourceMatrix.a) * 180) / Math.PI
+      : 0;
+    if (targetFrame) {
+      const targetRect = targetFrame.getBoundingClientRect();
+      const animationContainer =
+        targetFrame.closest<HTMLElement>(".selection-stage");
+      const containerRect =
+        animationContainer &&
+        getComputedStyle(animationContainer).transform !== "none"
+          ? animationContainer.getBoundingClientRect()
+          : null;
+      const sourceCenterX = containerRect
+        ? containerRect.left + containerRect.width / 2
+        : window.innerWidth / 2;
+      const sourceCenterY = containerRect
+        ? containerRect.top + containerRect.height / 2
+        : window.innerHeight / 2;
+      setDrawAnimationGeometry({
+        sourceX: sourceRect.left + sourceRect.width / 2 - sourceCenterX,
+        sourceY: sourceRect.top + sourceRect.height / 2 - sourceCenterY,
+        sourceScale: sourceElement.offsetWidth / 154,
+        sourceRotation,
+        targetX: targetRect.left + targetRect.width / 2 - sourceCenterX,
+        targetY: targetRect.top + targetRect.height / 2 - sourceCenterY,
+        targetScale: targetRect.width / 154,
+      });
+    } else {
+      setDrawAnimationGeometry({
+        sourceX: 0,
+        sourceY: 110,
+        sourceScale: 0.58,
+        sourceRotation: 0,
+        targetX: 0,
+        targetY: -180,
+        targetScale: 0.38,
+      });
+    }
+    triggerHaptic("impact");
+    setAnimatingDraw(drawn);
   }
 
-  function revealAllCards() {
-    setRevealedPositionIds(
-      drawnCards.map((drawn) => drawn.position.id),
+  function finishDrawAnimation() {
+    if (!animatingDraw) return;
+
+    const updatedDrawnCards = [...drawnCards, animatingDraw];
+    const nextPosition = orderedActivePositions.find(
+      (position) =>
+        !updatedDrawnCards.some(
+          (selected) => selected.position.id === position.id,
+        ),
     );
+    const completesSpread =
+      updatedDrawnCards.length === activeSpread.positions.length;
+
+    setDrawnCards(updatedDrawnCards);
+    setActiveDrawPositionId(nextPosition?.id ?? "");
+    setAnimatingDraw(null);
+    triggerHaptic(completesSpread ? "success" : "selection");
+    if (completesSpread) {
+      returnToChatTimeout.current = window.setTimeout(() => {
+        dispatchFlow({ type: "complete-draw" });
+        returnToChatTimeout.current = null;
+      }, 700);
+    }
+  }
+
+  function startDeckDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    deckDrag.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startRotation: deckRotation,
+      moved: false,
+    };
+  }
+
+  function moveDeckDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    const drag = deckDrag.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    const distance = event.clientX - drag.startX;
+    if (Math.abs(distance) > 5 && !drag.moved) {
+      drag.moved = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      event.currentTarget.classList.add("dragging");
+    }
+    if (!drag.moved) return;
+
+    event.preventDefault();
+    const nextRotation = drag.startRotation + distance * 0.38;
+    setDeckRotation(nextRotation);
+    const hapticIndex = Math.round(nextRotation / 8);
+    if (hapticIndex !== lastScrollHapticIndex.current) {
+      lastScrollHapticIndex.current = hapticIndex;
+      triggerHaptic("selection");
+    }
+  }
+
+  function finishDeckDrag(
+    event: ReactPointerEvent<HTMLDivElement>,
+    suppressClick: boolean,
+  ) {
+    const drag = deckDrag.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    if (suppressClick && drag.moved) {
+      suppressCardClick.current = true;
+      window.setTimeout(() => {
+        suppressCardClick.current = false;
+      }, 0);
+    }
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    event.currentTarget.classList.remove("dragging");
+    deckDrag.current = null;
   }
 
   function saveReading() {
@@ -251,246 +403,376 @@ export function ArcanaPrototype() {
     const updated = [next, ...history].slice(0, 12);
     setHistory(updated);
     window.localStorage.setItem("arcana-history", JSON.stringify(updated));
-    setScreen("history");
+    dispatchFlow({ type: "save" });
   }
 
   function goHome() {
-    setScreen("home");
-    setShuffling(false);
-    setRevealedPositionIds([]);
+    resetReading();
   }
 
   return (
     <main className="app-shell">
-      <div className="phone-stage">
+      <div
+        className={`phone-stage ${
+          flow.phase === "draw" ? "draw-page" : ""
+        }`}
+      >
         <header className="topbar">
           <button className="text-button" onClick={goHome} aria-label="返回首页">
-            {screen === "home" ? "☾" : "←"}
+            ☾
           </button>
           <p className="wordmark">Arcana</p>
           <button
             className="icon-button"
-            onClick={() => setScreen("history")}
+            onClick={() => setHistoryOpen(true)}
             aria-label="查看占卜记录"
           >
             ◷
           </button>
         </header>
 
-        {screen === "home" && (
-          <section className="screen">
-            <p className="eyebrow">A quiet space for reflection</p>
-            <h1 className="hero-title">
-              在牌面中，
-              <br />
-              看见此刻的自己
-            </h1>
-            <p className="hero-copy">
-              带着一个问题而来。这里不替你预测命运，只借牌面，照见被忽略的感受与可能。
-            </p>
-            <div className="moon-orbit" aria-hidden="true">
-              <div className="moon" />
-            </div>
-            <div className="home-actions">
-              <button className="primary-button" onClick={startReading}>
-                开始一次占卜
-              </button>
-              <button
-                className="secondary-button"
-                onClick={() => setScreen("history")}
-              >
-                查看最近记录
-              </button>
-            </div>
-            <p className="disclaimer">仅供娱乐与自我探索，不替代专业建议</p>
-          </section>
-        )}
-
-        {screen === "question" && (
-          <section className="screen">
-            <p className="eyebrow">01 · Set an intention</p>
-            <h1 className="screen-title">此刻，你想照见什么？</h1>
-            <p className="screen-copy">
-              开放式的问题，往往比“会不会”更能带来启发。
-            </p>
-            <div className="question-categories" aria-label="问题分类">
-              {questionCategories.map((category) => (
+        {!historyOpen && (
+          <ChatThread
+            messages={flow.messages}
+            activeKey={`${flow.phase}-${drawnCards.length}`}
+          >
+            {flow.phase === "welcome" && (
+              <AssistantCard>
+                <p className="message-card-label">准备好了吗？</p>
                 <button
-                  className={`category-tab ${
-                    questionCategoryId === category.id ? "active" : ""
-                  }`}
-                  key={category.id}
-                  onClick={() => {
-                    setQuestionCategoryId(category.id);
-                    setQuestionOptionId("");
-                  }}
-                  aria-pressed={questionCategoryId === category.id}
+                  className="primary-button"
+                  onClick={() => dispatchFlow({ type: "start" })}
                 >
-                  {category.name}
+                  开始一次占卜
                 </button>
-              ))}
-            </div>
-            <p className="category-description">
-              {activeQuestionCategory.description}
-            </p>
-            <div
-              className="question-options"
-              aria-label={`${activeQuestionCategory.name}选项`}
-            >
-              {activeQuestionCategory.options.map((option) => (
-                <button
-                  className={`option-chip ${
-                    questionOptionId === option.id ? "active" : ""
-                  }`}
-                  key={option.id}
-                  onClick={() => {
-                    setQuestionOptionId(option.id);
-                    setQuestion(option.prompt);
-                    if (
-                      enabledSpreads.some(
-                        (spread) => spread.id === option.recommendedSpreadId,
-                      )
-                    ) {
-                      setSpreadId(option.recommendedSpreadId);
+              </AssistantCard>
+            )}
+
+        {(flow.phase === "category" ||
+          flow.phase === "question" ||
+          flow.phase === "spread") && (
+          <AssistantCard>
+            <section className="chat-step">
+            {flow.phase === "category" && (
+              <div className="question-categories" aria-label="问题分类">
+                {questionCategories.map((category) => (
+                  <button
+                    className="category-tab"
+                    key={category.id}
+                    onClick={() => {
+                      setQuestion("");
+                      setQuestionCategoryId(category.id);
+                      setQuestionOptionId("");
+                      setSpreadId(singleCardSpread.id);
+                      dispatchFlow({
+                        type: "select-category",
+                        label: category.name,
+                      });
+                    }}
+                  >
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            {flow.phase === "question" && activeQuestionCategory && (
+              <div className="question-step">
+                <p className="category-description">
+                  {activeQuestionCategory.description}
+                </p>
+                <div
+                  className="question-options"
+                  aria-label={`${activeQuestionCategory.name}选项`}
+                >
+                  {activeQuestionCategory.options.map((option) => (
+                    <button
+                      className={`option-chip ${
+                        questionOptionId === option.id ? "active" : ""
+                      }`}
+                      key={option.id}
+                      onClick={() => {
+                        setQuestionOptionId(option.id);
+                        setQuestion(option.prompt);
+                        if (
+                          enabledSpreads.some(
+                            (spread) =>
+                              spread.id === option.recommendedSpreadId,
+                          )
+                        ) {
+                          setSpreadId(option.recommendedSpreadId);
+                        }
+                      }}
+                      aria-pressed={questionOptionId === option.id}
+                      aria-label={`${option.name}：${option.prompt}`}
+                    >
+                      {option.name}
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  className="question-box"
+                  value={question}
+                  maxLength={120}
+                  onChange={(event) => {
+                    setQuestion(event.target.value);
+                    if (event.target.value !== activeQuestionOption?.prompt) {
+                      setQuestionOptionId("");
                     }
                   }}
-                  aria-pressed={questionOptionId === option.id}
-                  aria-label={`${option.name}：${option.prompt}`}
-                >
-                  {option.name}
-                </button>
-              ))}
-            </div>
-            <textarea
-              className="question-box"
-              value={question}
-              maxLength={120}
-              onChange={(event) => setQuestion(event.target.value)}
-              placeholder="也可以直接写下你自己的问题"
-              aria-label="输入你想探索的问题"
-            />
-            <p className="section-label">选择牌阵</p>
-            <div className="spread-options" aria-label="选择牌阵">
-              {enabledSpreads.map((spread) => (
+                  placeholder="也可以直接写下你自己的问题"
+                  aria-label="输入你想探索的问题"
+                />
                 <button
-                  className={`spread-option ${
-                    spreadId === spread.id ? "active" : ""
-                  }`}
-                  key={spread.id}
-                  onClick={() => setSpreadId(spread.id)}
-                  aria-pressed={spreadId === spread.id}
+                  className="primary-button"
+                  disabled={!question.trim()}
+                  onClick={() =>
+                    dispatchFlow({
+                      type: "submit-question",
+                      question,
+                    })
+                  }
                 >
-                  <span>
-                    {spread.name}
-                    {activeQuestionOption?.recommendedSpreadId === spread.id && (
-                      <small>推荐</small>
-                    )}
-                  </span>
-                  <em>{spread.positions.length}张 · {spread.description}</em>
+                  确认这个问题
                 </button>
-              ))}
-            </div>
-            <div className="home-actions">
-              <button className="primary-button" onClick={beginDraw}>
-                使用{activeSpread.name}洗牌
-              </button>
-              <button className="text-button" onClick={beginDraw}>
-                暂时没有具体问题
-              </button>
-            </div>
-          </section>
+              </div>
+            )}
+            {flow.phase === "spread" && activeQuestionCategory && (
+              <div className="question-step">
+                <p className="section-label">选择牌阵</p>
+                <div className="spread-options" aria-label="选择牌阵">
+                  {enabledSpreads.map((spread) => (
+                    <button
+                      className={`spread-option ${
+                        spreadId === spread.id ? "active" : ""
+                      }`}
+                      key={spread.id}
+                      onClick={() => setSpreadId(spread.id)}
+                      aria-pressed={spreadId === spread.id}
+                    >
+                      <SpreadIcon spread={spread} />
+                      <span className="spread-option-copy">
+                        <span className="spread-option-title">
+                          {spread.name}
+                          {activeQuestionOption?.recommendedSpreadId ===
+                            spread.id && <small>推荐</small>}
+                        </span>
+                        <em>
+                          {spread.positions.length}张 · {spread.description}
+                        </em>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+                <div className="home-actions">
+                  <button className="primary-button" onClick={beginDraw}>
+                    使用{activeSpread.name}洗牌
+                  </button>
+                </div>
+              </div>
+            )}
+            </section>
+          </AssistantCard>
         )}
 
-        {screen === "draw" && (
-          <section className="screen draw-stage">
-            <p className="eyebrow">02 · Draw the cards</p>
-            <h1 className="screen-title">
-              {shuffling ? "让思绪慢下来" : `为${activeSpread.name}抽牌`}
-            </h1>
+        {flow.phase === "draw" && (
+          <AssistantCard>
+          <section className="chat-step draw-stage selection-stage">
+            <h2 className="message-card-title">凭直觉选择你的牌</h2>
+            <p className="draw-progress" aria-live="polite">
+              已选择 {drawnCards.length} / {activeSpread.positions.length}
+            </p>
             <div
-              className={`deck ${shuffling ? "shuffling" : ""}`}
-              aria-hidden="true"
+              className="draw-position-slots"
+              aria-label={`${activeSpread.name}牌位`}
             >
-              <div className="deck-card" />
-              <div className="deck-card" />
-              <div className="deck-card" />
+              {orderedActivePositions.map((position) => {
+                const drawn = drawnCards.find(
+                  (item) => item.position.id === position.id,
+                );
+                return (
+                  <button
+                    className={`draw-position-slot ${
+                      activeDrawPositionId === position.id ? "active" : ""
+                    } ${drawn ? "filled" : ""}`}
+                    key={position.id}
+                    onClick={() => {
+                      setActiveDrawPositionId(position.id);
+                      triggerHaptic("selection");
+                    }}
+                    disabled={
+                      shuffling || Boolean(drawn) || Boolean(animatingDraw)
+                    }
+                    aria-pressed={activeDrawPositionId === position.id}
+                  >
+                    <span className="draw-position-name">{position.name}</span>
+                    <span
+                      className="draw-position-frame"
+                      ref={(element) => {
+                        if (element) {
+                          drawPositionFrames.current.set(position.id, element);
+                        } else {
+                          drawPositionFrames.current.delete(position.id);
+                        }
+                      }}
+                    >
+                      {drawn && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          className={
+                            drawn.orientation === "reversed" ? "reversed" : ""
+                          }
+                          src={drawn.card.asset.image ?? ""}
+                          alt={`${drawn.card.name}，${
+                            drawn.orientation === "upright" ? "正位" : "逆位"
+                          }`}
+                        />
+                      )}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
             <p className="draw-hint">
-              {shuffling
-                ? "正在洗牌…"
-                : `准备好后，抽取${activeSpread.positions.length}张牌`}
+              {drawnCards.length === activeSpread.positions.length
+                ? "牌阵已经完整展开"
+                : animatingDraw
+                  ? `正在翻开“${animatingDraw.position.name}”的牌…`
+                  : `左右拖动转动牌圈，为“${activeDrawPosition?.name}”选择一张牌`}
             </p>
-            <button
-              className="primary-button"
-              onClick={drawCards}
-              disabled={shuffling}
+            <div
+              className="draw-deck-wheel"
+              onPointerDown={startDeckDrag}
+              onPointerMove={moveDeckDrag}
+              onPointerUp={(event) => finishDeckDrag(event, true)}
+              onPointerCancel={(event) => finishDeckDrag(event, false)}
+              aria-label="可拖动旋转的圆形塔罗牌组"
             >
-              {shuffling
-                ? "请稍候"
-                : `抽取${activeSpread.positions.length}张牌`}
-            </button>
-            {shuffling && (
+              {availableDeckCards.map((card, index) => {
+                  const baseAngle =
+                    availableDeckCards.length === 1
+                      ? 0
+                      : -150 +
+                        (index * 300) /
+                          (availableDeckCards.length - 1);
+                  const angle = baseAngle + deckRotation;
+                  const depth =
+                    100 +
+                    Math.round(
+                      Math.cos((angle * Math.PI) / 180) * 50,
+                    );
+                  return (
+                    <button
+                      className="draw-deck-card"
+                      key={card.id}
+                      style={
+                        {
+                          "--wheel-angle": `${angle}deg`,
+                          "--wheel-z": depth,
+                        } as CSSProperties
+                      }
+                      onClick={(event) => {
+                        if (suppressCardClick.current) {
+                          event.preventDefault();
+                          suppressCardClick.current = false;
+                          return;
+                        }
+                        selectCard(card, event.currentTarget);
+                      }}
+                      disabled={
+                        shuffling ||
+                        Boolean(animatingDraw) ||
+                        drawnCards.length >= activeSpread.positions.length
+                      }
+                      aria-label={`第 ${index + 1} 张牌，点击抽取`}
+                    >
+                      <span className="draw-deck-card-pattern">✦</span>
+                    </button>
+                  );
+                })}
+            </div>
+            {drawnCards.length === activeSpread.positions.length && (
               <button
-                className="text-button"
-                onClick={() => setShuffling(false)}
+                className="primary-button draw-complete-button"
+                onClick={() => dispatchFlow({ type: "complete-draw" })}
               >
-                跳过动效
+                返回对话查看解读
               </button>
             )}
-          </section>
-        )}
-
-        {screen === "reveal" && drawnCards.length > 0 && (
-          <section className="screen draw-stage">
-            <p className="eyebrow">03 · Reveal</p>
-            <h1 className="screen-title">逐张翻开你的牌</h1>
-            <div
-              className={`spread-card-grid count-${drawnCards.length}`}
-            >
-              {drawnCards.map((drawn) => (
-                <div className="spread-card-item" key={drawn.position.id}>
-                  <p className="position-label">{drawn.position.name}</p>
-                  <div
-                    className={`spread-card-scene ${
-                      drawnCards.length === 1 ? "single" : ""
-                    }`}
-                  >
-                    <CardVisual
-                      drawn={drawn}
-                      revealed={revealedPositionIds.includes(
-                        drawn.position.id,
-                      )}
-                      compact={drawnCards.length > 1}
-                      onReveal={() => revealCard(drawn.position.id)}
-                    />
-                  </div>
+            {shuffling && (
+              <div className="shuffle-intro" aria-live="polite">
+                <div className="shuffle-deck" aria-hidden="true">
+                  <span className="shuffle-card" />
+                  <span className="shuffle-card" />
+                  <span className="shuffle-card" />
                 </div>
-              ))}
-            </div>
-            <p className="reveal-label">
-              已翻开 {revealedPositionIds.length} / {drawnCards.length}
-            </p>
-            <div className="result-actions">
-              <button
-                className="primary-button"
-                onClick={() => setScreen("result")}
-                disabled={!allCardsRevealed}
-              >
-                查看完整解读
-              </button>
-              {!allCardsRevealed && (
-                <button className="text-button" onClick={revealAllCards}>
-                  直接翻开全部
+                <p>让牌序重新流动…</p>
+                <button
+                  className="text-button"
+                  onClick={() => {
+                    if (shuffleTimeout.current !== null) {
+                      window.clearTimeout(shuffleTimeout.current);
+                      shuffleTimeout.current = null;
+                    }
+                    setShuffling(false);
+                  }}
+                >
+                  跳过洗牌
                 </button>
-              )}
-            </div>
+              </div>
+            )}
+            {animatingDraw && (
+              <div className="draw-card-animation" aria-live="assertive">
+                <div
+                  className={`draw-card-flip ${
+                    animatingDraw.orientation === "reversed" ? "reversed" : ""
+                  }`}
+                  style={
+                    {
+                      "--draw-source-x": `${drawAnimationGeometry.sourceX}px`,
+                      "--draw-source-y": `${drawAnimationGeometry.sourceY}px`,
+                      "--draw-source-scale":
+                        drawAnimationGeometry.sourceScale,
+                      "--draw-source-rotation": `${drawAnimationGeometry.sourceRotation}deg`,
+                      "--draw-target-x": `${drawAnimationGeometry.targetX}px`,
+                      "--draw-target-y": `${drawAnimationGeometry.targetY}px`,
+                      "--draw-target-scale":
+                        drawAnimationGeometry.targetScale,
+                    } as CSSProperties
+                  }
+                  onAnimationEnd={(event) => {
+                    if (
+                      event.currentTarget === event.target &&
+                      event.animationName === "selected-card-pop"
+                    ) {
+                      finishDrawAnimation();
+                    }
+                  }}
+                >
+                  <span className="draw-card-flip-inner">
+                    <span className="draw-card-flip-back">✦</span>
+                    <span className="draw-card-flip-face">
+                      {animatingDraw.card.asset.image && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={animatingDraw.card.asset.image}
+                          alt={animatingDraw.card.asset.alt}
+                        />
+                      )}
+                      <strong>{animatingDraw.card.name}</strong>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            )}
           </section>
+          </AssistantCard>
         )}
 
-        {screen === "result" && drawnCards.length > 0 && (
-          <section className="screen">
-            <p className="eyebrow">Your reflection · {activeSpread.name}</p>
-            <h1 className="screen-title">牌面为你展开</h1>
+        {flow.phase === "result" && drawnCards.length > 0 && (
+          <AssistantCard>
+          <section className="chat-step result-step">
+            <p className="message-card-label">Your reflection · {activeSpread.name}</p>
+            <h2 className="message-card-title">牌面为你展开</h2>
             <div className={`spread-card-grid result count-${drawnCards.length}`}>
               {drawnCards.map((drawn) => (
                 <div className="spread-card-item" key={drawn.position.id}>
@@ -502,7 +784,6 @@ export function ArcanaPrototype() {
                   >
                     <CardVisual
                       drawn={drawn}
-                      revealed
                       compact={drawnCards.length > 1}
                     />
                   </div>
@@ -619,7 +900,7 @@ export function ArcanaPrototype() {
               <button className="primary-button" onClick={saveReading}>
                 保存这次启示
               </button>
-              <button className="secondary-button" onClick={startReading}>
+              <button className="secondary-button" onClick={resetReading}>
                 重新提问
               </button>
             </div>
@@ -627,17 +908,52 @@ export function ArcanaPrototype() {
               牌面提供的是观察角度，而不是确定的未来
             </p>
           </section>
+          </AssistantCard>
         )}
 
-        {screen === "history" && (
-          <section className="screen">
+        {flow.phase === "complete" && (
+          <AssistantCard>
+            <button
+              className="primary-button"
+              onClick={() => {
+                resetReading();
+                window.setTimeout(
+                  () => dispatchFlow({ type: "start" }),
+                  0,
+                );
+              }}
+            >
+              开始新的对话
+            </button>
+          </AssistantCard>
+        )}
+          </ChatThread>
+        )}
+
+        {historyOpen && (
+          <section className="history-panel">
+            <button
+              className="text-button history-close"
+              onClick={() => setHistoryOpen(false)}
+            >
+              ← 返回对话
+            </button>
             <p className="eyebrow">Your journey</p>
             <h1 className="screen-title">最近的启示</h1>
             {history.length === 0 ? (
               <div className="empty-state">
                 <div>
                   <p>还没有保存过占卜记录</p>
-                  <button className="primary-button" onClick={startReading}>
+                  <button
+                    className="primary-button"
+                    onClick={() => {
+                      resetReading();
+                      window.setTimeout(
+                        () => dispatchFlow({ type: "start" }),
+                        0,
+                      );
+                    }}
+                  >
                     开始第一次探索
                   </button>
                 </div>
@@ -660,7 +976,16 @@ export function ArcanaPrototype() {
                     </article>
                   ))}
                 </div>
-                <button className="secondary-button" onClick={startReading}>
+                <button
+                  className="secondary-button"
+                  onClick={() => {
+                    resetReading();
+                    window.setTimeout(
+                      () => dispatchFlow({ type: "start" }),
+                      0,
+                    );
+                  }}
+                >
                   开始新的占卜
                 </button>
               </>

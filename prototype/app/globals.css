@@ -75,16 +75,208 @@ button {
   display: flex;
   flex-direction: column;
   width: min(100%, 430px);
+  height: 100svh;
   min-height: 100svh;
   margin: 0 auto;
   padding: 24px 22px 28px;
+  overflow: hidden;
 }
 
 .topbar {
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
   min-height: 40px;
+}
+
+.chat-thread {
+  flex: 1;
+  min-height: 0;
+  padding: 0 2px 28px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.chat-thread::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-intro {
+  padding: 14px 2px 24px;
+}
+
+.chat-intro .eyebrow {
+  margin-top: 20px;
+}
+
+.chat-title {
+  max-width: 320px;
+  margin: 0;
+  color: var(--ink);
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.message-row {
+  display: flex;
+  gap: 9px;
+  align-items: flex-end;
+  width: 100%;
+  margin: 0 0 14px;
+}
+
+.message-row.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  color: var(--gold);
+  font-family: system-ui, sans-serif;
+  font-size: 11px;
+  background: rgba(214, 185, 120, 0.08);
+  border: 1px solid rgba(214, 185, 120, 0.22);
+  border-radius: 50%;
+  place-items: center;
+}
+
+.message-row.user .message-avatar {
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+.message-bubble {
+  max-width: 82%;
+  padding: 11px 14px;
+  color: var(--ink);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.65;
+  background: rgba(34, 28, 58, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px 16px 16px 5px;
+}
+
+.message-row.user .message-bubble {
+  color: #1b1424;
+  background: var(--gold);
+  border-color: var(--gold);
+  border-radius: 16px 16px 5px;
+}
+
+.message-row.interactive {
+  align-items: flex-start;
+}
+
+.chat-active-step {
+  scroll-margin-block: 12px;
+}
+
+.message-card {
+  width: calc(100% - 37px);
+  min-width: 0;
+  padding: 16px;
+  background: rgba(25, 20, 47, 0.82);
+  border: 1px solid rgba(214, 185, 120, 0.18);
+  border-radius: 18px 18px 18px 6px;
+}
+
+.message-card-label {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+}
+
+.message-card-title {
+  margin: 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.chat-step {
+  width: 100%;
+}
+
+.chat-step .question-categories {
+  margin-top: 0;
+}
+
+.chat-disclaimer {
+  margin: 26px 0 0;
+  color: #776e85;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.history-panel {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.history-close {
+  margin-top: 12px;
+}
+
+.draw-page .chat-intro,
+.draw-page .chat-thread > .message-row,
+.draw-page .chat-disclaimer {
+  display: none;
+}
+
+.draw-page .chat-thread {
+  display: flex;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.draw-page .chat-active-step,
+.draw-page .chat-active-step > .message-row,
+.draw-page .message-card,
+.draw-page .selection-stage {
+  width: 100%;
+  min-height: 0;
+}
+
+.draw-page .chat-active-step {
+  display: flex;
+  flex: 1;
+}
+
+.draw-page .chat-active-step > .message-row {
+  flex: 1;
+  align-items: stretch;
+  margin: 0;
+}
+
+.draw-page .message-avatar {
+  display: none;
+}
+
+.draw-page .message-card {
+  display: flex;
+  flex: 1;
+  padding: 0;
+  background: transparent;
+  border: 0;
+}
+
+.draw-page .selection-stage {
+  flex: 1;
 }
 
 .wordmark {
@@ -302,6 +494,11 @@ button {
   margin-top: 28px;
 }
 
+.question-step {
+  width: 100%;
+  animation: enter 320ms ease both;
+}
+
 .category-tab {
   min-height: 38px;
   padding: 8px 4px;
@@ -372,22 +569,27 @@ button {
 
 .spread-options {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px;
   margin-bottom: 24px;
 }
 
 .spread-option {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  min-height: 154px;
   width: 100%;
-  padding: 13px 14px;
+  padding: 15px 14px 14px;
   color: var(--ink);
   text-align: left;
   cursor: pointer;
   background: rgba(255, 255, 255, 0.025);
   border: 1px solid rgba(255, 255, 255, 0.09);
   border-radius: 14px;
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+  grid-template-rows: 54px 1fr;
 }
 
 .spread-option.active {
@@ -395,11 +597,42 @@ button {
   border-color: var(--gold-soft);
 }
 
-.spread-option span {
+.spread-option:active {
+  transform: translateY(1px);
+}
+
+.spread-icon {
+  display: block;
+  width: 72px;
+  height: 48px;
+  margin: 0 auto;
+  color: var(--gold);
+}
+
+.spread-icon-card rect {
+  fill: rgba(11, 10, 24, 0.8);
+  stroke: currentColor;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.spread-icon-card path {
+  fill: currentColor;
+}
+
+.spread-option-copy {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.spread-option-title {
   display: flex;
   gap: 8px;
   align-items: center;
+  justify-content: center;
   color: var(--gold);
+  text-align: center;
 }
 
 .spread-option small {
@@ -412,12 +645,13 @@ button {
 }
 
 .spread-option em {
-  max-width: 68%;
+  margin-top: 8px;
   color: var(--muted);
   font-family: system-ui, sans-serif;
   font-size: 10px;
   font-style: normal;
-  text-align: right;
+  line-height: 1.55;
+  text-align: center;
 }
 
 .draw-stage {
@@ -428,65 +662,350 @@ button {
   justify-content: center;
 }
 
-.deck {
+.selection-stage {
   position: relative;
-  width: 154px;
-  height: 252px;
-  margin: 22px 0 42px;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
-.deck-card,
+.selection-stage .eyebrow {
+  margin-top: 28px;
+}
+
+.selection-stage .screen-title,
+.selection-stage .draw-progress {
+  text-align: center;
+}
+
+.draw-position-slots {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  width: 100%;
+  margin: 20px 0 8px;
+  padding: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.draw-position-slots::-webkit-scrollbar {
+  display: none;
+}
+
+.draw-position-slot {
+  display: grid;
+  flex: 1 0 70px;
+  min-width: 0;
+  padding: 0;
+  color: var(--muted);
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  place-items: center;
+}
+
+.draw-position-slot:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.draw-position-name {
+  min-height: 30px;
+  font-family: system-ui, sans-serif;
+  font-size: 10px;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.draw-position-frame {
+  position: relative;
+  display: grid;
+  width: min(100%, 68px);
+  aspect-ratio: 154 / 252;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.018);
+  border: 1px dashed rgba(214, 185, 120, 0.34);
+  border-radius: 7px;
+  transition:
+    border-color 180ms ease,
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+  place-items: center;
+}
+
+.draw-position-frame::before {
+  color: rgba(214, 185, 120, 0.3);
+  content: "✦";
+  font-size: 11px;
+}
+
+.draw-position-slot.active {
+  color: var(--gold);
+}
+
+.draw-position-slot.active .draw-position-frame {
+  background: rgba(214, 185, 120, 0.06);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(214, 185, 120, 0.08);
+  transform: translateY(-2px);
+}
+
+.draw-position-slot.filled .draw-position-frame {
+  border-style: solid;
+  animation: position-fill 700ms ease-out both;
+}
+
+.draw-position-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.draw-position-frame img.reversed {
+  transform: rotate(180deg);
+}
+
+.shuffle-intro {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  background:
+    radial-gradient(circle at 50% 44%, rgba(102, 73, 150, 0.3), transparent 52%),
+    rgba(11, 10, 24, 0.96);
+  animation: shuffle-intro 3000ms ease both;
+}
+
+.shuffle-intro p {
+  margin: 28px 0 8px;
+}
+
+.shuffle-deck {
+  position: relative;
+  width: 108px;
+  height: 176px;
+}
+
+.shuffle-card {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle, transparent 26%, rgba(214, 185, 120, 0.22) 27% 28%, transparent 29%),
+    repeating-linear-gradient(45deg, transparent 0 11px, rgba(214, 185, 120, 0.08) 12px 13px),
+    #19142f;
+  border: 1px solid var(--gold-soft);
+  border-radius: 10px;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.38);
+}
+
+.shuffle-card:first-child {
+  animation: shuffle-card-left 720ms ease-in-out infinite alternate;
+}
+
+.shuffle-card:nth-child(2) {
+  animation: shuffle-card-right 640ms 90ms ease-in-out infinite alternate;
+}
+
+.shuffle-card:nth-child(3) {
+  animation: shuffle-card-center 820ms ease-in-out infinite alternate;
+}
+
 .tarot-card {
   border: 1px solid var(--gold-soft);
   border-radius: 12px;
   box-shadow: 0 24px 54px rgba(0, 0, 0, 0.38);
 }
 
-.deck-card {
+.draw-progress {
+  margin: 14px 0 0;
+  color: var(--gold);
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+}
+
+.draw-deck-wheel {
+  position: relative;
+  flex: 0 0 240px;
+  width: calc(100% + 44px);
+  height: 240px;
+  margin: 0 -22px -20px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.draw-deck-wheel.dragging {
+  cursor: grabbing;
+}
+
+.draw-deck-wheel.dragging .draw-deck-card {
+  cursor: grabbing;
+  transition: none;
+}
+
+.draw-deck-card {
+  position: absolute;
+  top: 304px;
+  left: 50%;
+  z-index: var(--wheel-z);
+  width: 72px;
+  height: 118px;
+  padding: 0;
+  color: var(--gold);
+  cursor: pointer;
+  background:
+    radial-gradient(circle, transparent 25%, rgba(214, 185, 120, 0.2) 26% 28%, transparent 29%),
+    repeating-linear-gradient(45deg, transparent 0 11px, rgba(214, 185, 120, 0.08) 12px 13px),
+    #19142f;
+  border: 1px solid var(--gold-soft);
+  border-radius: 7px;
+  box-shadow: -8px 10px 18px rgba(4, 3, 12, 0.36);
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--wheel-angle))
+    translateY(-230px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease,
+    filter 180ms ease;
+  user-select: none;
+}
+
+.draw-deck-card:focus-visible {
+  z-index: 200;
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.draw-deck-card-pattern {
+  position: absolute;
+  inset: 8px;
+  display: grid;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  place-items: center;
+}
+
+.draw-hint {
+  min-height: 20px;
+  margin: 0;
+  color: var(--muted);
+  font-family: system-ui, sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+
+.draw-page .draw-hint {
+  position: absolute;
+  right: 0;
+  bottom: 238px;
+  left: 0;
+  margin: 0;
+}
+
+.draw-page .draw-deck-wheel {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.draw-complete-button {
+  margin-top: 20px;
+}
+
+.draw-card-animation {
+  --draw-animation-duration: 3200ms;
+
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  pointer-events: none;
+  background: rgba(7, 5, 18, 0.52);
+  animation: draw-overlay var(--draw-animation-duration) ease both;
+  perspective: 1200px;
+  place-items: center;
+}
+
+.draw-card-flip {
+  width: 154px;
+  height: 252px;
+  animation: selected-card-pop var(--draw-animation-duration) ease-in-out both;
+  perspective: 1000px;
+}
+
+.draw-card-flip-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: selected-card-turn var(--draw-animation-duration) ease-in-out both;
+  transform-style: preserve-3d;
+}
+
+.draw-card-flip-back,
+.draw-card-flip-face {
   position: absolute;
   inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--gold-soft);
+  border-radius: 12px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.56);
+  backface-visibility: hidden;
+}
+
+.draw-card-flip-back {
   display: grid;
   color: var(--gold);
+  font-size: 24px;
   background:
     radial-gradient(circle, transparent 26%, rgba(214, 185, 120, 0.22) 27% 28%, transparent 29%),
     repeating-linear-gradient(45deg, transparent 0 11px, rgba(214, 185, 120, 0.08) 12px 13px),
     #19142f;
   place-items: center;
-  transition: transform 500ms ease;
 }
 
-.deck-card::before {
-  width: 70%;
-  height: 84%;
-  content: "✦";
-  font-size: 26px;
+.draw-card-flip-face {
+  background: #171224;
+  transform: rotateY(180deg);
+}
+
+.draw-card-flip-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.draw-card-flip.reversed .draw-card-flip-face img {
+  transform: rotate(180deg);
+}
+
+.draw-card-flip-face strong {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  left: 8px;
+  padding: 7px;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
   text-align: center;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  line-height: 208px;
-}
-
-.deck.shuffling .deck-card:nth-child(1) {
-  animation: shuffle-left 900ms ease-in-out infinite alternate;
-}
-
-.deck.shuffling .deck-card:nth-child(2) {
-  animation: shuffle-right 800ms 120ms ease-in-out infinite alternate;
-}
-
-.deck-card:nth-child(2) {
-  transform: translate(4px, 5px) rotate(2deg);
-}
-
-.deck-card:nth-child(3) {
-  transform: translate(-3px, 2px) rotate(-1deg);
-}
-
-.draw-hint {
-  margin: 0 0 18px;
-  color: var(--muted);
-  font-family: system-ui, sans-serif;
-  font-size: 13px;
+  background: rgba(11, 10, 24, 0.8);
+  border-radius: 6px;
 }
 
 .card-scene {
@@ -902,21 +1421,103 @@ button {
   }
 }
 
-@keyframes shuffle-left {
-  to {
-    transform: translate(-48px, -3px) rotate(-8deg);
+@keyframes position-fill {
+  from {
+    opacity: 0.2;
   }
 }
 
-@keyframes shuffle-right {
+@keyframes draw-overlay {
+  0%,
+  99% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes selected-card-pop {
+  0% {
+    opacity: 1;
+    transform:
+      translate(var(--draw-source-x), var(--draw-source-y))
+      rotate(var(--draw-source-rotation))
+      scale(var(--draw-source-scale));
+  }
+
+  15%,
+  60% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  92%,
+  99% {
+    opacity: 1;
+    transform:
+      translate(var(--draw-target-x), var(--draw-target-y))
+      scale(var(--draw-target-scale));
+  }
+
+  100% {
+    opacity: 0;
+    transform:
+      translate(var(--draw-target-x), var(--draw-target-y))
+      scale(var(--draw-target-scale));
+  }
+}
+
+@keyframes selected-card-turn {
+  0%,
+  25% {
+    transform: rotateY(0);
+  }
+
+  58%,
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+
+@keyframes shuffle-intro {
+  0% {
+    opacity: 0;
+  }
+
+  12%,
+  88% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes shuffle-card-left {
   to {
-    transform: translate(46px, 5px) rotate(8deg);
+    transform: translate(-52px, -4px) rotate(-10deg);
+  }
+}
+
+@keyframes shuffle-card-right {
+  to {
+    transform: translate(52px, 5px) rotate(10deg);
+  }
+}
+
+@keyframes shuffle-card-center {
+  to {
+    transform: translateY(-7px) rotate(1deg);
   }
 }
 
 @media (min-width: 700px) {
   .phone-stage {
-    min-height: 844px;
+    height: min(844px, calc(100svh - 64px));
+    min-height: min(844px, calc(100svh - 64px));
     margin: 32px auto;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 32px;

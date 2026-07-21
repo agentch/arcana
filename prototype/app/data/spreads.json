@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.2",
+  "spreadsVersion": "2026.07.3",
   "spreads": [
     {
       "id": "single-card",
@@ -8,6 +8,9 @@
       "description": "聚焦当下最值得看见的主题",
       "enabled": true,
       "supportedTopics": ["general", "love", "career", "growth"],
+      "visual": {
+        "cards": [{"x": 36, "y": 24}]
+      },
       "positions": [
         {
           "id": "focus",
@@ -23,6 +26,13 @@
       "description": "理解一件事如何从过去发展到未来",
       "enabled": true,
       "supportedTopics": ["general", "love", "career", "growth"],
+      "visual": {
+        "cards": [
+          {"x": 14, "y": 24},
+          {"x": 36, "y": 24},
+          {"x": 58, "y": 24}
+        ]
+      },
       "positions": [
         {"id": "past", "name": "过去", "prompt": "已形成影响的背景、经验或旧模式", "order": 1},
         {"id": "present", "name": "现在", "prompt": "当前最重要的力量、状态或选择", "order": 2},
@@ -35,6 +45,13 @@
       "description": "分析现状、核心挑战与可行建议",
       "enabled": false,
       "supportedTopics": ["general", "career", "growth"],
+      "visual": {
+        "cards": [
+          {"x": 36, "y": 13},
+          {"x": 20, "y": 35, "rotation": -6},
+          {"x": 52, "y": 35, "rotation": 6}
+        ]
+      },
       "positions": [
         {"id": "situation", "name": "现状", "prompt": "当前可见与未充分看见的状态", "order": 1},
         {"id": "challenge", "name": "挑战", "prompt": "阻力、矛盾、盲点或需要整合的部分", "order": 2},
@@ -47,6 +64,15 @@
       "description": "观察双方状态、关系动力与发展趋势",
       "enabled": false,
       "supportedTopics": ["love"],
+      "visual": {
+        "cards": [
+          {"x": 18, "y": 13, "rotation": -5},
+          {"x": 54, "y": 13, "rotation": 5},
+          {"x": 36, "y": 24},
+          {"x": 18, "y": 35, "rotation": 5},
+          {"x": 54, "y": 35, "rotation": -5}
+        ]
+      },
       "positions": [
         {"id": "self", "name": "我的状态", "prompt": "我的需要、感受与关系模式", "order": 1},
         {"id": "other", "name": "对方状态", "prompt": "我所感受到的对方立场，不声称读取真实思想", "order": 2},
@@ -61,6 +87,15 @@
       "description": "对比两种选择的过程与可能倾向",
       "enabled": false,
       "supportedTopics": ["general", "love", "career", "growth"],
+      "visual": {
+        "cards": [
+          {"x": 36, "y": 11},
+          {"x": 18, "y": 24, "rotation": -4},
+          {"x": 18, "y": 37, "rotation": 4},
+          {"x": 54, "y": 24, "rotation": 4},
+          {"x": 54, "y": 37, "rotation": -4}
+        ]
+      },
       "positions": [
         {"id": "context", "name": "当前处境", "prompt": "做出选择时真正重要的背景与需要", "order": 1},
         {"id": "option-a-process", "name": "A 的过程", "prompt": "选择 A 可能面对的体验、资源和挑战", "order": 2},
