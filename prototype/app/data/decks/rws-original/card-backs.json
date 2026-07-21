@@ -1,7 +1,14 @@
 {
   "schemaVersion": "1.0",
   "deckId": "rws-original",
-  "defaultBackId": null,
-  "backs": [],
+  "defaultBackId": "arcana-starpath-mirror",
+  "backs": [
+    {
+      "id": "arcana-starpath-mirror",
+      "origin": "arcana-original",
+      "source": "/assets/card-backs/arcana-starpath-mirror-card-back.png",
+      "web": "/assets/card-backs/arcana-starpath-mirror-card-back.webp"
+    }
+  ],
   "fallbackPolicy": "扫描批次没有授权明确的牌背时，使用独立审核的 Arcana 原创牌背，不从其他商业牌组拼接。"
 }

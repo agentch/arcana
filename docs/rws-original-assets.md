@@ -198,7 +198,7 @@ Web 文件从 `source/` 通过可重复执行的脚本生成。
 ## 10. 入库验收清单
 
 - [x] 78张牌完整且来自同一来源、同一批次
-- [ ] 牌背来源已确认或使用 Arcana 自有牌背
+- [x] 牌背来源已确认或使用 Arcana 自有牌背
 - [x] 来源页面和许可记录已归档
 - [x] 商业使用、修改与再分发权限已核验并由项目方接受
 - [x] 原始文件已保存且 SHA-256 已生成
@@ -233,6 +233,6 @@ npm run assets:sync:public
 - `assets:approve` 只允许来源和许可已批准、Web 文件完整的素材进入 `approved`。
 - `assets:sync:public` 根据牌组映射生成站点静态副本，不让业务逻辑引用归档原图。
 
-截至2026-07-20，78张正面牌均为 `approved`；牌背仍保持独立待定。
+截至2026-07-21，78张正面牌均为 `approved`；原创牌背 `arcana-starpath-mirror` 已接入原型运行时（源 PNG + WebP）。
 
 候选来源的详细核验记录见 [`rws-source-audit.md`](rws-source-audit.md)。

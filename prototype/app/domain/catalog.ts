@@ -1,6 +1,7 @@
 import cardMeaningsJson from "../data/card-meanings.json";
 import {layeredCardMeanings} from "../data/cards/registry";
 import activeDeckJson from "../data/deck-manifests/rws-original.json";
+import cardBacksJson from "../data/decks/rws-original/card-backs.json";
 import meaningTopicMapJson from "../data/meaning-topic-map.json";
 import questionPromptsJson from "../data/question-prompts.json";
 import spreadsJson from "../data/spreads.json";
@@ -13,6 +14,12 @@ import type {
   RenderableCard,
   SpreadDefinition,
 } from "./tarot";
+
+export type ActiveCardBack = {
+  id: string;
+  image: string;
+  origin: "rws-source" | "arcana-original";
+};
 
 const cardMeanings = cardMeaningsJson.cards as CardMeaning[];
 const deck = activeDeckJson as DeckManifest;
@@ -67,6 +74,19 @@ export const activeDeck = {
   name: deck.name,
   version: deck.version,
 } as const;
+
+/** 当前牌组默认牌背；未配置时返回 null，UI 回退到样式占位。 */
+export function getActiveCardBack(): ActiveCardBack | null {
+  const defaultBackId = cardBacksJson.defaultBackId;
+  if (!defaultBackId) return null;
+  const back = cardBacksJson.backs.find((item) => item.id === defaultBackId);
+  if (!back?.web) return null;
+  return {
+    id: back.id,
+    image: back.web,
+    origin: back.origin as ActiveCardBack["origin"],
+  };
+}
 
 export function getCards(): RenderableCard[] {
   return cardMeanings.map((meaning) => {

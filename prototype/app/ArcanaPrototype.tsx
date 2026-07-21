@@ -25,6 +25,7 @@ import {
 import {
   activeDeck,
   catalogVersions,
+  getActiveCardBack,
   getCards,
   getEnabledSpreads,
   getLayeredMeaning,
@@ -64,6 +65,7 @@ const cards = getCards();
 const enabledSpreads = getEnabledSpreads();
 const singleCardSpread = getSpread("single-card");
 const questionCategories = getQuestionCategories();
+const activeCardBack = getActiveCardBack();
 const cardNameById = new Map(cards.map((card) => [card.id, card.name]));
 
 function normalizeHistoryItem(
@@ -905,13 +907,23 @@ export function ArcanaPrototype() {
 
         {flow.phase === "draw" && (
           <AssistantCard>
-          <section className="chat-step draw-stage selection-stage">
+          <section
+            className={`chat-step draw-stage selection-stage${
+              activeSpread.positions.length === 5 ? " spread-dense" : ""
+            }`}
+          >
             <h2 className="message-card-title">倾听直觉，召出你的牌</h2>
             <p className="draw-progress" aria-live="polite">
               命运之印 {drawnCards.length} / {activeSpread.positions.length}
             </p>
             <div
-              className="draw-position-slots"
+              className={`draw-position-slots${
+                activeSpread.id === "choice-five"
+                  ? " layout-choice"
+                  : activeSpread.positions.length === 5
+                    ? " layout-cross"
+                    : ""
+              }`}
               aria-label={`${activeSpread.name}牌位`}
             >
               {orderedActivePositions.map((position) => {
@@ -995,7 +1007,9 @@ export function ArcanaPrototype() {
                     );
                   return (
                     <button
-                      className="draw-deck-card"
+                      className={`draw-deck-card${
+                        activeCardBack ? " has-image" : ""
+                      }`}
                       key={card.id}
                       data-card-id={card.id}
                       style={
@@ -1028,7 +1042,18 @@ export function ArcanaPrototype() {
                           : `第 ${index + 1} 张牌，点击抽取`
                       }
                     >
-                      <span className="draw-deck-card-pattern">✦</span>
+                      {activeCardBack ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          className="draw-deck-card-image"
+                          src={activeCardBack.image}
+                          alt=""
+                          aria-hidden="true"
+                          draggable={false}
+                        />
+                      ) : (
+                        <span className="draw-deck-card-pattern">✦</span>
+                      )}
                     </button>
                   );
                 })}
@@ -1044,9 +1069,30 @@ export function ArcanaPrototype() {
             {shuffling && (
               <div className="shuffle-intro" aria-live="polite">
                 <div className="shuffle-deck" aria-hidden="true">
-                  <span className="shuffle-card" />
-                  <span className="shuffle-card" />
-                  <span className="shuffle-card" />
+                  <span
+                    className={`shuffle-card${activeCardBack ? " has-image" : ""}`}
+                    style={
+                      activeCardBack
+                        ? {backgroundImage: `url(${activeCardBack.image})`}
+                        : undefined
+                    }
+                  />
+                  <span
+                    className={`shuffle-card${activeCardBack ? " has-image" : ""}`}
+                    style={
+                      activeCardBack
+                        ? {backgroundImage: `url(${activeCardBack.image})`}
+                        : undefined
+                    }
+                  />
+                  <span
+                    className={`shuffle-card${activeCardBack ? " has-image" : ""}`}
+                    style={
+                      activeCardBack
+                        ? {backgroundImage: `url(${activeCardBack.image})`}
+                        : undefined
+                    }
+                  />
                 </div>
                 <p>牌序正在重写命运的篇章…</p>
                 <button
@@ -1092,7 +1138,23 @@ export function ArcanaPrototype() {
                   }}
                 >
                   <span className="draw-card-flip-inner">
-                    <span className="draw-card-flip-back">✦</span>
+                    <span
+                      className={`draw-card-flip-back${
+                        activeCardBack ? " has-image" : ""
+                      }`}
+                    >
+                      {activeCardBack ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          className="draw-card-flip-back-image"
+                          src={activeCardBack.image}
+                          alt=""
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        "✦"
+                      )}
+                    </span>
                     <span className="draw-card-flip-face">
                       {animatingDraw.card.asset.image && (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -1122,10 +1184,18 @@ export function ArcanaPrototype() {
             </h2>
             <div
               className={`spread-card-grid result count-${drawnCards.length}${
-                activeSpread.id === "choice-five" ? " layout-choice" : ""
+                activeSpread.id === "choice-five"
+                  ? " layout-choice"
+                  : drawnCards.length === 5
+                    ? " layout-cross"
+                    : ""
               }`}
             >
-              {drawnCards.map((drawn) => (
+              {[...drawnCards]
+                .sort(
+                  (left, right) => left.position.order - right.position.order,
+                )
+                .map((drawn) => (
                 <div className="spread-card-item" key={drawn.position.id}>
                   <p className="position-label">{drawn.position.name}</p>
                   <div

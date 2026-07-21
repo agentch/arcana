@@ -816,6 +816,87 @@ button {
   display: none;
 }
 
+/* 五牌阵抽牌位：十字形，避免横向挤出右侧 */
+.draw-position-slots.layout-cross {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    ". top ."
+    "left center right"
+    ". bottom .";
+  gap: 8px 6px;
+  overflow: visible;
+  justify-items: center;
+}
+
+.draw-position-slots.layout-cross .draw-position-slot:nth-child(1) {
+  grid-area: left;
+}
+
+.draw-position-slots.layout-cross .draw-position-slot:nth-child(2) {
+  grid-area: top;
+}
+
+.draw-position-slots.layout-cross .draw-position-slot:nth-child(3) {
+  grid-area: center;
+}
+
+.draw-position-slots.layout-cross .draw-position-slot:nth-child(4) {
+  grid-area: right;
+}
+
+.draw-position-slots.layout-cross .draw-position-slot:nth-child(5) {
+  grid-area: bottom;
+}
+
+.draw-position-slots.layout-cross .draw-position-slot {
+  flex: none;
+  width: 100%;
+  max-width: 88px;
+}
+
+.draw-position-slots.layout-cross .draw-position-frame {
+  width: min(100%, 72px);
+}
+
+.draw-position-slots.layout-choice {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas:
+    "context context"
+    "a-process b-process"
+    "a-direction b-direction";
+  gap: 8px 6px;
+  overflow: visible;
+  justify-items: center;
+}
+
+.draw-position-slots.layout-choice .draw-position-slot:nth-child(1) {
+  grid-area: context;
+}
+
+.draw-position-slots.layout-choice .draw-position-slot:nth-child(2) {
+  grid-area: a-process;
+}
+
+.draw-position-slots.layout-choice .draw-position-slot:nth-child(3) {
+  grid-area: a-direction;
+}
+
+.draw-position-slots.layout-choice .draw-position-slot:nth-child(4) {
+  grid-area: b-process;
+}
+
+.draw-position-slots.layout-choice .draw-position-slot:nth-child(5) {
+  grid-area: b-direction;
+}
+
+.draw-position-slots.layout-choice .draw-position-slot {
+  flex: none;
+  width: 100%;
+  max-width: 96px;
+}
+
 .draw-position-slot {
   display: grid;
   flex: 1 0 70px;
@@ -931,6 +1012,13 @@ button {
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.38);
 }
 
+.shuffle-card.has-image {
+  background-color: #0b0a18;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
 .shuffle-card:first-child {
   animation: shuffle-card-left 720ms ease-in-out infinite alternate;
 }
@@ -1022,6 +1110,20 @@ button {
   place-items: center;
 }
 
+.draw-deck-card.has-image {
+  overflow: hidden;
+  background: #0b0a18;
+}
+
+.draw-deck-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
 .draw-hint {
   min-height: 20px;
   margin: 0;
@@ -1036,6 +1138,7 @@ button {
   right: 0;
   bottom: 238px;
   left: 0;
+  z-index: 3;
   margin: 0;
 }
 
@@ -1043,8 +1146,77 @@ button {
   position: absolute;
   bottom: -20px;
   left: 50%;
+  z-index: 1;
   margin: 0;
   transform: translateX(-50%);
+}
+
+/* 五牌阵：牌位略放大并在可用区内居中，底部仍给圆环留空 */
+.draw-page .selection-stage.spread-dense {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 196px;
+}
+
+.draw-page .selection-stage.spread-dense .message-card-title {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+}
+
+.draw-page .selection-stage.spread-dense .draw-progress {
+  flex: 0 0 auto;
+  margin-top: 8px;
+}
+
+.draw-page .selection-stage.spread-dense .draw-position-slots.layout-cross,
+.draw-page .selection-stage.spread-dense .draw-position-slots.layout-choice {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  align-content: center;
+  gap: 8px 10px;
+  margin: 4px 0 0;
+  min-height: 0;
+}
+
+.draw-page .selection-stage.spread-dense .draw-position-name {
+  min-height: 20px;
+  margin-bottom: 4px;
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.draw-page .selection-stage.spread-dense .draw-position-slots.layout-cross .draw-position-slot,
+.draw-page .selection-stage.spread-dense .draw-position-slots.layout-choice .draw-position-slot {
+  max-width: 86px;
+}
+
+.draw-page .selection-stage.spread-dense .draw-position-slots.layout-cross .draw-position-frame,
+.draw-page .selection-stage.spread-dense .draw-position-slots.layout-choice .draw-position-frame {
+  width: min(100%, 62px);
+}
+
+.draw-page .selection-stage.spread-dense .draw-hint {
+  bottom: 172px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.draw-page .selection-stage.spread-dense .draw-deck-wheel {
+  bottom: -36px;
+  width: calc(100% + 44px);
+  height: 180px;
+}
+
+.draw-page .selection-stage.spread-dense .draw-deck-card {
+  top: 240px;
+  width: 60px;
+  height: 98px;
+  transform:
+    translate(-50%, -50%)
+    rotate(var(--wheel-angle))
+    translateY(-180px);
 }
 
 .draw-complete-button {
@@ -1103,6 +1275,17 @@ button {
   place-items: center;
 }
 
+.draw-card-flip-back.has-image {
+  background: #0b0a18;
+}
+
+.draw-card-flip-back-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .draw-card-flip-face {
   background: #171224;
   transform: rotateY(180deg);
@@ -1156,22 +1339,48 @@ button {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.spread-card-grid.count-5 {
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+/* 默认五牌：十字形，避免宽屏两列布局右侧溢出 */
+.spread-card-grid.count-5,
+.spread-card-grid.count-5.layout-cross {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    ". top ."
+    "left center right"
+    ". bottom .";
+  gap: 6px 8px;
+  max-width: 100%;
 }
 
+/* 牌序：我 / 对方 / 关系 / 挑战 / 趋势 → 左 / 上 / 中 / 右 / 下 */
 .spread-card-grid.count-5 .spread-card-item:nth-child(1),
-.spread-card-grid.count-5 .spread-card-item:nth-child(4) {
-  grid-column: span 3;
+.spread-card-grid.count-5.layout-cross .spread-card-item:nth-child(1) {
+  grid-area: left;
 }
 
 .spread-card-grid.count-5 .spread-card-item:nth-child(2),
-.spread-card-grid.count-5 .spread-card-item:nth-child(5) {
-  grid-column: span 3;
+.spread-card-grid.count-5.layout-cross .spread-card-item:nth-child(2) {
+  grid-area: top;
 }
 
-.spread-card-grid.count-5 .spread-card-item:nth-child(3) {
-  grid-column: 2 / span 4;
+.spread-card-grid.count-5 .spread-card-item:nth-child(3),
+.spread-card-grid.count-5.layout-cross .spread-card-item:nth-child(3) {
+  grid-area: center;
+}
+
+.spread-card-grid.count-5 .spread-card-item:nth-child(4),
+.spread-card-grid.count-5.layout-cross .spread-card-item:nth-child(4) {
+  grid-area: right;
+}
+
+.spread-card-grid.count-5 .spread-card-item:nth-child(5),
+.spread-card-grid.count-5.layout-cross .spread-card-item:nth-child(5) {
+  grid-area: bottom;
+}
+
+.spread-card-grid.count-5 .spread-card-scene,
+.spread-card-grid.count-5.layout-cross .spread-card-scene {
+  max-width: 96px;
+  margin: 0 auto;
 }
 
 /* 二选一：处境居中，A/B 左右并列 */
@@ -1181,6 +1390,7 @@ button {
     "context context"
     "a-process b-process"
     "a-direction b-direction";
+  gap: 8px;
 }
 
 .spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(1) {
@@ -1201,6 +1411,10 @@ button {
 
 .spread-card-grid.count-5.layout-choice .spread-card-item:nth-child(5) {
   grid-area: b-direction;
+}
+
+.spread-card-grid.count-5.layout-choice .spread-card-scene {
+  max-width: 112px;
 }
 
 .spread-card-grid.result {
@@ -1341,6 +1555,23 @@ button {
   border: 1px solid var(--line);
   border-radius: 999px;
   place-items: center;
+}
+
+.card-back.has-image {
+  background: #0b0a18;
+}
+
+.card-back.has-image::before,
+.tarot-card.compact .card-back.has-image::before {
+  display: none;
+  content: none;
+}
+
+.card-back-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .card-face {

@@ -1,5 +1,8 @@
+import {getActiveCardBack} from "../../domain/catalog";
 import type { DrawnRenderableCard } from "../../domain/draw";
 import type { SpreadDefinition } from "../../domain/tarot";
+
+const activeCardBack = getActiveCardBack();
 
 function createDefaultSpreadLayout(cardCount: number) {
   const columns = Math.min(cardCount, 5);
@@ -59,7 +62,17 @@ export function CardVisual({
 
   return (
     <div className={className}>
-      <span className="card-back" />
+      <span className={`card-back${activeCardBack ? " has-image" : ""}`}>
+        {activeCardBack ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="card-back-image"
+            src={activeCardBack.image}
+            alt=""
+            aria-hidden="true"
+          />
+        ) : null}
+      </span>
       <span className="card-face">
         {drawn.card.asset.image ? (
           // 牌组流水线已经输出不可变的优化 WebP 文件
