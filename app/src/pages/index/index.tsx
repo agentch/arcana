@@ -3,6 +3,10 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
 import {
+  readDailyCardRecord,
+  writeDailyCardRecord,
+} from '@/features/daily/daily-card-record'
+import {
   prependSingleReading,
   readSingleReadingHistory,
   removeSingleReading,
@@ -19,6 +23,12 @@ import {
   getQuestionCategories,
   getSpread,
 } from '@arcana/tarot-core/domain/catalog'
+import {
+  DAILY_CATEGORY_ID,
+  DAILY_QUESTION,
+  getLocalDateKey,
+  pickDailyCard,
+} from '@arcana/tarot-core/domain/daily-card'
 import {
   drawForSpread,
   type DrawnRenderableCard,
@@ -44,6 +54,7 @@ export default function Index() {
   const updateDraft = useReadingStore((state) => state.updateDraft)
   const resetDraft = useReadingStore((state) => state.reset)
   const [phase, setPhase] = useState<ReadingPhase>('question')
+  const [dailyMode, setDailyMode] = useState(false)
   const [drawnCard, setDrawnCard] = useState<DrawnRenderableCard | null>(null)
   const [interpretation, setInterpretation] =
     useState<InterpretationView | null>(null)
@@ -89,10 +100,56 @@ export default function Index() {
     updateDraft({ question: prompt })
   }
 
+  const startDailyReading = async () => {
+    const dateKey = getLocalDateKey()
+    const existing = readDailyCardRecord()
+    const spread = getSpread('single-card')
+    const position = spread.positions[0]
+
+    setDailyMode(true)
+    setSavedReadingId(null)
+    setSaveStatus('')
+    updateDraft({
+      question: DAILY_QUESTION,
+      questionCategoryId: DAILY_CATEGORY_ID,
+      spreadId: 'single-card',
+    })
+
+    if (existing?.dateKey === dateKey) {
+      const card = cards.find((item) => item.id === existing.cardId)
+      if (card) {
+        const nextDrawn: DrawnRenderableCard = {
+          card,
+          orientation: existing.orientation,
+          position,
+        }
+        setDrawnCard(nextDrawn)
+        setInterpretation(
+          composeInterpretation({
+            card,
+            layeredMeaning: getLayeredMeaning(card.id),
+            orientation: existing.orientation,
+            topicId: getMeaningTopic(DAILY_CATEGORY_ID),
+            position,
+          }),
+        )
+        setPhase('result')
+        await triggerHaptic()
+        return
+      }
+    }
+
+    setDrawnCard(null)
+    setInterpretation(null)
+    setPhase('shuffle')
+    await triggerHaptic()
+  }
+
   const beginRitual = async () => {
     if (!question.trim() || !questionCategoryId) return
 
     await triggerHaptic()
+    setDailyMode(false)
     setDrawnCard(null)
     setInterpretation(null)
     setSavedReadingId(null)
@@ -105,7 +162,12 @@ export default function Index() {
 
     await triggerHaptic()
     const spread = getSpread('single-card')
-    const [drawn] = drawForSpread(cards, spread)
+    const drawn = dailyMode
+      ? {
+          ...pickDailyCard(cards, getLocalDateKey()),
+          position: spread.positions[0],
+        }
+      : drawForSpread(cards, spread)[0]
     const nextInterpretation = composeInterpretation({
       card: drawn.card,
       layeredMeaning: getLayeredMeaning(drawn.card.id),
@@ -115,12 +177,21 @@ export default function Index() {
     })
     setDrawnCard(drawn)
     setInterpretation(nextInterpretation)
+    if (dailyMode) {
+      writeDailyCardRecord({
+        dateKey: getLocalDateKey(),
+        cardId: drawn.card.id,
+        orientation: drawn.orientation,
+        revealedAt: new Date().toISOString(),
+      })
+    }
     setPhase('reveal')
     await triggerHaptic()
   }
 
   const startAgain = () => {
     resetDraft()
+    setDailyMode(false)
     setDrawnCard(null)
     setInterpretation(null)
     setSavedReadingId(null)
@@ -183,6 +254,7 @@ export default function Index() {
       position,
     })
 
+    setDailyMode(false)
     updateDraft({
       question: reading.question,
       questionCategoryId: reading.questionCategoryId,
@@ -213,7 +285,9 @@ export default function Index() {
           : phase === 'reveal'
             ? '牌面正在显现'
             : phase === 'result'
-              ? '牌面已经回应'
+              ? dailyMode
+                ? '今日的牌已经回应'
+                : '牌面已经回应'
               : '带一个问题来到牌前'
 
   const pageSummary =
@@ -228,12 +302,24 @@ export default function Index() {
   return (
     <View className='reading-page'>
       <View className='reading-page__glow' />
-      <Text className='reading-page__eyebrow'>ARCANA · 单牌启示</Text>
+      <Text className='reading-page__eyebrow'>
+        ARCANA · {dailyMode ? '今日一牌' : '单牌启示'}
+      </Text>
       <Text className='reading-page__title'>{pageTitle}</Text>
       <Text className='reading-page__summary'>{pageSummary}</Text>
 
       {phase === 'question' ? (
         <>
+          <Button className='daily-entry' onClick={startDailyReading}>
+            <Text className='daily-entry__symbol'>☼</Text>
+            <View className='daily-entry__content'>
+              <Text className='daily-entry__title'>今日一牌</Text>
+              <Text className='daily-entry__description'>
+                同一天保持同一张牌，随时回来查看
+              </Text>
+            </View>
+          </Button>
+          <Text className='mode-divider'>或者，带着一个问题开始</Text>
           <View className='reading-section'>
             <Text className='reading-section__label'>问题方向</Text>
             <View className='choice-grid'>

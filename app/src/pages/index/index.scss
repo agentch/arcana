@@ -97,6 +97,67 @@
   }
 }
 
+.daily-entry {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  margin-top: 40px;
+  padding: 26px 28px;
+  border: 1px solid rgb(215 181 109 / 42%);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 12% 50%, rgb(215 181 109 / 16%), transparent 28%),
+    rgb(255 255 255 / 5%);
+  color: $color-paper;
+  text-align: left;
+
+  &::after {
+    border: 0;
+  }
+
+  &__symbol {
+    display: grid;
+    width: 74px;
+    height: 74px;
+    flex: 0 0 auto;
+    color: $color-gold;
+    font-size: 50px;
+    place-items: center;
+  }
+
+  &__content,
+  &__title,
+  &__description {
+    display: block;
+  }
+
+  &__content {
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 28px;
+  }
+
+  &__description {
+    margin-top: 8px;
+    color: $color-muted;
+    font-size: 21px;
+    line-height: 1.45;
+    white-space: normal;
+  }
+}
+
+.mode-divider {
+  display: block;
+  margin: 32px 0 -16px;
+  color: $color-muted;
+  font-size: 21px;
+  text-align: center;
+}
+
 .history-link {
   margin-top: 20px;
   border: 0;
