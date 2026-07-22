@@ -1,0 +1,94 @@
+@use '../../styles/tokens' as *;
+
+.foundation-page {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 96px $space-page 64px;
+  background:
+    radial-gradient(circle at 84% 12%, rgb(215 181 109 / 18%), transparent 28%),
+    linear-gradient(155deg, $color-midnight, #171735 58%, #222043);
+
+  &__orb {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 44px;
+    border: 2px solid rgb(215 181 109 / 72%);
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 18px rgb(215 181 109 / 6%),
+      inset 0 0 32px rgb(215 181 109 / 20%);
+  }
+
+  &__eyebrow,
+  &__title,
+  &__summary,
+  &__note {
+    display: block;
+  }
+
+  &__eyebrow {
+    margin-bottom: 18px;
+    color: $color-gold;
+    font-size: 22px;
+    letter-spacing: 5px;
+  }
+
+  &__title {
+    max-width: 620px;
+    margin-bottom: 24px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 56px;
+    line-height: 1.22;
+  }
+
+  &__summary {
+    max-width: 640px;
+    color: $color-muted;
+    font-size: 28px;
+    line-height: 1.75;
+  }
+
+  &__button {
+    margin-top: 36px;
+    border: 1px solid rgb(215 181 109 / 64%);
+    border-radius: 999px;
+    background: rgb(215 181 109 / 12%);
+    color: $color-paper;
+    font-size: 28px;
+  }
+
+  &__button::after {
+    border: 0;
+  }
+
+  &__note {
+    margin-top: 22px;
+    color: $color-muted;
+    font-size: 22px;
+    text-align: center;
+  }
+}
+
+.foundation-card {
+  margin-top: 52px;
+  padding: 28px 30px;
+  border: 1px solid rgb(215 181 109 / 18%);
+  border-radius: $radius-card;
+  background: rgb(255 255 255 / 5%);
+  backdrop-filter: blur(18px);
+
+  &__item {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    padding: 14px 0;
+    color: $color-paper;
+    font-size: 26px;
+  }
+
+  &__marker {
+    color: $color-gold;
+  }
+}
