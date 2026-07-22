@@ -6,6 +6,7 @@
 /outputs/
 /work/
 /public/tarot/
+/public/assets/card-backs/
 
 # Generated framework files
 next-env.d.ts

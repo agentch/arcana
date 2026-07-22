@@ -3,6 +3,7 @@ import test from "node:test";
 import {
   composeShareCardContent,
   composeShareText,
+  planShareCardSlots,
 } from "../app/domain/share-card.ts";
 
 const interpretations = [
@@ -76,4 +77,11 @@ test("composeShareText includes cards and disclaimer without winner claims", () 
   assert.match(text, /愚人（正位）/);
   assert.match(text, /不是写定的预言/);
   assert.doesNotMatch(text, /必须选|胜者/);
+});
+
+test("five-card share layout keeps every card in the canvas content area", () => {
+  const slots = planShareCardSlots(5);
+  assert.equal(slots.length, 5);
+  assert.equal(new Set(slots.map((slot) => `${slot.x}:${slot.y}`)).size, 5);
+  assert.ok(Math.max(...slots.map((slot) => slot.y + slot.height)) <= 380);
 });

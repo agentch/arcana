@@ -1,6 +1,6 @@
 # Arcana 可点击原型
 
-Arcana 移动端 Web 原型，用于验证单牌占卜的页面结构、交互节奏和视觉方向。
+Arcana 移动端 Web 原型，用于验证完整78张牌、五种牌阵、对话式引导、仪式化抽牌和结构化解读。
 
 ## Prerequisites
 
@@ -19,14 +19,14 @@ npm run build
 - 首页
 - 问题输入与示例问题
 - 洗牌和跳过动效
-- 单牌与时间流牌阵选择
-- 时间流过去、现在、未来三张无重复抽取与逐张翻牌
+- 单牌、时间流、圣三角、恋爱关系五牌阵和二选一牌阵
+- 完整78张牌无重复抽取、逐张翻牌与牌阵组合解读
 - 正位 / 逆位
 - 翻牌与固定解读
-- 本地保存和最近记录
+- 今日一牌、本地保存、最近记录和分享卡片
 - 移动端、键盘操作和减少动态效果
 
-当前已包含22张大阿卡纳 v1 原型短文案、1张“愚人”完整 v2 分层样例，以及通过审核的完整78张 RWS Pam-A 正面牌。v2 样例仍处于内容草稿状态，不能视为已审核正式牌义。
+当前已包含通过结构与内容质量门槛的78张分层 v2 牌义、完整 RWS Pam-A 正面牌和独立审核的 Arcana 原创牌背。
 
 ## 数据边界
 
@@ -49,6 +49,7 @@ npm run build
 
 ```bash
 npm run data:validate
+npm run typecheck
 npm run data:migrate:v2
 npm run assets:audit:commons -- --input <Commons API JSON>
 npm run assets:verify
@@ -56,7 +57,7 @@ npm run assets:build:web
 npm test
 ```
 
-`data:validate` 会执行 v1/v2 JSON Schema 校验，并检查 card ID 唯一性、牌组素材映射完整性、牌阵位置顺序、主题映射、问题推荐牌阵和版本化边界。
+`typecheck` 执行应用与 Cloudflare Worker 全量 TypeScript 检查。`data:validate` 会执行 v1/v2 JSON Schema 校验，并检查 card ID 唯一性、牌组素材映射完整性、牌阵位置顺序、主题映射、问题推荐牌阵和版本化边界。
 
 `data:migrate:v2` 默认将22张 v1 内容生成到标准输出；使用 `-- --output <目录>` 可以生成逐卡编辑草稿。自动迁移结果包含明确的待编辑内容，只能作为内容团队的脚手架，不能直接标记为正式牌义。
 

@@ -8,12 +8,14 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const deckRoot = resolve(root, "app/data/decks/rws-original");
 const deckPath = resolve(deckRoot, "deck.json");
 const manifestPath = resolve(deckRoot, "manifest.json");
+const cardBacksPath = resolve(deckRoot, "card-backs.json");
 const cardIndexPath = resolve(root, "app/data/card-index.json");
 const activeDeckPath = resolve(
   root,
   "app/data/deck-manifests/rws-original.json",
 );
 const publicRoot = resolve(root, "public/tarot/rws-original");
+const publicCardBackRoot = resolve(root, "public/assets/card-backs");
 
 async function readJson(path) {
   return JSON.parse(await readFile(path, "utf8"));
@@ -94,9 +96,10 @@ function assertRecordedFile(recorded, actual, label) {
 }
 
 export async function verifyAssets() {
-  const [deck, manifest] = await Promise.all([
+  const [deck, manifest, cardBacks] = await Promise.all([
     readJson(deckPath),
     readJson(manifestPath),
+    readJson(cardBacksPath),
   ]);
   const assets = Object.values(manifest.assets);
 
@@ -136,6 +139,16 @@ export async function verifyAssets() {
     }
   }
 
+  for (const cardBack of cardBacks.backs) {
+    const sourceActual = await inspectFile(cardBack.source.file, "source");
+    const webActual = await inspectFile(cardBack.web.file, "web");
+    assertRecordedFile(cardBack.source, sourceActual, `${cardBack.id}.source`);
+    assertRecordedFile(cardBack.web, webActual, `${cardBack.id}.web`);
+    if (cardBack.license.status !== "approved") {
+      throw new Error(`${cardBack.id} license must be approved`);
+    }
+  }
+
   return {
     total: assets.length,
     pending: assets.filter((asset) => asset.status === "pending-source").length,
@@ -145,7 +158,7 @@ export async function verifyAssets() {
   };
 }
 
-async function syncPublicAssets(deck, manifest, cardIndex) {
+async function syncPublicAssets(deck, manifest, cardIndex, cardBacks) {
   await mkdir(publicRoot, {recursive: true});
   for (const asset of Object.values(manifest.assets)) {
     if (asset.status !== "web-ready" && asset.status !== "approved") {
@@ -153,6 +166,23 @@ async function syncPublicAssets(deck, manifest, cardIndex) {
     }
     const webPath = resolveDeckFile(asset.web.file, "web");
     await copyFile(webPath, resolve(publicRoot, `${asset.cardId}.webp`));
+  }
+  await mkdir(publicCardBackRoot, {recursive: true});
+  for (const cardBack of cardBacks.backs) {
+    const expectedPrefix = "/assets/card-backs/";
+    if (
+      !cardBack.web.publicPath.startsWith(expectedPrefix) ||
+      cardBack.web.publicPath.includes("..")
+    ) {
+      throw new Error(`${cardBack.id} has an invalid public card-back path`);
+    }
+    await copyFile(
+      resolveDeckFile(cardBack.web.file, "web"),
+      resolve(
+        publicCardBackRoot,
+        cardBack.web.publicPath.slice(expectedPrefix.length),
+      ),
+    );
   }
 
   const activeDeck = {
@@ -181,10 +211,11 @@ async function syncPublicAssets(deck, manifest, cardIndex) {
 }
 
 async function buildWebAssets({rebuild = false} = {}) {
-  const [deck, manifest, cardIndex] = await Promise.all([
+  const [deck, manifest, cardIndex, cardBacks] = await Promise.all([
     readJson(deckPath),
     readJson(manifestPath),
     readJson(cardIndexPath),
+    readJson(cardBacksPath),
   ]);
   let built = 0;
   await mkdir(resolve(deckRoot, "web"), {recursive: true});
@@ -227,7 +258,7 @@ async function buildWebAssets({rebuild = false} = {}) {
     `${JSON.stringify(manifest, null, 2)}\n`,
     "utf8",
   );
-  await syncPublicAssets(deck, manifest, cardIndex);
+  await syncPublicAssets(deck, manifest, cardIndex, cardBacks);
   return built;
 }
 
@@ -279,12 +310,13 @@ if (command === "verify") {
   const approved = await approveAssets();
   process.stdout.write(`Approved ${approved} verified RWS assets.\n`);
 } else if (command === "sync-public") {
-  const [deck, manifest, cardIndex] = await Promise.all([
+  const [deck, manifest, cardIndex, cardBacks] = await Promise.all([
     readJson(deckPath),
     readJson(manifestPath),
     readJson(cardIndexPath),
+    readJson(cardBacksPath),
   ]);
-  await syncPublicAssets(deck, manifest, cardIndex);
+  await syncPublicAssets(deck, manifest, cardIndex, cardBacks);
   process.stdout.write(`Synced ${manifest.cardCount} public RWS assets.\n`);
 } else {
   throw new Error(`Unknown command: ${command}`);

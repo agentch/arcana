@@ -60,6 +60,7 @@ import type {
 } from "./domain/tarot";
 import { triggerHaptic } from "./platform/haptics";
 import {shareCard} from "./platform/share";
+import {readLocalJson, writeLocalJson} from "./platform/storage.ts";
 
 const cards = getCards();
 const enabledSpreads = getEnabledSpreads();
@@ -114,25 +115,21 @@ function normalizeHistoryItem(
 }
 
 function readHistory(): Reading[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const stored = JSON.parse(
-      window.localStorage.getItem("arcana-history") ?? "[]",
-    ) as Array<
-      Reading & {
-        cardId?: string;
-        cardName?: string;
-        orientation?: Orientation;
-      }
-    >;
+  const stored =
+    readLocalJson<
+      Array<
+        Reading & {
+          cardId?: string;
+          cardName?: string;
+          orientation?: Orientation;
+        }
+      >
+    >("arcana-history") ?? [];
 
-    return stored.flatMap((item) => {
-      const normalized = normalizeHistoryItem(item);
-      return normalized ? [normalized] : [];
-    });
-  } catch {
-    return [];
-  }
+  return stored.flatMap((item) => {
+    const normalized = normalizeHistoryItem(item);
+    return normalized ? [normalized] : [];
+  });
 }
 
 function getSpreadName(spreadId: string): string {
@@ -610,7 +607,7 @@ export function ArcanaPrototype() {
     };
     const updated = [next, ...history].slice(0, 12);
     setHistory(updated);
-    window.localStorage.setItem("arcana-history", JSON.stringify(updated));
+    writeLocalJson("arcana-history", updated);
     dispatchFlow({ type: "save" });
   }
 

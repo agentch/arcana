@@ -16,6 +16,37 @@ export type ShareCardContent = {
   disclaimer: string;
 };
 
+export type ShareCardSlot = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+/** 为1–5张牌生成不会截断的分享卡布局。 */
+export function planShareCardSlots(cardCount: number): ShareCardSlot[] {
+  const count = Math.max(0, Math.min(5, cardCount));
+  if (count <= 3) {
+    return Array.from({length: count}, (_, index) => ({
+      x: 0,
+      y: index * 146,
+      width: 888,
+      height: 138,
+    }));
+  }
+
+  return Array.from({length: count}, (_, index) => {
+    if (index === 0) return {x: 0, y: 0, width: 888, height: 116};
+    const compactIndex = index - 1;
+    return {
+      x: (compactIndex % 2) * 456,
+      y: 126 + Math.floor(compactIndex / 2) * 126,
+      width: 432,
+      height: 116,
+    };
+  });
+}
+
 type ComposeShareCardInput = {
   title: string;
   question: string;

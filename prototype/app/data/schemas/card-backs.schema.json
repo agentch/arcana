@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["schemaVersion", "deckId", "defaultBackId", "backs", "fallbackPolicy"],
   "properties": {
-    "schemaVersion": {"type": "string", "const": "1.0"},
+    "schemaVersion": {"type": "string", "const": "2.0"},
     "deckId": {"type": "string", "minLength": 1},
     "defaultBackId": {
       "oneOf": [
@@ -16,18 +16,64 @@
     },
     "backs": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["id", "origin", "source", "web"],
-        "properties": {
-          "id": {"type": "string", "minLength": 1},
-          "origin": {"type": "string", "enum": ["rws-source", "arcana-original"]},
-          "source": {"type": ["string", "null"]},
-          "web": {"type": ["string", "null"]}
-        }
-      }
+      "items": {"$ref": "#/$defs/cardBack"}
     },
     "fallbackPolicy": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["file", "mediaType", "width", "height", "bytes", "sha256"],
+      "properties": {
+        "file": {"type": "string", "minLength": 1},
+        "originalFileName": {"type": "string", "minLength": 1},
+        "publicPath": {"type": "string", "pattern": "^/assets/card-backs/[a-z0-9-]+\\.webp$"},
+        "mediaType": {"type": "string", "enum": ["image/png", "image/webp"]},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "name", "commercialUse", "modification", "redistribution", "notes"],
+      "properties": {
+        "status": {"const": "approved"},
+        "name": {"type": "string", "minLength": 1},
+        "commercialUse": {"const": "allowed"},
+        "modification": {"const": "allowed"},
+        "redistribution": {"type": "string", "enum": ["allowed", "project-controlled"]},
+        "notes": {"type": "string", "minLength": 1}
+      }
+    },
+    "cardBack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "origin", "author", "version", "createdAt", "license", "source", "web"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+        "name": {"type": "string", "minLength": 1},
+        "origin": {"type": "string", "enum": ["rws-source", "arcana-original"]},
+        "author": {"type": "string", "minLength": 1},
+        "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+        "createdAt": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        "license": {"$ref": "#/$defs/license"},
+        "source": {
+          "allOf": [
+            {"$ref": "#/$defs/asset"},
+            {"type": "object", "required": ["originalFileName"]}
+          ]
+        },
+        "web": {
+          "allOf": [
+            {"$ref": "#/$defs/asset"},
+            {"type": "object", "required": ["publicPath"]}
+          ]
+        }
+      }
+    }
   }
 }

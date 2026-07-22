@@ -1,5 +1,5 @@
 import type {ShareCardContent} from "../domain/share-card";
-import {composeShareText} from "../domain/share-card";
+import {composeShareText, planShareCardSlots} from "../domain/share-card";
 
 export type ShareResult =
   | {status: "shared"}
@@ -75,8 +75,10 @@ export async function renderShareCardBlob(
   context.fillStyle = "#f4eedf";
   context.font = "600 64px Georgia, 'Times New Roman', serif";
   const titleLines = wrapText(context, content.title, width - 192);
+  const visibleCards = content.cards.slice(0, 5);
+  const compactCards = visibleCards.length >= 4;
   let cursorY = 230;
-  for (const line of titleLines.slice(0, 2)) {
+  for (const line of titleLines.slice(0, compactCards ? 1 : 2)) {
     context.fillText(line, 96, cursorY);
     cursorY += 78;
   }
@@ -89,7 +91,7 @@ export async function renderShareCardBlob(
       context,
       content.question,
       width - 192,
-    ).slice(0, 3)) {
+    ).slice(0, compactCards ? 2 : 3)) {
       context.fillText(line, 96, cursorY);
       cursorY += 48;
     }
@@ -103,33 +105,47 @@ export async function renderShareCardBlob(
   context.stroke();
   cursorY += 70;
 
-  const visibleCards = content.cards.slice(0, 5);
-  for (const card of visibleCards) {
+  const cardStartY = cursorY;
+  const slots = planShareCardSlots(visibleCards.length);
+  for (const [index, card] of visibleCards.entries()) {
+    const slot = slots[index];
+    const cardX = 96 + slot.x;
+    let cardY = cardStartY + slot.y;
     context.fillStyle = "#d6b978";
-    context.font = "500 28px Georgia, 'Times New Roman', serif";
-    context.fillText(card.positionName, 96, cursorY);
-    cursorY += 46;
+    context.font = compactCards
+      ? "500 22px Georgia, 'Times New Roman', serif"
+      : "500 28px Georgia, 'Times New Roman', serif";
+    context.fillText(card.positionName, cardX, cardY, slot.width);
+    cardY += compactCards ? 34 : 46;
 
     context.fillStyle = "#f4eedf";
-    context.font = "600 44px Georgia, 'Times New Roman', serif";
+    context.font = compactCards
+      ? "600 32px Georgia, 'Times New Roman', serif"
+      : "600 44px Georgia, 'Times New Roman', serif";
     context.fillText(
       `${card.cardName} · ${card.orientationName}`,
-      96,
-      cursorY,
+      cardX,
+      cardY,
+      slot.width,
     );
-    cursorY += 48;
+    cardY += compactCards ? 38 : 48;
 
     if (card.keywords.length > 0) {
       context.fillStyle = "rgba(244, 238, 223, 0.62)";
-      context.font = "400 28px Georgia, 'Times New Roman', serif";
-      context.fillText(card.keywords.join(" · "), 96, cursorY);
-      cursorY += 52;
-    } else {
-      cursorY += 12;
+      context.font = compactCards
+        ? "400 21px Georgia, 'Times New Roman', serif"
+        : "400 28px Georgia, 'Times New Roman', serif";
+      context.fillText(
+        card.keywords.join(" · "),
+        cardX,
+        cardY,
+        slot.width,
+      );
     }
-
-    if (cursorY > height - 280) break;
   }
+  cursorY =
+    cardStartY +
+    slots.reduce((bottom, slot) => Math.max(bottom, slot.y + slot.height), 0);
 
   if (content.highlight) {
     cursorY += 12;
@@ -139,7 +155,7 @@ export async function renderShareCardBlob(
       context,
       content.highlight,
       width - 192,
-    ).slice(0, 4)) {
+    ).slice(0, compactCards ? 2 : 4)) {
       context.fillText(line, 96, cursorY);
       cursorY += 46;
     }

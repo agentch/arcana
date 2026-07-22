@@ -1,13 +1,41 @@
 {
-  "schemaVersion": "1.0",
+  "schemaVersion": "2.0",
   "deckId": "rws-original",
   "defaultBackId": "arcana-starpath-mirror",
   "backs": [
     {
       "id": "arcana-starpath-mirror",
+      "name": "Arcana Starpath Mirror",
       "origin": "arcana-original",
-      "source": "/assets/card-backs/arcana-starpath-mirror-card-back.png",
-      "web": "/assets/card-backs/arcana-starpath-mirror-card-back.webp"
+      "author": "Arcana",
+      "version": "1.0.0",
+      "createdAt": "2026-07-21",
+      "license": {
+        "status": "approved",
+        "name": "Arcana project original",
+        "commercialUse": "allowed",
+        "modification": "allowed",
+        "redistribution": "project-controlled",
+        "notes": "Arcana 原创牌背，仅作为独立牌背素材使用，不与 RWS 正面牌版权状态混合。"
+      },
+      "source": {
+        "file": "source/card-backs/arcana-starpath-mirror-card-back.png",
+        "originalFileName": "arcana-starpath-mirror-card-back.png",
+        "mediaType": "image/png",
+        "width": 1024,
+        "height": 1536,
+        "bytes": 3235205,
+        "sha256": "5505ed7975a8d98085d63596ff8a05f1241191845cd7a0d5c1459dc474aa5c7f"
+      },
+      "web": {
+        "file": "web/card-backs/arcana-starpath-mirror-card-back.webp",
+        "publicPath": "/assets/card-backs/arcana-starpath-mirror-card-back.webp",
+        "mediaType": "image/webp",
+        "width": 720,
+        "height": 1080,
+        "bytes": 154560,
+        "sha256": "5469194e5f0459df0d6d235c398c0e84ad7eab0590753e70240b6678021a42c3"
+      }
     }
   ],
   "fallbackPolicy": "扫描批次没有授权明确的牌背时，使用独立审核的 Arcana 原创牌背，不从其他商业牌组拼接。"

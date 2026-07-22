@@ -80,10 +80,10 @@ export function getActiveCardBack(): ActiveCardBack | null {
   const defaultBackId = cardBacksJson.defaultBackId;
   if (!defaultBackId) return null;
   const back = cardBacksJson.backs.find((item) => item.id === defaultBackId);
-  if (!back?.web) return null;
+  if (!back?.web.publicPath) return null;
   return {
     id: back.id,
-    image: back.web,
+    image: back.web.publicPath,
     origin: back.origin as ActiveCardBack["origin"],
   };
 }

@@ -1,4 +1,5 @@
 import type {Orientation, RenderableCard} from "./tarot";
+import {readLocalJson, writeLocalJson} from "../platform/storage.ts";
 
 export const DAILY_QUESTION = "今天，我最需要看见什么？";
 export const DAILY_STORAGE_KEY = "arcana-daily-card";
@@ -53,25 +54,17 @@ export function pickDailyCard(
 }
 
 export function readDailyCardRecord(): DailyCardRecord | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(DAILY_STORAGE_KEY);
-    if (!raw) return null;
-    const record = JSON.parse(raw) as DailyCardRecord;
-    if (
-      !record?.dateKey ||
-      !record.cardId ||
-      (record.orientation !== "upright" && record.orientation !== "reversed")
-    ) {
-      return null;
-    }
-    return record;
-  } catch {
+  const record = readLocalJson<DailyCardRecord>(DAILY_STORAGE_KEY);
+  if (
+    !record?.dateKey ||
+    !record.cardId ||
+    (record.orientation !== "upright" && record.orientation !== "reversed")
+  ) {
     return null;
   }
+  return record;
 }
 
-export function writeDailyCardRecord(record: DailyCardRecord): void {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(DAILY_STORAGE_KEY, JSON.stringify(record));
+export function writeDailyCardRecord(record: DailyCardRecord): boolean {
+  return writeLocalJson(DAILY_STORAGE_KEY, record);
 }
