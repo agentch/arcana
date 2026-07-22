@@ -1,0 +1,15 @@
+{
+  "name": "@arcana/tarot-core",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./catalog": "./src/domain/catalog.ts",
+    "./daily-card": "./src/domain/daily-card.ts",
+    "./draw": "./src/domain/draw.ts",
+    "./interpretation": "./src/domain/interpretation.ts",
+    "./share-card": "./src/domain/share-card.ts",
+    "./tarot": "./src/domain/tarot.ts"
+  }
+}

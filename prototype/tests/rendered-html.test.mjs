@@ -39,15 +39,15 @@ test("server-renders the Arcana prototype shell", async () => {
 
 test("keeps meanings, deck assets, and spreads referentially valid", async () => {
   const [meanings, deck, spreads] = await Promise.all([
-    readFile(new URL("../app/data/card-meanings.json", import.meta.url), "utf8"),
+    readFile(new URL("../../packages/tarot-core/src/data/card-meanings.json", import.meta.url), "utf8"),
     readFile(
       new URL(
-        "../app/data/deck-manifests/rws-original.json",
+        "../../packages/tarot-core/src/data/deck-manifests/rws-original.json",
         import.meta.url,
       ),
       "utf8",
     ),
-    readFile(new URL("../app/data/spreads.json", import.meta.url), "utf8"),
+    readFile(new URL("../../packages/tarot-core/src/data/spreads.json", import.meta.url), "utf8"),
   ]).then((files) => files.map((content) => JSON.parse(content)));
 
   const cardIds = meanings.cards.map((card) => card.id);

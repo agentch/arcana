@@ -5,14 +5,14 @@ import {fileURLToPath} from "node:url";
 import sharp from "sharp";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const deckRoot = resolve(root, "app/data/decks/rws-original");
+const deckRoot = resolve(root, "../packages/tarot-core/src/data/decks/rws-original");
 const deckPath = resolve(deckRoot, "deck.json");
 const manifestPath = resolve(deckRoot, "manifest.json");
 const cardBacksPath = resolve(deckRoot, "card-backs.json");
-const cardIndexPath = resolve(root, "app/data/card-index.json");
+const cardIndexPath = resolve(root, "../packages/tarot-core/src/data/card-index.json");
 const activeDeckPath = resolve(
   root,
-  "app/data/deck-manifests/rws-original.json",
+  "../packages/tarot-core/src/data/deck-manifests/rws-original.json",
 );
 const publicRoot = resolve(root, "public/tarot/rws-original");
 const publicCardBackRoot = resolve(root, "public/assets/card-backs");

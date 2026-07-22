@@ -14,7 +14,7 @@ if (!inputPath) {
 
 const [apiResponse, cardIndex] = await Promise.all([
   readFile(inputPath, "utf8").then(JSON.parse),
-  readFile(resolve(root, "app/data/card-index.json"), "utf8").then(JSON.parse),
+  readFile(resolve(root, "../packages/tarot-core/src/data/card-index.json"), "utf8").then(JSON.parse),
 ]);
 
 const rankByNumber = [
@@ -126,7 +126,7 @@ const audit = {
 };
 
 await writeFile(
-  resolve(root, "app/data/decks/rws-original/source-audit.json"),
+  resolve(root, "../packages/tarot-core/src/data/decks/rws-original/source-audit.json"),
   `${JSON.stringify(audit, null, 2)}\n`,
   "utf8",
 );

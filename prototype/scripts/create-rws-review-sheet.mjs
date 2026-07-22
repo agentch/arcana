@@ -4,7 +4,7 @@ import sharp from "sharp";
 
 const root = resolve(import.meta.dirname, "..");
 const cardIndex = JSON.parse(
-  await readFile(resolve(root, "app/data/card-index.json"), "utf8"),
+  await readFile(resolve(root, "../packages/tarot-core/src/data/card-index.json"), "utf8"),
 );
 const output = resolve(
   process.cwd(),

@@ -52,7 +52,7 @@ data/
         └── LICENSES/              # 授权文本和来源证据
 ```
 
-当前工程实现位于 `prototype/app/data/decks/rws-original/`。在正式 Taro 工程初始化后按相同相对结构迁移，不改变 `cardId` 或 Manifest 语义。
+当前工程实现位于 `packages/tarot-core/src/data/decks/rws-original/`，由 Web 原型和正式 Taro 应用共享，不改变 `cardId` 或 Manifest 语义。
 
 牌义与图片严格分离：
 

@@ -2,7 +2,7 @@ import {access, mkdir, writeFile} from "node:fs/promises";
 import {resolve} from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
-const dataRoot = resolve(root, "app/data");
+const dataRoot = resolve(root, "../packages/tarot-core/src/data");
 const deckRoot = resolve(dataRoot, "decks/rws-original");
 
 const majorNames = [

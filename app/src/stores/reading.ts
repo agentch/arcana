@@ -14,7 +14,7 @@ type ReadingState = ReadingDraft & {
 const initialState: ReadingDraft = {
   questionCategoryId: null,
   question: '',
-  spreadId: 'single',
+  spreadId: 'single-card',
 }
 
 export const useReadingStore = create<ReadingState>((set) => ({

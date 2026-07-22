@@ -21,8 +21,8 @@ const position = {
 
 test("composes layered meaning from orientation, topic, and spread position", async () => {
   const [catalog, foolV2] = await Promise.all([
-    readJson("../app/data/card-meanings.json"),
-    readJson("../app/data/cards/major-00.json"),
+    readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-00.json"),
   ]);
   const foolV1 = {
     ...catalog.cards[0],
@@ -50,8 +50,8 @@ test("composes layered meaning from orientation, topic, and spread position", as
 
 test("composes a non-Fool reversed topic independently", async () => {
   const [catalog, magicianV2] = await Promise.all([
-    readJson("../app/data/card-meanings.json"),
-    readJson("../app/data/cards/major-01.json"),
+    readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-01.json"),
   ]);
   const magicianV1 = {
     ...catalog.cards[1],
@@ -75,10 +75,10 @@ test("composes a non-Fool reversed topic independently", async () => {
 
 test("composes a fused multi-card spread summary", async () => {
   const [catalog, foolV2, magicianV2, worldV2] = await Promise.all([
-    readJson("../app/data/card-meanings.json"),
-    readJson("../app/data/cards/major-00.json"),
-    readJson("../app/data/cards/major-01.json"),
-    readJson("../app/data/cards/major-21.json"),
+    readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-00.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-01.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-21.json"),
   ]);
   const fool = {
     ...catalog.cards[0],
@@ -159,10 +159,10 @@ test("composes a fused multi-card spread summary", async () => {
 
 test("composes a sacred-triangle spread summary", async () => {
   const [catalog, foolV2, magicianV2, worldV2] = await Promise.all([
-    readJson("../app/data/card-meanings.json"),
-    readJson("../app/data/cards/major-00.json"),
-    readJson("../app/data/cards/major-01.json"),
-    readJson("../app/data/cards/major-21.json"),
+    readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-00.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-01.json"),
+    readJson("../../packages/tarot-core/src/data/cards/major-21.json"),
   ]);
   const interpretations = [
     composeInterpretation({
@@ -234,12 +234,12 @@ test("composes a sacred-triangle spread summary", async () => {
 test("composes a relationship-five spread summary", async () => {
   const [catalog, foolV2, magicianV2, deathV2, towerV2, worldV2] =
     await Promise.all([
-      readJson("../app/data/card-meanings.json"),
-      readJson("../app/data/cards/major-00.json"),
-      readJson("../app/data/cards/major-01.json"),
-      readJson("../app/data/cards/major-13.json"),
-      readJson("../app/data/cards/major-16.json"),
-      readJson("../app/data/cards/major-21.json"),
+      readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-00.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-01.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-13.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-16.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-21.json"),
     ]);
 
   const makeCard = (index, symbol, alt) => ({
@@ -332,12 +332,12 @@ test("composes a relationship-five spread summary", async () => {
 test("composes a choice-five spread summary without declaring a winner", async () => {
   const [catalog, foolV2, magicianV2, deathV2, towerV2, worldV2] =
     await Promise.all([
-      readJson("../app/data/card-meanings.json"),
-      readJson("../app/data/cards/major-00.json"),
-      readJson("../app/data/cards/major-01.json"),
-      readJson("../app/data/cards/major-13.json"),
-      readJson("../app/data/cards/major-16.json"),
-      readJson("../app/data/cards/major-21.json"),
+      readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-00.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-01.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-13.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-16.json"),
+      readJson("../../packages/tarot-core/src/data/cards/major-21.json"),
     ]);
 
   const makeCard = (index, symbol, alt) => ({
@@ -429,7 +429,7 @@ test("composes a choice-five spread summary without declaring a winner", async (
 });
 
 test("adapts legacy cards to the same display model without placeholders", async () => {
-  const catalog = await readJson("../app/data/card-meanings.json");
+  const catalog = await readJson("../../packages/tarot-core/src/data/card-meanings.json");
   const magician = {
     ...catalog.cards[1],
     asset: {image: null, fallbackSymbol: "✧", alt: "魔术师占位牌面"},

@@ -16,24 +16,26 @@
 | 测试 | Vitest | 牌阵、随机、数据转换优先做单测 |
 | 质量 | ESLint + Prettier | 统一代码规范 |
 
-## 3. 建议目录
+## 3. 工程目录
 
 ```text
-src/
-  pages/              # 跨端页面
-  components/         # 通用组件
-  features/           # 按业务能力拆分
-    reading/
-    spreads/
-    history/
-    sharing/
-  domain/             # 纯 TypeScript 业务规则
-  data/               # 版本化牌库与牌义
-  stores/             # Zustand 状态
-  adapters/           # 存储、分享、埋点等平台适配
-  styles/             # 设计令牌与全局样式
-  types/
+packages/
+  tarot-core/         # 共享牌库、Schema、素材与纯领域规则
+prototype/
+  app/                # 已发布 Web 原型及共享领域兼容入口
+  scripts/            # 数据校验与素材处理命令
+app/
+  src/
+    pages/            # Taro 跨端页面
+    components/       # 通用组件
+    features/         # 按业务能力拆分
+    stores/           # Zustand 状态
+    adapters/         # 存储、分享、埋点等平台适配
+    styles/           # 设计令牌与全局样式
 ```
+
+`packages/tarot-core` 是牌义、牌阵、牌组素材和领域规则的唯一来源。
+平台存储、触觉、系统分享及视图动画留在各应用适配层。
 
 ## 4. 核心领域模型
 
@@ -209,7 +211,7 @@ data/
 
 ## 6. 数据策略
 
-MVP 将牌库作为只读 JSON 随应用发布，记录默认保存在设备本地。若后续增加账号、云同步、AI 解读或运营配置，再引入 API。
+MVP 将牌义和牌阵 JSON 随应用发布，记录默认保存在设备本地。78张 WebP 牌面约16 MB：H5 使用静态资源发布；微信小程序不得直接全部放入主包，发布前需在 CDN 按需加载与分包素材之间完成决策。若后续增加账号、云同步、AI 解读或运营配置，再引入业务 API。
 
 建议接口边界提前定义，但不提前建设服务：
 
@@ -234,7 +236,7 @@ interface ReadingRepository {
 
 1. H5 预览环境：每次合并自动构建。
 2. Web 正式环境：静态资源 CDN + HTTPS。
-3. 微信小程序：同一仓库增加平台配置，完成授权、分享和隐私能力适配。
+3. 微信小程序：同一仓库增加平台配置，完成授权、分享、隐私与牌面资源包体适配；当前16 MB 牌面资源是提审阻塞项。
 4. Web 与小程序共享内容版本，发布时分别做回归验收。
 
 ## 9. 架构决策记录

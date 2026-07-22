@@ -14,12 +14,12 @@ async function readJson(relativePath) {
 
 async function loadLayeredMeanings(pattern) {
   const filenames = (
-    await readdir(new URL("../app/data/cards/", import.meta.url))
+    await readdir(new URL("../../packages/tarot-core/src/data/cards/", import.meta.url))
   )
     .filter((filename) => pattern.test(filename))
     .sort();
   return Promise.all(
-    filenames.map((filename) => readJson(`../app/data/cards/${filename}`)),
+    filenames.map((filename) => readJson(`../../packages/tarot-core/src/data/cards/${filename}`)),
   );
 }
 
@@ -78,7 +78,7 @@ test("approved pentacles minor arcana pass content quality gates", async () => {
 });
 
 test("the Fool sample remains free of shared topic skeletons", async () => {
-  const fool = await readJson("../app/data/cards/major-00.json");
+  const fool = await readJson("../../packages/tarot-core/src/data/cards/major-00.json");
   const skeletons = Object.values(fool.topics).map((topic) =>
     topicSkeleton(topic.upright),
   );

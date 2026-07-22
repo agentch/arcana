@@ -6,6 +6,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
+      '@arcana/tarot-core': resolve(
+        __dirname,
+        '..',
+        'packages',
+        'tarot-core',
+        'src',
+      ),
     },
   },
   test: {

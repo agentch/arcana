@@ -120,7 +120,7 @@ export function migrateCatalogV1ToV2(catalog) {
 
 async function runCli() {
   const source = JSON.parse(
-    await readFile(resolve(root, "app/data/card-meanings.json"), "utf8"),
+    await readFile(resolve(root, "../packages/tarot-core/src/data/card-meanings.json"), "utf8"),
   );
   const migrated = migrateCatalogV1ToV2(source);
   const outputFlagIndex = process.argv.indexOf("--output");

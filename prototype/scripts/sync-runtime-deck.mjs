@@ -9,7 +9,7 @@ import {dirname, resolve} from "node:path";
 import {fileURLToPath} from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const cardsDir = resolve(root, "app/data/cards");
+const cardsDir = resolve(root, "../packages/tarot-core/src/data/cards");
 const rankOrder = [
   "ace",
   "two",
@@ -61,8 +61,8 @@ function layeredToV1Card(layered) {
 }
 
 const [cardIndex, existingMeanings, filenames] = await Promise.all([
-  readJson("app/data/card-index.json"),
-  readJson("app/data/card-meanings.json"),
+  readJson("../packages/tarot-core/src/data/card-index.json"),
+  readJson("../packages/tarot-core/src/data/card-meanings.json"),
   readdir(cardsDir),
 ]);
 
@@ -71,7 +71,7 @@ const layeredFiles = filenames
   .sort();
 const layeredById = new Map();
 for (const filename of layeredFiles) {
-  const layered = await readJson(`app/data/cards/${filename}`);
+  const layered = await readJson(`../packages/tarot-core/src/data/cards/${filename}`);
   layeredById.set(layered.id, layered);
 }
 
@@ -107,7 +107,7 @@ const nextMeanings = {
 };
 
 await writeFile(
-  resolve(root, "app/data/card-meanings.json"),
+  resolve(root, "../packages/tarot-core/src/data/card-meanings.json"),
   `${JSON.stringify(nextMeanings, null, 2)}\n`,
   "utf8",
 );

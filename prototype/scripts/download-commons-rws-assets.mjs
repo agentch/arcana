@@ -4,7 +4,7 @@ import {resolve} from "node:path";
 import sharp from "sharp";
 
 const root = resolve(import.meta.dirname, "..");
-const deckRoot = resolve(root, "app/data/decks/rws-original");
+const deckRoot = resolve(root, "../packages/tarot-core/src/data/decks/rws-original");
 const auditPath = resolve(deckRoot, "source-audit.json");
 const deckPath = resolve(deckRoot, "deck.json");
 const manifestPath = resolve(deckRoot, "manifest.json");

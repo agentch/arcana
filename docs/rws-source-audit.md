@@ -36,7 +36,7 @@ Commons 将该分类定义为同一风格的 image set，并说明其内容是 T
 逐文件页面、原图下载地址、当前版本用户与时间、SHA-1、宽高、文件大小和许可字段保存在：
 
 ```text
-prototype/app/data/decks/rws-original/source-audit.json
+packages/tarot-core/src/data/decks/rws-original/source-audit.json
 ```
 
 ## 3. 许可证据

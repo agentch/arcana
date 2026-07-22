@@ -20,12 +20,52 @@ export default defineConfig<'vite'>(async (merge) => {
     outputRoot: 'dist',
     alias: {
       '@': resolve(__dirname, '..', 'src'),
+      '@arcana/tarot-core': resolve(
+        __dirname,
+        '..',
+        '..',
+        'packages',
+        'tarot-core',
+        'src',
+      ),
     },
     framework: 'react',
     compiler: 'vite',
     defineConstants: {},
     copy: {
-      patterns: [],
+      patterns: [
+        {
+          from: resolve(
+            __dirname,
+            '..',
+            '..',
+            'packages',
+            'tarot-core',
+            'src',
+            'data',
+            'decks',
+            'rws-original',
+            'web',
+          ),
+          to: 'tarot/rws-original',
+        },
+        {
+          from: resolve(
+            __dirname,
+            '..',
+            '..',
+            'packages',
+            'tarot-core',
+            'src',
+            'data',
+            'decks',
+            'rws-original',
+            'web',
+            'card-backs',
+          ),
+          to: 'assets/card-backs',
+        },
+      ],
       options: {},
     },
     mini: {

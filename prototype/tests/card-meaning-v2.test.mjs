@@ -15,9 +15,9 @@ async function readJson(relativePath) {
 
 test("all major arcana meanings satisfy the layered v2 schema", async () => {
   const [schema, catalog, filenames] = await Promise.all([
-    readJson("../app/data/schemas/card-meaning-v2.schema.json"),
-    readJson("../app/data/card-meanings.json"),
-    readdir(new URL("../app/data/cards/", import.meta.url)),
+    readJson("../../packages/tarot-core/src/data/schemas/card-meaning-v2.schema.json"),
+    readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+    readdir(new URL("../../packages/tarot-core/src/data/cards/", import.meta.url)),
   ]);
   const validate = new Ajv2020({allErrors: true, strict: true}).compile(schema);
   const majorFilenames = filenames
@@ -25,7 +25,7 @@ test("all major arcana meanings satisfy the layered v2 schema", async () => {
     .sort();
   const meanings = await Promise.all(
     majorFilenames.map((filename) =>
-      readJson(`../app/data/cards/${filename}`),
+      readJson(`../../packages/tarot-core/src/data/cards/${filename}`),
     ),
   );
 
@@ -77,9 +77,9 @@ const MINOR_RANK_ORDER = [
 
 async function assertMinorSuitMeanings(suit, element) {
   const [schema, cardIndex, filenames] = await Promise.all([
-    readJson("../app/data/schemas/card-meaning-v2.schema.json"),
-    readJson("../app/data/card-index.json"),
-    readdir(new URL("../app/data/cards/", import.meta.url)),
+    readJson("../../packages/tarot-core/src/data/schemas/card-meaning-v2.schema.json"),
+    readJson("../../packages/tarot-core/src/data/card-index.json"),
+    readdir(new URL("../../packages/tarot-core/src/data/cards/", import.meta.url)),
   ]);
   const validate = new Ajv2020({allErrors: true, strict: true}).compile(schema);
   const suitFilenames = filenames.filter((filename) =>
@@ -88,7 +88,7 @@ async function assertMinorSuitMeanings(suit, element) {
   const meanings = (
     await Promise.all(
       suitFilenames.map((filename) =>
-        readJson(`../app/data/cards/${filename}`),
+        readJson(`../../packages/tarot-core/src/data/cards/${filename}`),
       ),
     )
   ).sort(
@@ -142,7 +142,7 @@ test("pentacles minor arcana meanings satisfy the layered v2 schema", async () =
 });
 
 test("v1 migration preserves identity and reviewed source copy", async () => {
-  const catalog = await readJson("../app/data/card-meanings.json");
+  const catalog = await readJson("../../packages/tarot-core/src/data/card-meanings.json");
   const source = catalog.cards[0];
   const migrated = migrateCardV1ToV2(source);
 
@@ -157,8 +157,8 @@ test("v1 migration preserves identity and reviewed source copy", async () => {
 
 test("the migration can scaffold every current card", async () => {
   const [catalog, schema] = await Promise.all([
-    readJson("../app/data/card-meanings.json"),
-    readJson("../app/data/schemas/card-meaning-v2.schema.json"),
+    readJson("../../packages/tarot-core/src/data/card-meanings.json"),
+    readJson("../../packages/tarot-core/src/data/schemas/card-meaning-v2.schema.json"),
   ]);
   const migrated = migrateCatalogV1ToV2(catalog);
   const validate = new Ajv2020({allErrors: true, strict: true}).compile(schema);

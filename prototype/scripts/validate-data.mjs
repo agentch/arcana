@@ -13,7 +13,7 @@ async function readJson(path) {
 }
 
 async function readLayeredMeaningsByPattern(pattern) {
-  const cardsDirectory = resolve(root, "app/data/cards");
+  const cardsDirectory = resolve(root, "../packages/tarot-core/src/data/cards");
   const filenames = (await readdir(cardsDirectory))
     .filter((filename) => pattern.test(filename))
     .sort();
@@ -21,7 +21,7 @@ async function readLayeredMeaningsByPattern(pattern) {
   return Promise.all(
     filenames.map(async (filename) => ({
       filename,
-      meaning: await readJson(`app/data/cards/${filename}`),
+      meaning: await readJson(`../packages/tarot-core/src/data/cards/${filename}`),
     })),
   );
 }
@@ -104,29 +104,29 @@ const [
   cardBacksSchema,
   sourceAuditSchema,
 ] = await Promise.all([
-  readJson("app/data/card-meanings.json"),
-  readJson("app/data/deck-manifests/rws-original.json"),
-  readJson("app/data/spreads.json"),
-  readJson("app/data/question-prompts.json"),
-  readJson("app/data/meaning-topic-map.json"),
+  readJson("../packages/tarot-core/src/data/card-meanings.json"),
+  readJson("../packages/tarot-core/src/data/deck-manifests/rws-original.json"),
+  readJson("../packages/tarot-core/src/data/spreads.json"),
+  readJson("../packages/tarot-core/src/data/question-prompts.json"),
+  readJson("../packages/tarot-core/src/data/meaning-topic-map.json"),
   readLayeredMeaningsByPattern(/^major-\d{2}\.json$/),
   readLayeredMeaningsByPattern(/^minor-[a-z]+-[a-z]+\.json$/),
-  readJson("app/data/card-index.json"),
-  readJson("app/data/decks/rws-original/deck.json"),
-  readJson("app/data/decks/rws-original/manifest.json"),
-  readJson("app/data/decks/rws-original/card-backs.json"),
-  readJson("app/data/decks/rws-original/source-audit.json"),
-  readJson("app/data/schemas/card-meanings.schema.json"),
-  readJson("app/data/schemas/card-meaning-v2.schema.json"),
-  readJson("app/data/schemas/deck-manifest.schema.json"),
-  readJson("app/data/schemas/spreads.schema.json"),
-  readJson("app/data/schemas/question-prompts.schema.json"),
-  readJson("app/data/schemas/meaning-topic-map.schema.json"),
-  readJson("app/data/schemas/card-index.schema.json"),
-  readJson("app/data/schemas/formal-deck.schema.json"),
-  readJson("app/data/schemas/formal-deck-manifest.schema.json"),
-  readJson("app/data/schemas/card-backs.schema.json"),
-  readJson("app/data/schemas/deck-source-audit.schema.json"),
+  readJson("../packages/tarot-core/src/data/card-index.json"),
+  readJson("../packages/tarot-core/src/data/decks/rws-original/deck.json"),
+  readJson("../packages/tarot-core/src/data/decks/rws-original/manifest.json"),
+  readJson("../packages/tarot-core/src/data/decks/rws-original/card-backs.json"),
+  readJson("../packages/tarot-core/src/data/decks/rws-original/source-audit.json"),
+  readJson("../packages/tarot-core/src/data/schemas/card-meanings.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/card-meaning-v2.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/deck-manifest.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/spreads.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/question-prompts.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/meaning-topic-map.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/card-index.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/formal-deck.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/formal-deck-manifest.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/card-backs.schema.json"),
+  readJson("../packages/tarot-core/src/data/schemas/deck-source-audit.schema.json"),
 ]);
 
 const ajv = new Ajv2020({allErrors: true, strict: true});

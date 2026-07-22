@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "jsx": "react-jsx",
     "strict": true,
     "noUnusedLocals": true,
@@ -11,9 +11,10 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"],
+      "@arcana/tarot-core": ["../packages/tarot-core/src/index.ts"],
+      "@arcana/tarot-core/*": ["../packages/tarot-core/src/*"]
     },
     "types": ["vitest/globals", "node"]
   },

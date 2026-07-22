@@ -30,16 +30,15 @@ npm run build
 
 ## 数据边界
 
-- `app/data/card-meanings.json`：稳定的牌 ID、名称、关键词、正逆位牌义和建议
-- `app/data/cards/`：正式分层牌义，每张牌一份 v2 JSON
-- `app/data/card-index.json`：标准78张牌的稳定 ID、顺序与名称
-- `app/data/meaning-topic-map.json`：问题分类到牌义主题的显式映射
-- `app/data/deck-manifests/`：牌组元数据与 `cardId → image` 素材映射
-- `app/data/decks/rws-original/`：正式 RWS 元数据、78张原图与 Web 图、完整 Manifest 和独立牌背配置
-- `app/data/spreads.json`：牌阵、牌位、顺序和解读提示
-- `app/data/question-prompts.json`：感情、职场、家庭、心情四类问题，每类包含4个可选主题
-- `app/domain/catalog.ts`：组合牌义与当前牌组资源，页面不直接读取图片路径
-- `app/domain/interpretation.ts`：把牌义、方向、问题主题和牌阵位置组合为统一展示模型
+- `../packages/tarot-core/src/data/card-meanings.json`：稳定的牌 ID、名称、关键词、正逆位牌义和建议
+- `../packages/tarot-core/src/data/cards/`：正式分层牌义，每张牌一份 v2 JSON
+- `../packages/tarot-core/src/data/card-index.json`：标准78张牌的稳定 ID、顺序与名称
+- `../packages/tarot-core/src/data/meaning-topic-map.json`：问题分类到牌义主题的显式映射
+- `../packages/tarot-core/src/data/deck-manifests/`：牌组元数据与 `cardId → image` 素材映射
+- `../packages/tarot-core/src/data/decks/rws-original/`：正式 RWS 元数据、78张原图与 Web 图、完整 Manifest 和独立牌背配置
+- `../packages/tarot-core/src/data/spreads.json`：牌阵、牌位、顺序和解读提示
+- `../packages/tarot-core/src/data/question-prompts.json`：感情、职场、家庭、心情四类问题，每类包含4个可选主题
+- `app/domain/`：保留原型稳定导入路径，实际牌库与纯领域规则来自共享包
 
 切换牌组时只替换牌组清单，不复制牌义。增加牌阵时只增加配置，不在页面中写死牌位。
 
