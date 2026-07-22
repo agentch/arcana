@@ -7,12 +7,12 @@ import {
   writeDailyCardRecord,
 } from '@/features/daily/daily-card-record'
 import {
-  prependSingleReading,
-  readSingleReadingHistory,
-  removeSingleReading,
-  type SavedSingleReading,
-  writeSingleReadingHistory,
-} from '@/features/history/single-reading-history'
+  prependReading,
+  readReadingHistory,
+  removeReading,
+  type SavedReading,
+  writeReadingHistory,
+} from '@/features/history/reading-history'
 import {
   activeDeck,
   catalogVersions,
@@ -35,7 +35,9 @@ import {
 } from '@arcana/tarot-core/domain/draw'
 import {
   composeInterpretation,
+  composeSpreadSummary,
   type InterpretationView,
+  type SpreadSummaryView,
 } from '@arcana/tarot-core/domain/interpretation'
 import { useReadingStore } from '@/stores/reading'
 
@@ -51,22 +53,35 @@ export default function Index() {
     (state) => state.questionCategoryId,
   )
   const question = useReadingStore((state) => state.question)
+  const spreadId = useReadingStore((state) => state.spreadId)
   const updateDraft = useReadingStore((state) => state.updateDraft)
   const resetDraft = useReadingStore((state) => state.reset)
   const [phase, setPhase] = useState<ReadingPhase>('question')
   const [dailyMode, setDailyMode] = useState(false)
-  const [drawnCard, setDrawnCard] = useState<DrawnRenderableCard | null>(null)
-  const [interpretation, setInterpretation] =
-    useState<InterpretationView | null>(null)
-  const [history, setHistory] = useState<SavedSingleReading[]>(
-    readSingleReadingHistory,
+  const [preparedDraws, setPreparedDraws] = useState<DrawnRenderableCard[]>([])
+  const [drawnCards, setDrawnCards] = useState<DrawnRenderableCard[]>([])
+  const [interpretations, setInterpretations] = useState<InterpretationView[]>(
+    [],
   )
+  const [detailsOpen, setDetailsOpen] = useState(false)
+  const [history, setHistory] = useState<SavedReading[]>(readReadingHistory)
   const [savedReadingId, setSavedReadingId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState('')
 
   const categories = useMemo(() => getQuestionCategories(), [])
   const cards = useMemo(() => getCards(), [])
   const cardBack = useMemo(() => getActiveCardBack(), [])
+  const activeSpread = getSpread(dailyMode ? 'single-card' : spreadId)
+  const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null
+  const spreadSummary: SpreadSummaryView | null =
+    interpretations.length > 1
+      ? composeSpreadSummary({
+          spreadId: activeSpread.id,
+          spreadName: activeSpread.name,
+          spreadDescription: activeSpread.description,
+          interpretations,
+        })
+      : null
   const activeCategory = categories.find(
     (category) => category.id === questionCategoryId,
   )
@@ -82,15 +97,21 @@ export default function Index() {
 
   useEffect(() => {
     if (phase !== 'reveal') return undefined
-    const timer = setTimeout(() => setPhase('result'), 900)
+    const timer = setTimeout(() => {
+      setPhase(
+        drawnCards.length < activeSpread.positions.length ? 'choose' : 'result',
+      )
+    }, 900)
     return () => clearTimeout(timer)
-  }, [phase])
+  }, [activeSpread.positions.length, drawnCards.length, phase])
 
   const selectCategory = async (categoryId: string) => {
     await triggerHaptic()
     updateDraft({ questionCategoryId: categoryId, question: '' })
-    setDrawnCard(null)
-    setInterpretation(null)
+    setPreparedDraws([])
+    setDrawnCards([])
+    setInterpretations([])
+    setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
   }
@@ -100,6 +121,17 @@ export default function Index() {
     updateDraft({ question: prompt })
   }
 
+  const selectSpread = async (nextSpreadId: 'single-card' | 'timeline') => {
+    await triggerHaptic()
+    updateDraft({ spreadId: nextSpreadId })
+    setPreparedDraws([])
+    setDrawnCards([])
+    setInterpretations([])
+    setDetailsOpen(false)
+    setSavedReadingId(null)
+    setSaveStatus('')
+  }
+
   const startDailyReading = async () => {
     const dateKey = getLocalDateKey()
     const existing = readDailyCardRecord()
@@ -107,6 +139,7 @@ export default function Index() {
     const position = spread.positions[0]
 
     setDailyMode(true)
+    setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
     updateDraft({
@@ -123,8 +156,9 @@ export default function Index() {
           orientation: existing.orientation,
           position,
         }
-        setDrawnCard(nextDrawn)
-        setInterpretation(
+        setPreparedDraws([nextDrawn])
+        setDrawnCards([nextDrawn])
+        setInterpretations([
           composeInterpretation({
             card,
             layeredMeaning: getLayeredMeaning(card.id),
@@ -132,15 +166,17 @@ export default function Index() {
             topicId: getMeaningTopic(DAILY_CATEGORY_ID),
             position,
           }),
-        )
+        ])
         setPhase('result')
         await triggerHaptic()
         return
       }
     }
 
-    setDrawnCard(null)
-    setInterpretation(null)
+    const picked = pickDailyCard(cards, dateKey)
+    setPreparedDraws([{ ...picked, position }])
+    setDrawnCards([])
+    setInterpretations([])
     setPhase('shuffle')
     await triggerHaptic()
   }
@@ -150,24 +186,22 @@ export default function Index() {
 
     await triggerHaptic()
     setDailyMode(false)
-    setDrawnCard(null)
-    setInterpretation(null)
+    const spread = getSpread(spreadId)
+    setPreparedDraws(drawForSpread(cards, spread))
+    setDrawnCards([])
+    setInterpretations([])
+    setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
     setPhase('shuffle')
   }
 
-  const revealSingleCard = async () => {
+  const revealNextCard = async () => {
     if (!question.trim() || !questionCategoryId || phase !== 'choose') return
 
     await triggerHaptic()
-    const spread = getSpread('single-card')
-    const drawn = dailyMode
-      ? {
-          ...pickDailyCard(cards, getLocalDateKey()),
-          position: spread.positions[0],
-        }
-      : drawForSpread(cards, spread)[0]
+    const drawn = preparedDraws[drawnCards.length]
+    if (!drawn) return
     const nextInterpretation = composeInterpretation({
       card: drawn.card,
       layeredMeaning: getLayeredMeaning(drawn.card.id),
@@ -175,8 +209,8 @@ export default function Index() {
       topicId: getMeaningTopic(questionCategoryId),
       position: drawn.position,
     })
-    setDrawnCard(drawn)
-    setInterpretation(nextInterpretation)
+    setDrawnCards((current) => [...current, drawn])
+    setInterpretations((current) => [...current, nextInterpretation])
     if (dailyMode) {
       writeDailyCardRecord({
         dateKey: getLocalDateKey(),
@@ -192,8 +226,10 @@ export default function Index() {
   const startAgain = () => {
     resetDraft()
     setDailyMode(false)
-    setDrawnCard(null)
-    setInterpretation(null)
+    setPreparedDraws([])
+    setDrawnCards([])
+    setInterpretations([])
+    setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
     setPhase('question')
@@ -201,8 +237,8 @@ export default function Index() {
 
   const saveReading = () => {
     if (
-      !drawnCard ||
-      !interpretation ||
+      drawnCards.length === 0 ||
+      interpretations.length !== drawnCards.length ||
       !questionCategoryId ||
       savedReadingId
     ) {
@@ -210,22 +246,25 @@ export default function Index() {
     }
 
     const createdAt = new Date().toISOString()
-    const reading: SavedSingleReading = {
-      id: `${Date.now()}-${drawnCard.card.id}`,
+    const reading: SavedReading = {
+      id: `${Date.now()}-${activeSpread.id}`,
       question: question.trim(),
       questionCategoryId,
-      cardId: drawnCard.card.id,
-      cardName: interpretation.cardName,
-      orientation: drawnCard.orientation,
+      cards: drawnCards.map((drawn, index) => ({
+        cardId: drawn.card.id,
+        cardName: interpretations[index].cardName,
+        orientation: drawn.orientation,
+        positionId: drawn.position.id,
+      })),
       createdAt,
       contentVersion: catalogVersions.content,
       deckId: activeDeck.id,
       deckVersion: activeDeck.version,
-      spreadId: 'single-card',
+      spreadId: activeSpread.id,
       spreadVersion: catalogVersions.spreads,
     }
-    const nextHistory = prependSingleReading(history, reading)
-    if (!writeSingleReadingHistory(nextHistory)) {
+    const nextHistory = prependReading(history, reading)
+    if (!writeReadingHistory(nextHistory)) {
       setSaveStatus('保存失败，请检查设备存储权限')
       return
     }
@@ -236,40 +275,50 @@ export default function Index() {
     void triggerHaptic()
   }
 
-  const openSavedReading = (reading: SavedSingleReading) => {
-    const card = cards.find((item) => item.id === reading.cardId)
-    if (!card) return
-    const spread = getSpread('single-card')
-    const position = spread.positions[0]
-    const nextDrawn: DrawnRenderableCard = {
-      card,
-      orientation: reading.orientation,
-      position,
+  const openSavedReading = (reading: SavedReading) => {
+    const spread = getSpread(reading.spreadId)
+    const nextDrawnCards: DrawnRenderableCard[] = []
+    const nextInterpretations: InterpretationView[] = []
+    for (const savedCard of reading.cards) {
+      const card = cards.find((item) => item.id === savedCard.cardId)
+      const position = spread.positions.find(
+        (item) => item.id === savedCard.positionId,
+      )
+      if (!card || !position) return
+      nextDrawnCards.push({
+        card,
+        orientation: savedCard.orientation,
+        position,
+      })
+      nextInterpretations.push(
+        composeInterpretation({
+          card,
+          layeredMeaning: getLayeredMeaning(card.id),
+          orientation: savedCard.orientation,
+          topicId: getMeaningTopic(reading.questionCategoryId),
+          position,
+        }),
+      )
     }
-    const nextInterpretation = composeInterpretation({
-      card,
-      layeredMeaning: getLayeredMeaning(card.id),
-      orientation: reading.orientation,
-      topicId: getMeaningTopic(reading.questionCategoryId),
-      position,
-    })
 
     setDailyMode(false)
     updateDraft({
       question: reading.question,
       questionCategoryId: reading.questionCategoryId,
-      spreadId: 'single-card',
+      spreadId: reading.spreadId,
     })
-    setDrawnCard(nextDrawn)
-    setInterpretation(nextInterpretation)
+    setPreparedDraws(nextDrawnCards)
+    setDrawnCards(nextDrawnCards)
+    setInterpretations(nextInterpretations)
+    setDetailsOpen(false)
     setSavedReadingId(reading.id)
     setSaveStatus('正在查看已保存的占卜')
     setPhase('result')
   }
 
   const deleteSavedReading = (readingId: string) => {
-    const nextHistory = removeSingleReading(history, readingId)
-    if (!writeSingleReadingHistory(nextHistory)) return
+    const nextHistory = removeReading(history, readingId)
+    if (!writeReadingHistory(nextHistory)) return
     setHistory(nextHistory)
     if (savedReadingId === readingId) setSavedReadingId(null)
     void triggerHaptic()
@@ -281,13 +330,13 @@ export default function Index() {
       : phase === 'shuffle'
         ? '让牌序慢慢沉静'
         : phase === 'choose'
-          ? '凭直觉选择一张牌'
+          ? `选择第 ${drawnCards.length + 1} 张牌`
           : phase === 'reveal'
             ? '牌面正在显现'
             : phase === 'result'
               ? dailyMode
                 ? '今日的牌已经回应'
-                : '牌面已经回应'
+                : `${activeSpread.name}已经回应`
               : '带一个问题来到牌前'
 
   const pageSummary =
@@ -303,7 +352,7 @@ export default function Index() {
     <View className='reading-page'>
       <View className='reading-page__glow' />
       <Text className='reading-page__eyebrow'>
-        ARCANA · {dailyMode ? '今日一牌' : '单牌启示'}
+        ARCANA · {dailyMode ? '今日一牌' : activeSpread.name}
       </Text>
       <Text className='reading-page__title'>{pageTitle}</Text>
       <Text className='reading-page__summary'>{pageSummary}</Text>
@@ -368,6 +417,35 @@ export default function Index() {
             </View>
           ) : null}
 
+          {activeCategory ? (
+            <View className='reading-section'>
+              <Text className='reading-section__label'>选择牌阵</Text>
+              <View className='spread-choice-grid'>
+                {(['single-card', 'timeline'] as const).map(
+                  (availableSpreadId) => {
+                    const spread = getSpread(availableSpreadId)
+                    return (
+                      <Button
+                        className={`spread-choice ${
+                          spreadId === spread.id ? 'spread-choice--active' : ''
+                        }`}
+                        key={spread.id}
+                        onClick={() => selectSpread(availableSpreadId)}
+                      >
+                        <Text className='spread-choice__title'>
+                          {spread.name}
+                        </Text>
+                        <Text className='spread-choice__description'>
+                          {spread.description}
+                        </Text>
+                      </Button>
+                    )
+                  },
+                )}
+              </View>
+            </View>
+          ) : null}
+
           <Button
             className='primary-action'
             disabled={!question.trim() || !questionCategoryId}
@@ -417,7 +495,7 @@ export default function Index() {
                 aria-label={`选择第 ${choice + 1} 张牌`}
                 className={`ritual-choice ritual-choice--${choice + 1}`}
                 key={choice}
-                onClick={revealSingleCard}
+                onClick={revealNextCard}
               >
                 {cardBack ? (
                   <Image
@@ -431,72 +509,142 @@ export default function Index() {
               </Button>
             ))}
           </View>
-          <Text className='ritual-stage__hint'>触碰最吸引你的一张牌</Text>
+          <Text className='ritual-stage__hint'>
+            触碰最吸引你的牌 · {drawnCards.length + 1} /{' '}
+            {activeSpread.positions.length}
+          </Text>
         </View>
       ) : null}
 
-      {phase === 'reveal' && drawnCard ? (
+      {phase === 'reveal' && currentDrawnCard ? (
         <View className='ritual-stage'>
           <View className='reveal-card'>
             <Image
               className={`result-card__image ${
-                drawnCard.orientation === 'reversed'
+                currentDrawnCard.orientation === 'reversed'
                   ? 'result-card__image--reversed'
                   : ''
               }`}
               mode='scaleToFill'
-              src={drawnCard.card.asset.image ?? ''}
+              src={currentDrawnCard.card.asset.image ?? ''}
               style={{ width: '100%', height: '100%' }}
             />
           </View>
         </View>
       ) : null}
 
-      {phase === 'result' && drawnCard && interpretation ? (
+      {phase === 'result' && drawnCards.length > 0 ? (
         <View className='result-card'>
-          {drawnCard?.card.asset.image ? (
-            <View className='result-card__image-frame'>
-              <Image
-                className={`result-card__image ${
-                  drawnCard.orientation === 'reversed'
-                    ? 'result-card__image--reversed'
-                    : ''
-                }`}
-                mode='scaleToFill'
-                src={drawnCard.card.asset.image}
-                style={{ width: '100%', height: '100%' }}
-              />
+          {spreadSummary ? (
+            <View className='spread-summary'>
+              {[spreadSummary.illumination, spreadSummary.guidance].map(
+                (section) => (
+                  <View className='spread-summary__section' key={section.title}>
+                    <Text className='reading-section__label'>
+                      {section.title}
+                    </Text>
+                    {section.lines.map((line) => (
+                      <Text
+                        className='spread-summary__line'
+                        key={`${line.label}-${line.text}`}
+                      >
+                        <Text className='spread-summary__label'>
+                          {line.label}
+                        </Text>
+                        {line.text}
+                      </Text>
+                    ))}
+                  </View>
+                ),
+              )}
+              <Text className='spread-summary__closing'>
+                {spreadSummary.closing}
+              </Text>
             </View>
           ) : null}
-          <Text className='result-card__position'>
-            {interpretation.positionName}
-          </Text>
-          <Text className='result-card__name'>
-            {interpretation.cardName} · {interpretation.orientationName}
-          </Text>
-          <Text className='result-card__keywords'>
-            {interpretation.keywords.join(' · ')}
-          </Text>
-          <Text className='result-card__overview'>
-            {interpretation.overview}
-          </Text>
-          {interpretation.topicText ? (
-            <Text className='result-card__topic'>
-              {interpretation.topicText}
-            </Text>
-          ) : null}
-          <View className='result-card__advice'>
-            <Text className='reading-section__label'>可以尝试</Text>
-            {interpretation.advice.map((advice) => (
-              <Text className='result-card__advice-line' key={advice}>
-                · {advice}
-              </Text>
-            ))}
+
+          <View
+            className={
+              drawnCards.length > 1
+                ? detailsOpen
+                  ? 'multi-card-details'
+                  : 'multi-card-grid'
+                : 'single-card-result'
+            }
+          >
+            {drawnCards.map((drawn, index) => {
+              const interpretation = interpretations[index]
+              return (
+                <View className='reading-result-item' key={drawn.position.id}>
+                  {drawn.card.asset.image ? (
+                    <View
+                      className={
+                        drawnCards.length > 1
+                          ? 'result-card__image-frame result-card__image-frame--compact'
+                          : 'result-card__image-frame'
+                      }
+                    >
+                      <Image
+                        className={`result-card__image ${
+                          drawn.orientation === 'reversed'
+                            ? 'result-card__image--reversed'
+                            : ''
+                        }`}
+                        mode='scaleToFill'
+                        src={drawn.card.asset.image}
+                        style={{ width: '100%', height: '100%' }}
+                      />
+                    </View>
+                  ) : null}
+                  <Text className='result-card__position'>
+                    {interpretation.positionName}
+                  </Text>
+                  <Text className='result-card__name'>
+                    {interpretation.cardName} · {interpretation.orientationName}
+                  </Text>
+                  <Text className='result-card__keywords'>
+                    {interpretation.keywords.join(' · ')}
+                  </Text>
+                  {drawnCards.length === 1 || detailsOpen ? (
+                    <>
+                      <Text className='result-card__overview'>
+                        {interpretation.overview}
+                      </Text>
+                      {interpretation.topicText ? (
+                        <Text className='result-card__topic'>
+                          {interpretation.topicText}
+                        </Text>
+                      ) : null}
+                      <View className='result-card__advice'>
+                        <Text className='reading-section__label'>可以尝试</Text>
+                        {interpretation.advice.map((advice) => (
+                          <Text
+                            className='result-card__advice-line'
+                            key={advice}
+                          >
+                            · {advice}
+                          </Text>
+                        ))}
+                      </View>
+                      {interpretation.reflection ? (
+                        <Text className='result-card__reflection'>
+                          留给你的问题：{interpretation.reflection}
+                        </Text>
+                      ) : null}
+                    </>
+                  ) : null}
+                </View>
+              )
+            })}
           </View>
-          {interpretation.reflection ? (
-            <Text className='result-card__reflection'>
-              留给你的问题：{interpretation.reflection}
-            </Text>
+
+          {drawnCards.length > 1 ? (
+            <Button
+              className='secondary-action'
+              onClick={() => setDetailsOpen((open) => !open)}
+            >
+              {detailsOpen ? '收起逐张解读' : '查看逐张解读'}
+            </Button>
           ) : null}
           <Button
             className='primary-action'
@@ -526,17 +674,20 @@ export default function Index() {
                   onClick={() => openSavedReading(reading)}
                 >
                   <View className='history-item__meta'>
-                    <Text>{reading.cardName}</Text>
+                    <Text>{getSpread(reading.spreadId).name}</Text>
                     <Text>
                       {new Date(reading.createdAt).toLocaleDateString('zh-CN')}
                     </Text>
                   </View>
+                  <Text className='history-item__cards'>
+                    {reading.cards.map((card) => card.cardName).join(' · ')}
+                  </Text>
                   <Text className='history-item__question'>
                     {reading.question}
                   </Text>
                 </Button>
                 <Button
-                  aria-label={`删除${reading.cardName}占卜记录`}
+                  aria-label={`删除${getSpread(reading.spreadId).name}占卜记录`}
                   className='history-item__delete'
                   onClick={() => deleteSavedReading(reading.id)}
                 >
@@ -547,7 +698,9 @@ export default function Index() {
           )}
           <Button
             className='secondary-action'
-            onClick={() => setPhase(interpretation ? 'result' : 'question')}
+            onClick={() =>
+              setPhase(interpretations.length > 0 ? 'result' : 'question')
+            }
           >
             返回
           </Button>

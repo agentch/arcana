@@ -1,21 +1,26 @@
 import { describe, expect, it } from 'vitest'
 
 import {
-  normalizeSingleReadingHistory,
-  prependSingleReading,
-  removeSingleReading,
-  type SavedSingleReading,
-  SINGLE_READING_HISTORY_LIMIT,
-} from '@/features/history/single-reading-history-model'
+  normalizeReadingHistory,
+  prependReading,
+  READING_HISTORY_LIMIT,
+  removeReading,
+  type SavedReading,
+} from '@/features/history/reading-history-model'
 
-function createReading(index: number): SavedSingleReading {
+function createReading(index: number): SavedReading {
   return {
     id: `reading-${index}`,
     question: `问题 ${index}`,
     questionCategoryId: 'mood',
-    cardId: 'major-00',
-    cardName: '愚人',
-    orientation: 'upright',
+    cards: [
+      {
+        cardId: 'major-00',
+        cardName: '愚人',
+        orientation: 'upright',
+        positionId: 'focus',
+      },
+    ],
     createdAt: new Date(2026, 6, index + 1).toISOString(),
     contentVersion: '1.0.0',
     deckId: 'rws-original',
@@ -28,23 +33,69 @@ function createReading(index: number): SavedSingleReading {
 describe('单牌历史记录', () => {
   it('过滤损坏数据并限制记录数量', () => {
     const values = [
-      ...Array.from({ length: SINGLE_READING_HISTORY_LIMIT + 2 }, (_, index) =>
+      ...Array.from({ length: READING_HISTORY_LIMIT + 2 }, (_, index) =>
         createReading(index),
       ),
       { id: 'broken' },
     ]
 
-    expect(normalizeSingleReadingHistory(values)).toHaveLength(
-      SINGLE_READING_HISTORY_LIMIT,
-    )
+    expect(normalizeReadingHistory(values)).toHaveLength(READING_HISTORY_LIMIT)
   })
 
   it('保存到顶部并可按 id 删除', () => {
     const first = createReading(1)
     const second = createReading(2)
-    const history = prependSingleReading([first], second)
+    const history = prependReading([first], second)
 
     expect(history.map((item) => item.id)).toEqual([second.id, first.id])
-    expect(removeSingleReading(history, second.id)).toEqual([first])
+    expect(removeReading(history, second.id)).toEqual([first])
+  })
+
+  it('迁移旧版单牌记录为卡牌数组', () => {
+    const legacy = {
+      ...createReading(1),
+      cards: undefined,
+      cardId: 'major-00',
+      cardName: '愚人',
+      orientation: 'reversed',
+    }
+
+    expect(normalizeReadingHistory([legacy])[0].cards).toEqual([
+      {
+        cardId: 'major-00',
+        cardName: '愚人',
+        orientation: 'reversed',
+        positionId: 'focus',
+      },
+    ])
+  })
+
+  it('保留时间流的多牌位记录', () => {
+    const timeline = {
+      ...createReading(1),
+      spreadId: 'timeline',
+      cards: [
+        {
+          cardId: 'major-00',
+          cardName: '愚人',
+          orientation: 'upright' as const,
+          positionId: 'past',
+        },
+        {
+          cardId: 'major-01',
+          cardName: '魔术师',
+          orientation: 'reversed' as const,
+          positionId: 'present',
+        },
+        {
+          cardId: 'major-02',
+          cardName: '女祭司',
+          orientation: 'upright' as const,
+          positionId: 'future',
+        },
+      ],
+    }
+
+    expect(normalizeReadingHistory([timeline])[0].cards).toHaveLength(3)
   })
 })
