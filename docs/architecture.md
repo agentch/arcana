@@ -6,15 +6,15 @@
 
 ## 2. 技术基线
 
-| 层级 | 方案 | 说明 |
-| --- | --- | --- |
-| 跨端 | Taro | React 技术栈构建 H5 与微信小程序 |
-| UI | React + TypeScript | 函数组件与 Hooks，保持模块边界清晰 |
-| 构建 | Vite | Web 开发与构建 |
-| 状态 | Zustand | 会话状态、偏好和历史记录 |
-| 样式 | CSS 变量 + SCSS | 主题令牌统一管理 |
-| 测试 | Vitest | 牌阵、随机、数据转换优先做单测 |
-| 质量 | ESLint + Prettier | 统一代码规范 |
+| 层级 | 方案                            | 说明                                           |
+| ---- | ------------------------------- | ---------------------------------------------- |
+| 跨端 | Taro                            | React 技术栈构建 H5 与微信小程序               |
+| UI   | React + TypeScript              | 函数组件与 Hooks，保持模块边界清晰             |
+| 构建 | Vite                            | Web 开发与构建                                 |
+| 状态 | React Hooks；按需引入外部 store | 当前单页使用本地状态，历史记录通过适配层持久化 |
+| 样式 | CSS 变量 + SCSS                 | 主题令牌统一管理                               |
+| 测试 | Vitest                          | 牌阵、随机、数据转换优先做单测                 |
+| 质量 | ESLint + Prettier               | 统一代码规范                                   |
 
 ## 3. 工程目录
 
@@ -29,7 +29,7 @@ app/
     pages/            # Taro 跨端页面
     components/       # 通用组件
     features/         # 按业务能力拆分
-    stores/           # Zustand 状态
+    stores/           # 预留的外部状态目录；当前单页使用 React Hooks
     adapters/         # 存储、分享、埋点等平台适配
     styles/           # 设计令牌与全局样式
 ```
@@ -40,101 +40,95 @@ app/
 ## 4. 核心领域模型
 
 ```ts
-type Orientation = 'upright' | 'reversed'
-type TopicId =
-  | 'love'
-  | 'career'
-  | 'family'
-  | 'mood'
-  | 'finance'
-  | 'growth'
+type Orientation = "upright" | "reversed";
+type TopicId = "love" | "career" | "family" | "mood" | "finance" | "growth";
 
 interface CardMeaning {
-  id: string
-  number: number
-  arcana: 'major' | 'minor'
-  suit?: 'wands' | 'cups' | 'swords' | 'pentacles'
+  id: string;
+  number: number;
+  arcana: "major" | "minor";
+  suit?: "wands" | "cups" | "swords" | "pentacles";
   name: {
-    zh: string
-    en: string
-  }
+    zh: string;
+    en: string;
+  };
   core: {
-    summary: string
+    summary: string;
     symbols: Array<{
-      name: string
-      meaning: string
-    }>
-    element?: string
-  }
-  upright: OrientationMeaning
-  reversed: OrientationMeaning
-  topics: Record<TopicId, Record<Orientation, string>>
+      name: string;
+      meaning: string;
+    }>;
+    element?: string;
+  };
+  upright: OrientationMeaning;
+  reversed: OrientationMeaning;
+  topics: Record<TopicId, Record<Orientation, string>>;
 }
 
 interface OrientationMeaning {
-  keywords: string[]
-  overview: string
-  light: string
-  shadow: string
-  advice: string[]
-  reflection: string
+  keywords: string[];
+  overview: string;
+  light: string;
+  shadow: string;
+  advice: string[];
+  reflection: string;
 }
 
 interface DeckCardAsset {
-  image: string | null
-  fallbackSymbol?: string
-  alt: string
+  image: string | null;
+  fallbackSymbol?: string;
+  alt: string;
 }
 
 interface DeckManifest {
-  id: string
-  name: string
-  author: string
-  edition: string
-  license: string
-  version: string
-  assets: Record<string, DeckCardAsset>
+  id: string;
+  name: string;
+  author: string;
+  edition: string;
+  license: string;
+  version: string;
+  assets: Record<string, DeckCardAsset>;
 }
 
 interface DrawnCard {
-  cardId: string
-  orientation: Orientation
-  positionId: string
+  cardId: string;
+  orientation: Orientation;
+  positionId: string;
 }
 
 interface SpreadPosition {
-  id: string
-  name: string
-  prompt: string
-  order: number
+  id: string;
+  name: string;
+  prompt: string;
+  order: number;
 }
 
 interface SpreadDefinition {
-  id: string
-  name: string
-  description: string
-  supportedTopics: string[]
-  positions: SpreadPosition[]
+  id: string;
+  name: string;
+  description: string;
+  supportedTopics: string[];
+  positions: SpreadPosition[];
   visual?: {
     cards: Array<{
-      x: number
-      y: number
-      rotation?: number
-    }>
-  }
-  version: string
+      x: number;
+      y: number;
+      rotation?: number;
+    }>;
+  };
+  version: string;
 }
 
 interface Reading {
-  id: string
-  spreadId: string
-  question?: string
-  cards: DrawnCard[]
-  createdAt: string
-  contentVersion: string
-  deckId: string
-  deckVersion: string
-  spreadVersion: string
+  id: string;
+  spreadId: string;
+  question?: string;
+  cards: DrawnCard[];
+  createdAt: string;
+  contentVersion: string;
+  deckId: string;
+  deckVersion: string;
+  spreadVersion: string;
 }
 ```
 
@@ -195,7 +189,7 @@ packages/tarot-core/src/data/
 
 问题引导同样配置化。页面只保存 `questionCategoryId`、`questionOptionId` 和用户最终编辑后的问题文本，便于后续分析不同主题的使用情况，同时不限制用户自由输入。
 
-### 正式应用迁移状态（2026-07-23）
+### 正式应用迁移状态（2026-07-24）
 
 ```text
 问题分类 / 问题确认 / 牌阵选择
@@ -207,6 +201,8 @@ packages/tarot-core/src/data/
 ```
 
 - 正式应用已接入单牌、今日一牌和时间流；三种模式使用同一套牌面、抽牌和结构化解读实现。
+- 当前选牌视图使用原生横向 `ScrollView` 展示7张候选牌背，但结果仍在进入选牌前预抽；真实78张位置映射尚未实现。
+- 当前单页会话使用React本地状态。Taro 4.2.1曾把Zustand `create` 错绑到React，因此在拆分页面和验证兼容性前不恢复该依赖。
 - 今日一牌使用本地日期种子稳定生成结果，同日重复进入直接回看。
 - 历史记录采用通用 `SavedReading` 多牌结构，兼容旧单牌数据，最多保留12条。
 - 圣三角、恋爱关系五牌阵和二选一的配置与组合摘要已在共享核心中，正式应用界面按优先级逐个迁移。
@@ -228,15 +224,15 @@ packages/tarot-core/src/data/
 
 ## 6. 数据策略
 
-MVP 将牌义和牌阵 JSON 随应用发布，记录默认保存在设备本地。78张 WebP 牌面约16 MB：H5 使用静态资源发布；微信小程序不得直接全部放入主包，发布前需在 CDN 按需加载与分包素材之间完成决策。若后续增加账号、云同步、AI 解读或运营配置，再引入业务 API。
+MVP 将牌义和牌阵JSON随应用发布，记录默认保存在设备本地。78张WebP牌面约16 MB：H5使用静态资源；正式微信构建通过CloudBase File ID按需读取，并在渲染前转换为临时HTTPS地址。本地开发可用构建常量将全部牌面复制进约18 MB产物，但该模式不得上传。若后续增加账号、云同步、AI解读或运营配置，再引入业务API。
 
 建议接口边界提前定义，但不提前建设服务：
 
 ```ts
 interface ReadingRepository {
-  list(): Promise<Reading[]>
-  save(reading: Reading): Promise<void>
-  remove(id: string): Promise<void>
+  list(): Promise<Reading[]>;
+  save(reading: Reading): Promise<void>;
+  remove(id: string): Promise<void>;
 }
 ```
 
@@ -253,7 +249,7 @@ interface ReadingRepository {
 
 1. H5 预览环境：每次合并自动构建。
 2. Web 正式环境：静态资源 CDN + HTTPS。
-3. 微信小程序：同一仓库增加平台配置，完成授权、分享、隐私与牌面资源包体适配；当前16 MB 牌面资源是提审阻塞项。
+3. 微信小程序：同一仓库维护正式CloudBase模式和本地素材测试模式；提审前需开通公开读取权限，并完成授权、分享、隐私与真机验证。
 4. Web 与小程序共享内容版本，发布时分别做回归验收。
 
 ## 9. 架构决策记录

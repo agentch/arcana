@@ -3,13 +3,19 @@ import type { RenderableCard } from '@arcana/tarot-core/domain/tarot'
 export type AssetPlatform = 'h5' | 'weapp'
 
 export const RWS_CLOUDBASE_ROOT =
-  'cloud://arcana-d1gztji7gce0b73d0.6172-arcana-d1gztji7gce0b73d0-1258587719/cards'
+  'cloud://cloud1-d4gihrh6ob576fe1d.636c-cloud1-d4gihrh6ob576fe1d-1457632608'
 
 export function resolveCardImage(
   cardId: string,
   webImage: string | null,
   platform: AssetPlatform,
 ): string | null {
+  if (
+    typeof __TARO_LOCAL_CARD_ASSETS__ !== 'undefined' &&
+    __TARO_LOCAL_CARD_ASSETS__
+  ) {
+    return webImage
+  }
   if (platform === 'weapp') {
     return `${RWS_CLOUDBASE_ROOT}/${cardId}.webp`
   }

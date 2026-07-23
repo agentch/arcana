@@ -4,4 +4,5 @@ node_modules/
 .swc/
 coverage/
 *.local
+project.private.config.json
 .DS_Store

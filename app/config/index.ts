@@ -7,6 +7,7 @@ import prodConfig from './prod'
 
 export default defineConfig<'vite'>(async (merge) => {
   const isWeappBuild = process.env.TARO_ENV === 'weapp'
+  const useLocalCardAssets = process.env.TARO_LOCAL_CARD_ASSETS === 'true'
   const baseConfig: UserConfigExport<'vite'> = {
     projectName: 'arcana',
     date: '2026-07-22',
@@ -32,10 +33,12 @@ export default defineConfig<'vite'>(async (merge) => {
     },
     framework: 'react',
     compiler: 'vite',
-    defineConstants: {},
+    defineConstants: {
+      __TARO_LOCAL_CARD_ASSETS__: JSON.stringify(useLocalCardAssets),
+    },
     copy: {
       patterns: [
-        ...(isWeappBuild
+        ...(isWeappBuild && !useLocalCardAssets
           ? []
           : [
               {

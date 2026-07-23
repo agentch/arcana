@@ -68,10 +68,7 @@ data/
 {
   "id": "rws-original",
   "name": "Rider–Waite–Smith Original",
-  "authors": [
-    "Arthur Edward Waite",
-    "Pamela Colman Smith"
-  ],
+  "authors": ["Arthur Edward Waite", "Pamela Colman Smith"],
   "edition": "待核验",
   "publicationPeriod": "1909/1910",
   "source": {
@@ -143,7 +140,7 @@ data/
   "origin": "arcana-original",
   "author": "Arcana",
   "version": "1.0.0",
-  "license": {"status": "approved"},
+  "license": { "status": "approved" },
   "source": {
     "file": "source/card-backs/arcana-starpath-mirror-card-back.png",
     "sha256": "..."
@@ -245,8 +242,10 @@ npm run assets:sync:public
 
 - Web/H5：继续发布 `web/` 下的78张牌面，并使用 `/tarot/rws-original/{cardId}.webp`。
 - 微信小程序：不把正面牌复制进代码包，运行时解析为
-  `cloud://arcana-d1gztji7gce0b73d0.6172-arcana-d1gztji7gce0b73d0-1258587719/cards/{cardId}.webp`。
-- CloudBase 环境 ID：`arcana-d1gztji7gce0b73d0`。
+  `cloud://cloud1-d4gihrh6ob576fe1d.636c-cloud1-d4gihrh6ob576fe1d-1457632608/{cardId}.webp`。
+- CloudBase 环境 ID：`cloud1-d4gihrh6ob576fe1d`。
 - 牌背：继续作为独立的小型本地资源发布，不进入正面牌 CloudBase 映射。
 - 基础牌义和正式素材 Manifest 不保存平台地址；平台差异只由正式应用的素材适配层处理。
-- CloudBase 控制台上传目录必须保持为 `cards/`，文件名必须与稳定 `cardId` 完全一致。
+- CloudBase 控制台将牌面上传到存储根目录，文件名必须与稳定 `cardId` 完全一致。
+- 小程序渲染前通过 `getTempFileURL` 将File ID转换为临时HTTPS地址；公开读取权限未开通时会返回 `STORAGE_EXCEED_AUTHORITY`。
+- 本地开发可通过 `TARO_LOCAL_CARD_ASSETS=true` 将78张WebP复制进约18 MB的小程序产物；该模式仅用于开发者工具，不用于上传。

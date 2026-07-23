@@ -1,8 +1,16 @@
-import { Button, Image, Text, Textarea, View } from '@tarojs/components'
+import {
+  Button,
+  Image,
+  ScrollView,
+  Text,
+  Textarea,
+  View,
+} from '@tarojs/components'
 import { useEffect, useMemo, useState } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
 import { getAssetPlatform, resolveCardAssets } from '@/adapters/card-assets'
+import { resolveCloudFileUrl } from '@/adapters/cloudbase'
 import {
   readDailyCardRecord,
   writeDailyCardRecord,
@@ -40,8 +48,6 @@ import {
   type InterpretationView,
   type SpreadSummaryView,
 } from '@arcana/tarot-core/domain/interpretation'
-import { useReadingStore } from '@/stores/reading'
-
 import './index.scss'
 
 type ReadingPhase =
@@ -50,13 +56,20 @@ type ReadingPhase =
 const CARD_CHOICES = Array.from({ length: 7 }, (_, index) => index)
 
 export default function Index() {
-  const questionCategoryId = useReadingStore(
-    (state) => state.questionCategoryId,
-  )
-  const question = useReadingStore((state) => state.question)
-  const spreadId = useReadingStore((state) => state.spreadId)
-  const updateDraft = useReadingStore((state) => state.updateDraft)
-  const resetDraft = useReadingStore((state) => state.reset)
+  const [readingDraft, setReadingDraft] = useState<{
+    questionCategoryId: string | null
+    question: string
+    spreadId: string
+  }>({ questionCategoryId: null, question: '', spreadId: 'single-card' })
+  const { questionCategoryId, question, spreadId } = readingDraft
+  const updateDraft = (draft: Partial<typeof readingDraft>) =>
+    setReadingDraft((current) => ({ ...current, ...draft }))
+  const resetDraft = () =>
+    setReadingDraft({
+      questionCategoryId: null,
+      question: '',
+      spreadId: 'single-card',
+    })
   const [phase, setPhase] = useState<ReadingPhase>('question')
   const [dailyMode, setDailyMode] = useState(false)
   const [preparedDraws, setPreparedDraws] = useState<DrawnRenderableCard[]>([])
@@ -155,8 +168,17 @@ export default function Index() {
     if (existing?.dateKey === dateKey) {
       const card = cards.find((item) => item.id === existing.cardId)
       if (card) {
+        const resolvedCard = {
+          ...card,
+          asset: {
+            ...card.asset,
+            image: card.asset.image
+              ? await resolveCloudFileUrl(card.asset.image)
+              : null,
+          },
+        }
         const nextDrawn: DrawnRenderableCard = {
-          card,
+          card: resolvedCard,
           orientation: existing.orientation,
           position,
         }
@@ -164,8 +186,8 @@ export default function Index() {
         setDrawnCards([nextDrawn])
         setInterpretations([
           composeInterpretation({
-            card,
-            layeredMeaning: getLayeredMeaning(card.id),
+            card: resolvedCard,
+            layeredMeaning: getLayeredMeaning(resolvedCard.id),
             orientation: existing.orientation,
             topicId: getMeaningTopic(DAILY_CATEGORY_ID),
             position,
@@ -206,14 +228,26 @@ export default function Index() {
     await triggerHaptic()
     const drawn = preparedDraws[drawnCards.length]
     if (!drawn) return
+    const resolvedDrawn: DrawnRenderableCard = {
+      ...drawn,
+      card: {
+        ...drawn.card,
+        asset: {
+          ...drawn.card.asset,
+          image: drawn.card.asset.image
+            ? await resolveCloudFileUrl(drawn.card.asset.image)
+            : null,
+        },
+      },
+    }
     const nextInterpretation = composeInterpretation({
-      card: drawn.card,
+      card: resolvedDrawn.card,
       layeredMeaning: getLayeredMeaning(drawn.card.id),
       orientation: drawn.orientation,
       topicId: getMeaningTopic(questionCategoryId),
       position: drawn.position,
     })
-    setDrawnCards((current) => [...current, drawn])
+    setDrawnCards((current) => [...current, resolvedDrawn])
     setInterpretations((current) => [...current, nextInterpretation])
     if (dailyMode) {
       writeDailyCardRecord({
@@ -493,28 +527,30 @@ export default function Index() {
 
       {phase === 'choose' ? (
         <View className='ritual-stage'>
-          <View className='card-choice-row'>
-            {CARD_CHOICES.map((choice) => (
-              <Button
-                aria-label={`选择第 ${choice + 1} 张牌`}
-                className={`ritual-choice ritual-choice--${choice + 1}`}
-                key={choice}
-                onClick={revealNextCard}
-              >
-                {cardBack ? (
-                  <Image
-                    className='card-back-image'
-                    mode='scaleToFill'
-                    src={cardBack.image}
-                  />
-                ) : (
-                  <Text className='card-back-symbol'>✦</Text>
-                )}
-              </Button>
-            ))}
-          </View>
+          <ScrollView className='card-choice-scroll' scrollX>
+            <View className='card-choice-row'>
+              {CARD_CHOICES.map((choice) => (
+                <Button
+                  aria-label={`选择第 ${choice + 1} 张牌`}
+                  className='ritual-choice'
+                  key={choice}
+                  onClick={revealNextCard}
+                >
+                  {cardBack ? (
+                    <Image
+                      className='card-back-image'
+                      mode='scaleToFill'
+                      src={cardBack.image}
+                    />
+                  ) : (
+                    <Text className='card-back-symbol'>✦</Text>
+                  )}
+                </Button>
+              ))}
+            </View>
+          </ScrollView>
           <Text className='ritual-stage__hint'>
-            触碰最吸引你的牌 · {drawnCards.length + 1} /{' '}
+            左右滑动，触碰最吸引你的牌 · {drawnCards.length + 1} /{' '}
             {activeSpread.positions.length}
           </Text>
         </View>

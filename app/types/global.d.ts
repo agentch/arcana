@@ -7,6 +7,8 @@ declare module '*.jpeg'
 declare module '*.webp'
 declare module '*.scss'
 
+declare const __TARO_LOCAL_CARD_ASSETS__: boolean
+
 declare namespace NodeJS {
   interface ProcessEnv {
     NODE_ENV: 'development' | 'production'

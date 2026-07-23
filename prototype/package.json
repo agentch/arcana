@@ -24,7 +24,8 @@
     "test": "npm run typecheck && npm run data:validate && npm run assets:verify && npm run build && node --test tests/*.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "predev": "npm run assets:sync:public"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
