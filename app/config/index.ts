@@ -6,6 +6,7 @@ import devConfig from './dev'
 import prodConfig from './prod'
 
 export default defineConfig<'vite'>(async (merge) => {
+  const isWeappBuild = process.env.TARO_ENV === 'weapp'
   const baseConfig: UserConfigExport<'vite'> = {
     projectName: 'arcana',
     date: '2026-07-22',
@@ -34,21 +35,25 @@ export default defineConfig<'vite'>(async (merge) => {
     defineConstants: {},
     copy: {
       patterns: [
-        {
-          from: resolve(
-            __dirname,
-            '..',
-            '..',
-            'packages',
-            'tarot-core',
-            'src',
-            'data',
-            'decks',
-            'rws-original',
-            'web',
-          ),
-          to: 'tarot/rws-original',
-        },
+        ...(isWeappBuild
+          ? []
+          : [
+              {
+                from: resolve(
+                  __dirname,
+                  '..',
+                  '..',
+                  'packages',
+                  'tarot-core',
+                  'src',
+                  'data',
+                  'decks',
+                  'rws-original',
+                  'web',
+                ),
+                to: 'tarot/rws-original',
+              },
+            ]),
         {
           from: resolve(
             __dirname,

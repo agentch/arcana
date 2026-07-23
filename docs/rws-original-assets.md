@@ -240,3 +240,13 @@ npm run assets:sync:public
 截至2026-07-22，78张正面牌均为 `approved`；原创牌背 `arcana-starpath-mirror` 已补齐作者、版本、许可、尺寸、字节数和 SHA-256，源 PNG 仅归档，运行时只发布 WebP。
 
 候选来源的详细核验记录见 [`rws-source-audit.md`](rws-source-audit.md)。
+
+## 12. 跨端发布规则
+
+- Web/H5：继续发布 `web/` 下的78张牌面，并使用 `/tarot/rws-original/{cardId}.webp`。
+- 微信小程序：不把正面牌复制进代码包，运行时解析为
+  `cloud://arcana-d1gztji7gce0b73d0.6172-arcana-d1gztji7gce0b73d0-1258587719/cards/{cardId}.webp`。
+- CloudBase 环境 ID：`arcana-d1gztji7gce0b73d0`。
+- 牌背：继续作为独立的小型本地资源发布，不进入正面牌 CloudBase 映射。
+- 基础牌义和正式素材 Manifest 不保存平台地址；平台差异只由正式应用的素材适配层处理。
+- CloudBase 控制台上传目录必须保持为 `cards/`，文件名必须与稳定 `cardId` 完全一致。

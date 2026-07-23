@@ -2,6 +2,7 @@ import { Button, Image, Text, Textarea, View } from '@tarojs/components'
 import { useEffect, useMemo, useState } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
+import { getAssetPlatform, resolveCardAssets } from '@/adapters/card-assets'
 import {
   readDailyCardRecord,
   writeDailyCardRecord,
@@ -69,7 +70,10 @@ export default function Index() {
   const [saveStatus, setSaveStatus] = useState('')
 
   const categories = useMemo(() => getQuestionCategories(), [])
-  const cards = useMemo(() => getCards(), [])
+  const cards = useMemo(
+    () => resolveCardAssets(getCards(), getAssetPlatform()),
+    [],
+  )
   const cardBack = useMemo(() => getActiveCardBack(), [])
   const activeSpread = getSpread(dailyMode ? 'single-card' : spreadId)
   const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null
