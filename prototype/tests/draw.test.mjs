@@ -11,7 +11,7 @@ const timeline = {
   positions: [
     {id: "past", name: "过去", prompt: "", order: 1},
     {id: "present", name: "现在", prompt: "", order: 2},
-    {id: "future", name: "未来趋势", prompt: "", order: 3},
+    {id: "future", name: "后续关注", prompt: "", order: 3},
   ],
 };
 

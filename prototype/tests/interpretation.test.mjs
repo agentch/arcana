@@ -124,8 +124,8 @@ test("composes a fused multi-card spread summary", async () => {
       topicId: "mood",
       position: {
         id: "future",
-        name: "未来趋势",
-        prompt: "沿当前路径继续时可能出现的倾向",
+        name: "后续关注",
+        prompt: "继续当前行动时值得留意的方向",
         order: 3,
       },
     }),
@@ -134,7 +134,7 @@ test("composes a fused multi-card spread summary", async () => {
   const summary = composeSpreadSummary({
     spreadId: "timeline",
     spreadName: "时间流",
-    spreadDescription: "理解一件事如何从过去发展到未来",
+    spreadDescription: "回顾过去、观察当下并梳理下一步",
     interpretations,
   });
 
@@ -142,12 +142,12 @@ test("composes a fused multi-card spread summary", async () => {
   assert.equal(summary.illumination.title, "照耀");
   assert.deepEqual(
     summary.illumination.lines.map((line) => line.label),
-    ["过去", "现在", "未来"],
+    ["过去", "现在", "后续关注"],
   );
   assert.equal(summary.guidance.title, "建议");
   assert.deepEqual(
     summary.guidance.lines.map((line) => line.label),
-    ["现在", "未来"],
+    ["现在", "后续关注"],
   );
   assert.ok(summary.illumination.lines[0].text.length > 0);
   assert.ok(summary.guidance.lines[0].text.includes(magicianV2.reversed.advice[0]));
@@ -228,7 +228,13 @@ test("composes a sacred-triangle spread summary", async () => {
     ["可行方向", "可以尝试"],
   );
   assert.ok(summary.guidance.lines[1].text.includes(worldV2.upright.advice[0]));
-  assert.doesNotMatch(JSON.stringify(summary), /过去|未来/);
+  assert.doesNotMatch(
+    summary.illumination.lines
+      .concat(summary.guidance.lines)
+      .map((line) => line.label)
+      .join(""),
+    /过去|未来/,
+  );
 });
 
 test("composes a relationship-five spread summary", async () => {
@@ -303,8 +309,8 @@ test("composes a relationship-five spread summary", async () => {
       topicId: "love",
       position: {
         id: "direction",
-        name: "发展趋势",
-        prompt: "维持当前互动方式时的可能方向",
+        name: "后续关注",
+        prompt: "维持当前互动方式时值得留意的方向",
         order: 5,
       },
     }),
@@ -313,7 +319,7 @@ test("composes a relationship-five spread summary", async () => {
   const summary = composeSpreadSummary({
     spreadId: "relationship-five",
     spreadName: "恋爱关系五牌阵",
-    spreadDescription: "观察双方状态、关系动力与发展趋势",
+    spreadDescription: "观察双方状态、关系动力与后续关注",
     interpretations,
   });
 
@@ -323,7 +329,7 @@ test("composes a relationship-five spread summary", async () => {
   );
   assert.deepEqual(
     summary.guidance.lines.map((line) => line.label),
-    ["趋势", "可以尝试"],
+    ["后续关注", "可以尝试"],
   );
   assert.match(summary.closing, /不是对他人内心的事实判定/);
   assert.ok(summary.guidance.lines[1].text.includes(worldV2.upright.advice[0]));

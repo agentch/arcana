@@ -78,12 +78,12 @@ export function composeShareCardContent({
   }
 
   return {
-    brand: "Arcana",
-    title: title.trim() || "塔罗启示",
+    brand: "阿卡纳星语",
+    title: title.trim() || "卡牌反思",
     question: question.trim(),
     cards,
     highlight: truncateText(highlight, 72),
-    disclaimer: "牌面是观察的镜子，不是写定的预言",
+    disclaimer: "牌面仅提供观察角度，不代表事实结论或未来结果",
   };
 }
 

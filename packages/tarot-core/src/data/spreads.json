@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.7",
+  "spreadsVersion": "2026.07.8",
   "spreads": [
     {
       "id": "single-card",
@@ -23,7 +23,7 @@
     {
       "id": "timeline",
       "name": "时间流",
-      "description": "理解一件事如何从过去发展到未来",
+      "description": "回顾过去、观察当下并梳理下一步",
       "enabled": true,
       "supportedTopics": ["general", "love", "career", "growth"],
       "visual": {
@@ -36,7 +36,7 @@
       "positions": [
         {"id": "past", "name": "过去", "prompt": "已形成影响的背景、经验或旧模式", "order": 1},
         {"id": "present", "name": "现在", "prompt": "当前最重要的力量、状态或选择", "order": 2},
-        {"id": "future", "name": "未来趋势", "prompt": "沿当前路径继续时可能出现的倾向", "order": 3}
+        {"id": "future", "name": "后续关注", "prompt": "继续当前行动时值得留意的方向", "order": 3}
       ]
     },
     {
@@ -61,7 +61,7 @@
     {
       "id": "relationship-five",
       "name": "恋爱关系五牌阵",
-      "description": "观察双方状态、关系动力与发展趋势",
+      "description": "观察双方状态、关系动力与后续关注",
       "enabled": true,
       "supportedTopics": ["love"],
       "visual": {
@@ -78,7 +78,7 @@
         {"id": "other", "name": "对方状态", "prompt": "我所感受到的对方立场，不声称读取真实思想", "order": 2},
         {"id": "connection", "name": "关系现状", "prompt": "双方当前形成的互动动力", "order": 3},
         {"id": "challenge", "name": "关系挑战", "prompt": "冲突、误解、边界或外部压力", "order": 4},
-        {"id": "direction", "name": "发展趋势", "prompt": "维持当前互动方式时的可能方向", "order": 5}
+        {"id": "direction", "name": "后续关注", "prompt": "维持当前互动方式时值得留意的方向", "order": 5}
       ]
     },
     {

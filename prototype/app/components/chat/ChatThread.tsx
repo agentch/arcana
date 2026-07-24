@@ -35,8 +35,8 @@ export function ChatThread({
   return (
     <div className="chat-thread" role="log" aria-live="polite">
       <div className="chat-intro">
-        <p className="eyebrow">星轨低语 · 牌面应心</p>
-        <h1 className="chat-title">在牌面中，与命运短暂对视</h1>
+        <p className="eyebrow">阿卡纳星语 · 卡牌反思</p>
+        <h1 className="chat-title">在牌面中，安静整理思绪</h1>
       </div>
       {messages.map((message, index) => (
         <div

@@ -30,11 +30,11 @@ test("composes share card content from a single-card reading", () => {
     interpretations,
   });
 
-  assert.equal(content.brand, "Arcana");
+  assert.equal(content.brand, "阿卡纳星语");
   assert.equal(content.title, "今日一牌");
   assert.equal(content.cards[0].cardName, "愚人");
   assert.equal(content.highlight, "把注意力放回第一步。");
-  assert.match(content.disclaimer, /不是写定的预言/);
+  assert.match(content.disclaimer, /不代表事实结论或未来结果/);
 });
 
 test("prefers summary illumination for multi-card share highlight", () => {
@@ -73,9 +73,9 @@ test("composeShareText includes cards and disclaimer without winner claims", () 
   });
   const text = composeShareText(content);
 
-  assert.match(text, /Arcana · 二选一牌阵/);
+  assert.match(text, /阿卡纳星语 · 二选一牌阵/);
   assert.match(text, /愚人（正位）/);
-  assert.match(text, /不是写定的预言/);
+  assert.match(text, /不代表事实结论或未来结果/);
   assert.doesNotMatch(text, /必须选|胜者/);
 });
 

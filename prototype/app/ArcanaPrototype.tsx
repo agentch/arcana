@@ -696,11 +696,11 @@ export function ArcanaPrototype() {
           >
             {showReadingDetail ? "←" : "☾"}
           </button>
-          <p className="wordmark">Arcana</p>
+          <p className="wordmark">阿卡纳星语</p>
           <button
             className="icon-button"
             onClick={() => setHistoryOpen(true)}
-            aria-label="查看占卜记录"
+            aria-label="查看卡牌记录"
             disabled={showReadingDetail}
           >
             ◷
@@ -723,13 +723,13 @@ export function ArcanaPrototype() {
           >
             {flow.phase === "welcome" && (
               <AssistantCard>
-                <p className="message-card-label">命运之门已半开</p>
+                <p className="message-card-label">给自己片刻安静</p>
                 <div className="home-actions">
                   <button
                     className="primary-button"
                     onClick={() => dispatchFlow({ type: "start" })}
                   >
-                    开始一次占卜
+                    开始卡牌解读
                   </button>
                   <button
                     className="secondary-button"
@@ -911,7 +911,7 @@ export function ArcanaPrototype() {
           >
             <h2 className="message-card-title">倾听直觉，召出你的牌</h2>
             <p className="draw-progress" aria-live="polite">
-              命运之印 {drawnCards.length} / {activeSpread.positions.length}
+              已选卡牌 {drawnCards.length} / {activeSpread.positions.length}
             </p>
             <div
               className={`draw-position-slots${
@@ -972,14 +972,14 @@ export function ArcanaPrototype() {
             </div>
             <p className="draw-hint">
               {drawnCards.length === activeSpread.positions.length
-                ? "阵已圆满，回响落定"
+                ? "卡牌已选齐"
                 : animatingDraw
-                  ? `“${animatingDraw.position.name}”的使者正在现身…`
+                  ? `“${animatingDraw.position.name}”的卡牌正在翻开…`
                   : isDailyMode
                     ? shuffling
                       ? "今日之轮正在翻涌…"
                       : "今日之牌将自行现身…"
-                    : `转动命运之轮，为“${activeDrawPosition?.name}”召来一张牌`}
+                    : `转动牌组，为“${activeDrawPosition?.name}”选择一张牌`}
             </p>
             <div
               className="draw-deck-wheel"
@@ -987,7 +987,7 @@ export function ArcanaPrototype() {
               onPointerMove={moveDeckDrag}
               onPointerUp={(event) => finishDeckDrag(event, true)}
               onPointerCancel={(event) => finishDeckDrag(event, false)}
-              aria-label="可拖动旋转的圆形塔罗牌组"
+              aria-label="可拖动旋转的圆形卡牌组"
             >
               {availableDeckCards.map((card, index) => {
                   const baseAngle =
@@ -1060,7 +1060,7 @@ export function ArcanaPrototype() {
                 className="primary-button draw-complete-button"
                 onClick={() => dispatchFlow({ type: "complete-draw" })}
               >
-                收束牌阵，聆听回响
+                完成选牌，生成解读
               </button>
             )}
             {shuffling && (
@@ -1091,7 +1091,7 @@ export function ArcanaPrototype() {
                     }
                   />
                 </div>
-                <p>牌序正在重写命运的篇章…</p>
+                <p>正在整理牌面与问题之间的线索…</p>
                 <button
                   className="text-button"
                   onClick={() => {
@@ -1174,10 +1174,10 @@ export function ArcanaPrototype() {
           <AssistantCard>
           <section className="chat-step result-step">
             <p className="message-card-label">
-              牌语回响 · {isDailyMode ? "今日一牌" : activeSpread.name}
+              卡牌解读 · {isDailyMode ? "今日一牌" : activeSpread.name}
             </p>
             <h2 className="message-card-title">
-              {isDailyMode ? "今日的使者已经抵达" : "命运为你铺开这一阵"}
+              {isDailyMode ? "今日卡牌已生成" : "本次解读已生成"}
             </h2>
             <div
               className={`spread-card-grid result count-${drawnCards.length}${
@@ -1236,7 +1236,7 @@ export function ArcanaPrototype() {
             ) : null}
             {spreadSummary && (
               <article className="reading-panel overview spread-summary">
-                <p className="reading-position">阵中回响</p>
+                <p className="reading-position">整体观察</p>
                 <h2>{spreadSummary.title}</h2>
                 <section className="spread-summary-section">
                   <h3>{spreadSummary.illumination.title}</h3>
@@ -1278,7 +1278,7 @@ export function ArcanaPrototype() {
             )}
             <div className="result-actions">
               <button className="primary-button" onClick={saveReading}>
-                铭刻这次启示
+                保存本次记录
               </button>
               <button
                 className="secondary-button"
@@ -1290,7 +1290,7 @@ export function ArcanaPrototype() {
                 {sharing ? "正在生成分享卡片…" : "生成分享卡片"}
               </button>
               <button className="secondary-button" onClick={resetReading}>
-                再次叩问星轨
+                开始新的卡牌解读
               </button>
             </div>
             {shareStatus ? (
@@ -1299,7 +1299,7 @@ export function ArcanaPrototype() {
               </p>
             ) : null}
             <p className="disclaimer">
-              牌面是观察的镜子，不是写定的预言
+              仅供娱乐与自我反思；牌面不代表事实结论或未来结果，也不替代医疗、心理、法律或财务等专业建议
             </p>
           </section>
           </AssistantCard>
@@ -1333,11 +1333,11 @@ export function ArcanaPrototype() {
               ← 返回对话
             </button>
             <p className="eyebrow">星尘轨迹</p>
-            <h1 className="screen-title">铭刻过的启示</h1>
+            <h1 className="screen-title">卡牌记录</h1>
             {history.length === 0 ? (
               <div className="empty-state">
                 <div>
-                  <p>还没有保存过占卜记录</p>
+                  <p>还没有保存过卡牌记录</p>
                   <button
                     className="primary-button"
                     onClick={() => {
@@ -1380,7 +1380,7 @@ export function ArcanaPrototype() {
                     );
                   }}
                 >
-                  开始新的占卜
+                  开始新的卡牌解读
                 </button>
               </>
             )}

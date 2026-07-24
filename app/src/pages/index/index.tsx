@@ -309,7 +309,7 @@ export default function Index() {
 
     setHistory(nextHistory)
     setSavedReadingId(reading.id)
-    setSaveStatus('已保存到占卜记录')
+    setSaveStatus('已保存到卡牌记录')
     void triggerHaptic()
   }
 
@@ -350,7 +350,7 @@ export default function Index() {
     setInterpretations(nextInterpretations)
     setDetailsOpen(false)
     setSavedReadingId(reading.id)
-    setSaveStatus('正在查看已保存的占卜')
+    setSaveStatus('正在查看已保存的卡牌解读')
     setPhase('result')
   }
 
@@ -364,7 +364,7 @@ export default function Index() {
 
   const pageTitle =
     phase === 'history'
-      ? '占卜记录'
+      ? '卡牌记录'
       : phase === 'shuffle'
         ? '让牌序慢慢沉静'
         : phase === 'choose'
@@ -373,8 +373,8 @@ export default function Index() {
             ? '牌面正在显现'
             : phase === 'result'
               ? dailyMode
-                ? '今日的牌已经回应'
-                : `${activeSpread.name}已经回应`
+                ? '今日卡牌已生成'
+                : `${activeSpread.name}解读已生成`
               : '带一个问题来到牌前'
 
   const pageSummary =
@@ -383,7 +383,7 @@ export default function Index() {
       : phase === 'question'
         ? '先选择问题方向，再进入洗牌与选牌。'
         : phase === 'result'
-          ? '这是一种观察当下的角度，而不是写定的预言。'
+          ? '牌面仅提供观察角度，不代表事实结论或未来结果。'
           : '放慢一点，不必寻找唯一正确的牌。'
 
   return (
@@ -496,7 +496,7 @@ export default function Index() {
             disabled={history.length === 0}
             onClick={() => setPhase('history')}
           >
-            占卜记录（{history.length}）
+            卡牌记录（{history.length}）
           </Button>
         </>
       ) : null}
@@ -691,13 +691,13 @@ export default function Index() {
             disabled={Boolean(savedReadingId)}
             onClick={saveReading}
           >
-            {savedReadingId ? '已保存' : '保存这次启示'}
+            {savedReadingId ? '已保存' : '保存本次记录'}
           </Button>
           {saveStatus ? (
             <Text className='save-status'>{saveStatus}</Text>
           ) : null}
           <Button className='secondary-action' onClick={startAgain}>
-            开始新的占卜
+            开始新的卡牌解读
           </Button>
         </View>
       ) : null}
@@ -705,7 +705,7 @@ export default function Index() {
       {phase === 'history' ? (
         <View className='history-panel'>
           {history.length === 0 ? (
-            <Text className='history-empty'>还没有保存过占卜记录</Text>
+            <Text className='history-empty'>还没有保存过卡牌记录</Text>
           ) : (
             history.map((reading) => (
               <View className='history-item' key={reading.id}>
@@ -727,7 +727,7 @@ export default function Index() {
                   </Text>
                 </Button>
                 <Button
-                  aria-label={`删除${getSpread(reading.spreadId).name}占卜记录`}
+                  aria-label={`删除${getSpread(reading.spreadId).name}卡牌记录`}
                   className='history-item__delete'
                   onClick={() => deleteSavedReading(reading.id)}
                 >
@@ -748,7 +748,7 @@ export default function Index() {
       ) : null}
 
       <Text className='reading-page__disclaimer'>
-        牌语仅供娱乐与自我探索，不替代专业建议
+        仅供娱乐与自我反思；牌面不代表事实结论或未来结果，也不替代医疗、心理、法律或财务等专业建议
       </Text>
     </View>
   )

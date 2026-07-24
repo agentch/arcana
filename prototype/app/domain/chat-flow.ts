@@ -35,7 +35,7 @@ export const initialChatFlowState: ChatFlowState = {
     {
       id: "message-0",
       role: "assistant",
-      text: "夜色沉静，星轨微响。欢迎来到 Arcana——把你的问题交给沉默的牌面，听命运轻轻应一声。",
+      text: "夜色沉静，星光微亮。欢迎来到阿卡纳星语——把问题写下，让牌面成为整理思绪的一种角度。",
     },
   ],
 };
@@ -63,10 +63,10 @@ export function chatFlowReducer(
     case "start":
       if (state.phase !== "welcome" && state.phase !== "complete") return state;
       return appendMessages(state, "category", [
-        { role: "user", text: "开始一次占卜" },
+        { role: "user", text: "开始卡牌解读" },
         {
           role: "assistant",
-          text: "先告诉我——此刻搅动你心潮的，是哪一道命运的波纹？",
+          text: "先选择一个方向，看看此刻最值得梳理的是什么。",
         },
       ]);
     case "start-daily":
@@ -75,7 +75,7 @@ export function chatFlowReducer(
         { role: "user", text: "今日一牌" },
         {
           role: "assistant",
-          text: "今日之轮已为你停驻。洗牌之后，让今天的使者自行现身。",
+          text: "今日卡牌已准备好。洗牌之后，选择一张最吸引你的牌。",
         },
       ]);
     case "reveal-daily":
@@ -84,7 +84,7 @@ export function chatFlowReducer(
         { role: "user", text: "今日一牌" },
         {
           role: "assistant",
-          text: "今日的使者已在等候。且看它为你留下的那一页。",
+          text: "今日卡牌已生成，看看它提供了怎样的观察角度。",
         },
       ]);
     case "select-category":
@@ -111,7 +111,7 @@ export function chatFlowReducer(
         { role: "user", text: `使用${action.label}` },
         {
           role: "assistant",
-          text: "牌圈已在你指尖苏醒。凭直觉拨动命运之轮，为每一个位置召来它的使者。",
+          text: "牌圈已经展开。轻轻拨动牌组，为每一个位置选择一张牌。",
         },
       ]);
     case "complete-draw":
@@ -119,7 +119,7 @@ export function chatFlowReducer(
       return appendMessages(state, "result", [
         {
           role: "assistant",
-          text: "阵已合拢，回响初成。且看牌面为你揭开的那一页。",
+          text: "卡牌已经选齐，解读正在生成。",
         },
       ]);
     case "save":
@@ -127,7 +127,7 @@ export function chatFlowReducer(
       return appendMessages(state, "complete", [
         {
           role: "assistant",
-          text: "这段启示已铭刻于你的记录之中。星轨未熄，你随时可以再次启程。",
+          text: "本次卡牌记录已保存，你可以随时回来查看。",
         },
       ]);
     case "reset":

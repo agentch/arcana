@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "promptsVersion": "2026.07.5",
+  "promptsVersion": "2026.07.6",
   "categories": [
     {
       "id": "love",
@@ -8,7 +8,7 @@
       "description": "关系、沟通与个人需要",
       "options": [
         {"id": "relationship", "name": "关系现状", "prompt": "这段关系现在最需要我看见什么？", "recommendedSpreadId": "relationship-five"},
-        {"id": "single", "name": "单身与缘分", "prompt": "在建立新的关系前，我最需要准备什么？", "recommendedSpreadId": "single-card"},
+        {"id": "single", "name": "建立新关系", "prompt": "在建立新的关系前，我最需要准备什么？", "recommendedSpreadId": "single-card"},
         {"id": "reconciliation", "name": "复合与告别", "prompt": "面对这段过去的关系，我该如何理解自己的需要？", "recommendedSpreadId": "timeline"},
         {"id": "communication", "name": "沟通与边界", "prompt": "我可以如何改善沟通并照顾自己的边界？", "recommendedSpreadId": "relationship-five"}
       ]

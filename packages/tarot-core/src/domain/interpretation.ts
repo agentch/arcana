@@ -170,10 +170,10 @@ function pickAdvice(item: InterpretationView): string {
 }
 
 function closingText(spreadDescription: string): string {
-  return `${spreadDescription}。牌面提供的是观察角度，不是写定的预言。`;
+  return `${spreadDescription}。牌面仅提供观察角度，不代表事实结论或未来结果。`;
 }
 
-/** 时间流：照耀过去/现在/未来 + 建议现在/未来。 */
+/** 时间流：照耀过去/现在/后续关注 + 建议现在/后续关注。 */
 function composeTimelineSummary(
   spreadName: string,
   spreadDescription: string,
@@ -201,7 +201,7 @@ function composeTimelineSummary(
   }
   if (future) {
     illuminationLines.push({
-      label: "未来",
+      label: "后续关注",
       text: pickIllumination(future),
     });
   }
@@ -216,7 +216,7 @@ function composeTimelineSummary(
   if (future) {
     const futureAdvice = pickAdvice(future);
     if (futureAdvice) {
-      guidanceLines.push({ label: "未来", text: futureAdvice });
+      guidanceLines.push({ label: "后续关注", text: futureAdvice });
     }
   }
 
@@ -272,7 +272,7 @@ function composeTriangleSummary(
   };
 }
 
-/** 恋爱关系五牌阵：照耀双方与关系张力，建议取自发展趋势。 */
+/** 恋爱关系五牌阵：照耀双方与关系张力，建议取自后续关注。 */
 function composeRelationshipSummary(
   spreadName: string,
   spreadDescription: string,
@@ -304,7 +304,7 @@ function composeRelationshipSummary(
   if (direction) {
     const trend = pickIllumination(direction);
     if (trend) {
-      guidanceLines.push({label: "趋势", text: trend});
+      guidanceLines.push({label: "后续关注", text: trend});
     }
     const action = pickAdvice(direction);
     if (action) {
@@ -312,7 +312,7 @@ function composeRelationshipSummary(
     }
   }
 
-  const closing = `${spreadDescription}。「对方」牌位是你对关系互动的观察角度，不是对他人内心的事实判定。牌面提供的是观察角度，不是写定的预言。`;
+  const closing = `${spreadDescription}。「对方」牌位是你对关系互动的观察角度，不是对他人内心的事实判定。牌面不代表事实结论或未来结果。`;
 
   return {
     title: `${spreadName} · 照耀与建议`,
@@ -364,7 +364,7 @@ function composeChoiceSummary(
     });
   }
 
-  const closing = `${spreadDescription}。两条路径并列呈现，牌面不替你宣布胜者。牌面提供的是观察角度，不是写定的预言。`;
+  const closing = `${spreadDescription}。两条路径并列呈现，牌面不替你宣布胜者，也不代表事实结论或未来结果。`;
 
   return {
     title: `${spreadName} · 照耀与建议`,
