@@ -14,7 +14,11 @@ describe('微信项目静态牌背配置', () => {
       '/assets/card-backs/arcana-starpath-mirror-card-back.jpg',
     )
     expect(
-      resolveBundledCardBack('rws-original', configuredCardBack)?.image,
+      resolveBundledCardBack('rws-original', configuredCardBack, 'weapp')
+        ?.image,
+    ).toBe('../../assets/card-backs/arcana-starpath-mirror-card-back.jpg')
+    expect(
+      resolveBundledCardBack('rws-original', configuredCardBack, 'h5')?.image,
     ).toMatch(/arcana-starpath-mirror-card-back\.jpg$/)
   })
 

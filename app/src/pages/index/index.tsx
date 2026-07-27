@@ -97,7 +97,12 @@ export default function Index() {
     [],
   )
   const cardBack = useMemo(
-    () => resolveBundledCardBack(activeDeck.id, getActiveCardBack()),
+    () =>
+      resolveBundledCardBack(
+        activeDeck.id,
+        getActiveCardBack(),
+        getAssetPlatform(),
+      ),
     [],
   )
   const visibleCardBack = cardBackLoadFailed ? null : cardBack
