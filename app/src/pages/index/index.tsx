@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
 import { getAssetPlatform, resolveCardAssets } from '@/adapters/card-assets'
+import { resolveBundledCardBack } from '@/adapters/card-back-assets'
 import { resolveCloudFileUrl } from '@/adapters/cloudbase'
 import {
   readDailyCardRecord,
@@ -95,7 +96,10 @@ export default function Index() {
     () => resolveCardAssets(getCards(), getAssetPlatform()),
     [],
   )
-  const cardBack = useMemo(() => getActiveCardBack(), [])
+  const cardBack = useMemo(
+    () => resolveBundledCardBack(activeDeck.id, getActiveCardBack()),
+    [],
+  )
   const visibleCardBack = cardBackLoadFailed ? null : cardBack
   const activeSpread = getSpread(dailyMode ? 'single-card' : spreadId)
   const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null

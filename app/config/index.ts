@@ -1,4 +1,4 @@
-import { resolve } from 'node:path'
+import { basename, resolve } from 'node:path'
 
 import { defineConfig, type UserConfigExport } from '@tarojs/cli'
 
@@ -57,26 +57,14 @@ export default defineConfig<'vite'>(async (merge) => {
                 to: 'tarot/rws-original',
               },
             ]),
-        {
-          from: resolve(
-            __dirname,
-            '..',
-            '..',
-            'packages',
-            'tarot-core',
-            'src',
-            'data',
-            'decks',
-            'rws-original',
-            'web',
-            'card-backs',
-          ),
-          to: 'assets/card-backs',
-        },
       ],
       options: {},
     },
     mini: {
+      imageUrlLoaderOption: {
+        limit: false,
+        name: (filePath) => `assets/card-backs/${basename(filePath)}`,
+      },
       postcss: {
         pxtransform: {
           enable: true,
