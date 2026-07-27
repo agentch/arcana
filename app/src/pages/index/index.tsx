@@ -87,6 +87,7 @@ export default function Index() {
   const [savedReadingId, setSavedReadingId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState('')
   const [ritualError, setRitualError] = useState('')
+  const [cardBackLoadFailed, setCardBackLoadFailed] = useState(false)
   const revealInFlight = useRef(false)
 
   const categories = useMemo(() => getQuestionCategories(), [])
@@ -95,6 +96,7 @@ export default function Index() {
     [],
   )
   const cardBack = useMemo(() => getActiveCardBack(), [])
+  const visibleCardBack = cardBackLoadFailed ? null : cardBack
   const activeSpread = getSpread(dailyMode ? 'single-card' : spreadId)
   const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null
   const spreadSummary: SpreadSummaryView | null =
@@ -567,11 +569,13 @@ export default function Index() {
                 className={`shuffle-card shuffle-card--${index + 1}`}
                 key={index}
               >
-                {cardBack ? (
+                {visibleCardBack ? (
                   <Image
                     className='card-back-image'
                     mode='scaleToFill'
-                    src={cardBack.image}
+                    onError={() => setCardBackLoadFailed(true)}
+                    src={visibleCardBack.image}
+                    webp
                   />
                 ) : (
                   <Text className='card-back-symbol'>✦</Text>
@@ -592,11 +596,13 @@ export default function Index() {
                 className='ritual-choice'
                 onClick={() => revealNextCard(0)}
               >
-                {cardBack ? (
+                {visibleCardBack ? (
                   <Image
                     className='card-back-image'
                     mode='scaleToFill'
-                    src={cardBack.image}
+                    onError={() => setCardBackLoadFailed(true)}
+                    src={visibleCardBack.image}
+                    webp
                   />
                 ) : (
                   <Text className='card-back-symbol'>✦</Text>
@@ -625,11 +631,13 @@ export default function Index() {
                     >
                       {selected ? (
                         <Text className='selected-card-mark'>已选择</Text>
-                      ) : cardBack ? (
+                      ) : visibleCardBack ? (
                         <Image
                           className='card-back-image'
                           mode='scaleToFill'
-                          src={cardBack.image}
+                          onError={() => setCardBackLoadFailed(true)}
+                          src={visibleCardBack.image}
+                          webp
                         />
                       ) : (
                         <Text className='card-back-symbol'>✦</Text>
