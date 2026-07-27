@@ -6,17 +6,19 @@
   "packageManager": "pnpm@11.7.0",
   "scripts": {
     "dev:h5": "taro build --type h5 --watch",
-    "dev:weapp": "taro build --type weapp --watch",
+    "dev:weapp": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp --watch",
     "dev:weapp:local": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp --watch",
+    "dev:weapp:cloud": "taro build --type weapp --watch",
     "build:h5": "taro build --type h5",
-    "build:weapp": "taro build --type weapp",
+    "build:weapp": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp",
     "build:weapp:local": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp",
+    "build:weapp:cloud": "taro build --type weapp",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests --ext .ts,.tsx",
     "format:check": "prettier --check .",
     "test": "vitest run",
     "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test",
-    "validate": "pnpm check && pnpm build:h5 && pnpm build:weapp"
+    "validate": "pnpm check && pnpm build:h5 && pnpm build:weapp:cloud && pnpm build:weapp:local"
   },
   "browserslist": [
     "defaults and fully supports es6-module",
