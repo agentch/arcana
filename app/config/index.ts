@@ -1,4 +1,4 @@
-import { basename, resolve } from 'node:path'
+import { resolve } from 'node:path'
 
 import { defineConfig, type UserConfigExport } from '@tarojs/cli'
 
@@ -61,10 +61,6 @@ export default defineConfig<'vite'>(async (merge) => {
       options: {},
     },
     mini: {
-      imageUrlLoaderOption: {
-        limit: false,
-        name: (filePath) => `assets/card-backs/${basename(filePath)}`,
-      },
       postcss: {
         pxtransform: {
           enable: true,

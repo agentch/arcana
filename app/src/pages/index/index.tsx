@@ -90,6 +90,18 @@ export default function Index() {
   const [ritualError, setRitualError] = useState('')
   const [cardBackLoadFailed, setCardBackLoadFailed] = useState(false)
   const revealInFlight = useRef(false)
+  const handleCardBackError = (event: {
+    detail?: {
+      errMsg?: string
+    }
+  }) => {
+    setCardBackLoadFailed(true)
+    setRitualError(
+      event.detail?.errMsg
+        ? `牌背加载失败：${event.detail.errMsg}`
+        : '牌背加载失败，请重新编译后再试',
+    )
+  }
 
   const categories = useMemo(() => getQuestionCategories(), [])
   const cards = useMemo(
@@ -97,12 +109,7 @@ export default function Index() {
     [],
   )
   const cardBack = useMemo(
-    () =>
-      resolveBundledCardBack(
-        activeDeck.id,
-        getActiveCardBack(),
-        getAssetPlatform(),
-      ),
+    () => resolveBundledCardBack(activeDeck.id, getActiveCardBack()),
     [],
   )
   const visibleCardBack = cardBackLoadFailed ? null : cardBack
@@ -591,7 +598,7 @@ export default function Index() {
                   <Image
                     className='card-back-image'
                     mode='scaleToFill'
-                    onError={() => setCardBackLoadFailed(true)}
+                    onError={handleCardBackError}
                     src={visibleCardBack.image}
                   />
                 ) : (
@@ -617,7 +624,7 @@ export default function Index() {
                   <Image
                     className='card-back-image'
                     mode='scaleToFill'
-                    onError={() => setCardBackLoadFailed(true)}
+                    onError={handleCardBackError}
                     src={visibleCardBack.image}
                   />
                 ) : (
@@ -651,7 +658,7 @@ export default function Index() {
                         <Image
                           className='card-back-image'
                           mode='scaleToFill'
-                          onError={() => setCardBackLoadFailed(true)}
+                          onError={handleCardBackError}
                           src={visibleCardBack.image}
                         />
                       ) : (
