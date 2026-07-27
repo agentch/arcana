@@ -371,7 +371,7 @@ export default function Index() {
     void triggerHaptic()
   }
 
-  const openSavedReading = (reading: SavedReading) => {
+  const openSavedReading = async (reading: SavedReading) => {
     const spread = getSpread(reading.spreadId)
     const nextDrawnCards: DrawnRenderableCard[] = []
     const nextInterpretations: InterpretationView[] = []
@@ -381,15 +381,24 @@ export default function Index() {
         (item) => item.id === savedCard.positionId,
       )
       if (!card || !position) return
+      const resolvedCard = {
+        ...card,
+        asset: {
+          ...card.asset,
+          image: card.asset.image
+            ? await resolveCloudFileUrl(card.asset.image)
+            : null,
+        },
+      }
       nextDrawnCards.push({
-        card,
+        card: resolvedCard,
         orientation: savedCard.orientation,
         position,
       })
       nextInterpretations.push(
         composeInterpretation({
-          card,
-          layeredMeaning: getLayeredMeaning(card.id),
+          card: resolvedCard,
+          layeredMeaning: getLayeredMeaning(resolvedCard.id),
           orientation: savedCard.orientation,
           topicId: getMeaningTopic(reading.questionCategoryId),
           position,
@@ -671,15 +680,23 @@ export default function Index() {
                   : ''
               }`}
               mode='scaleToFill'
+              onError={() => setRitualError('牌面图片加载失败，请重新尝试')}
               src={currentDrawnCard.card.asset.image ?? ''}
               style={{ width: '100%', height: '100%' }}
+              webp
             />
           </View>
+          {ritualError ? (
+            <Text className='ritual-stage__error'>{ritualError}</Text>
+          ) : null}
         </View>
       ) : null}
 
       {phase === 'result' && drawnCards.length > 0 ? (
         <View className='result-card'>
+          {ritualError ? (
+            <Text className='ritual-stage__error'>{ritualError}</Text>
+          ) : null}
           {spreadSummary ? (
             <View className='spread-summary'>
               {[spreadSummary.illumination, spreadSummary.guidance].map(
@@ -736,8 +753,12 @@ export default function Index() {
                             : ''
                         }`}
                         mode='scaleToFill'
+                        onError={() =>
+                          setRitualError('牌面图片加载失败，请重新尝试')
+                        }
                         src={drawn.card.asset.image}
                         style={{ width: '100%', height: '100%' }}
+                        webp
                       />
                     </View>
                   ) : null}
@@ -816,7 +837,7 @@ export default function Index() {
               <View className='history-item' key={reading.id}>
                 <Button
                   className='history-item__content'
-                  onClick={() => openSavedReading(reading)}
+                  onClick={() => void openSavedReading(reading)}
                 >
                   <View className='history-item__meta'>
                     <Text>{getSpread(reading.spreadId).name}</Text>
