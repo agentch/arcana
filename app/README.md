@@ -28,14 +28,13 @@ pnpm validate
 
 ## 微信牌面模式
 
-开发者工具默认使用本地素材，避免未开通 CloudBase 公开读取权限时出现 `STORAGE_EXCEED_AUTHORITY`：
+开发者工具的监听模式默认使用本地素材：
 
 ```bash
 pnpm dev:weapp
-pnpm build:weapp
 ```
 
-以下别名与默认开发命令等价：
+对应的显式本地素材命令为：
 
 ```bash
 pnpm dev:weapp:local
@@ -44,14 +43,15 @@ pnpm build:weapp:local
 
 本地素材产物约18 MB，只用于微信开发者工具验证，不能作为正式上传包。
 
-需要验证正式 CloudBase 模式时显式执行：
+真机调试和正式上传必须使用 CloudBase 构建；默认生产构建即为云模式：
 
 ```bash
+pnpm build:weapp
 pnpm dev:weapp:cloud
 pnpm build:weapp:cloud
 ```
 
-当前 CloudBase 环境为 `cloud1-d4gihrh6ob576fe1d`。云模式在渲染前使用 `getTempFileURL` 将 `cloud://` File ID 转为临时 HTTPS 地址；公开读取权限未开通时会收到 `STORAGE_EXCEED_AUTHORITY`。`pnpm validate` 会先验证云模式，最后重新生成本地素材 `dist`，避免覆盖开发者工具正在使用的版本。
+当前 CloudBase 环境为 `cloud1-d4gihrh6ob576fe1d`。`pnpm build:weapp` 和 `pnpm build:weapp:cloud` 均生成用于真机的 CloudBase 构建；只有 `pnpm build:weapp:local` 会复制78张本地牌面，仅用于开发者工具模拟器，不能上传或用于真机。云模式在渲染前使用 `getTempFileURL` 将 `cloud://` File ID 转为临时 HTTPS 地址；公开读取权限未开通时会收到 `STORAGE_EXCEED_AUTHORITY`。`pnpm validate` 会先验证云模式，最后重新生成本地素材 `dist`，避免覆盖开发者工具正在使用的版本。
 
 ## 当前功能
 

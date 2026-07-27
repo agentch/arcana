@@ -10,7 +10,7 @@
     "dev:weapp:local": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp --watch",
     "dev:weapp:cloud": "taro build --type weapp --watch",
     "build:h5": "taro build --type h5",
-    "build:weapp": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp",
+    "build:weapp": "taro build --type weapp",
     "build:weapp:local": "TARO_LOCAL_CARD_ASSETS=true taro build --type weapp",
     "build:weapp:cloud": "taro build --type weapp",
     "typecheck": "tsc --noEmit",
