@@ -1,9 +1,16 @@
 import { describe, expect, it } from 'vitest'
 
-import { drawForSpread } from '@/domain/draw'
+import {
+  drawForSpread,
+  drawPreparedCardAt,
+  prepareDeckForSelection,
+} from '@/domain/draw'
 
 const cards = Array.from({ length: 8 }, (_, index) => ({
   id: `major-${String(index).padStart(2, '0')}`,
+}))
+const fullDeck = Array.from({ length: 78 }, (_, index) => ({
+  id: `card-${String(index + 1).padStart(2, '0')}`,
 }))
 
 const timeline = {
@@ -47,5 +54,36 @@ describe('drawForSpread', () => {
     expect(() => drawForSpread(cards.slice(0, 2), timeline)).toThrow(
       'needs 3 cards',
     )
+  })
+})
+
+describe('真实牌组位置选牌', () => {
+  it('将完整洗牌顺序与可选择位置一一绑定', () => {
+    const first = prepareDeckForSelection(fullDeck, seededRandom(21))
+    const second = prepareDeckForSelection(fullDeck, seededRandom(21))
+
+    expect(first).toHaveLength(78)
+    expect(first).toEqual(second)
+    expect(new Set(first.map(({ card }) => card.id)).size).toBe(78)
+  })
+
+  it('点击的牌组位置决定实际抽取的牌', () => {
+    const preparedDeck = prepareDeckForSelection(cards, seededRandom(9))
+    const result = drawPreparedCardAt(preparedDeck, 5, timeline.positions[0])
+
+    expect(result.card.id).toBe(preparedDeck[5].card.id)
+    expect(result.orientation).toBe(preparedDeck[5].orientation)
+    expect(result.position.id).toBe('past')
+  })
+
+  it('拒绝重复位置和越界位置', () => {
+    const preparedDeck = prepareDeckForSelection(cards, seededRandom(5))
+
+    expect(() =>
+      drawPreparedCardAt(preparedDeck, 2, timeline.positions[0], [2]),
+    ).toThrow('already been selected')
+    expect(() =>
+      drawPreparedCardAt(preparedDeck, cards.length, timeline.positions[0]),
+    ).toThrow('outside the prepared deck')
   })
 })

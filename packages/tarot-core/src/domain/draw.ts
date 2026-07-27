@@ -1,8 +1,4 @@
-import type {
-  Orientation,
-  RenderableCard,
-  SpreadPosition,
-} from "./tarot";
+import type { Orientation, RenderableCard, SpreadPosition } from "./tarot";
 
 export type CardReference = {
   id: string;
@@ -29,6 +25,11 @@ export type DrawnCard<
 };
 
 export type DrawnRenderableCard = DrawnCard<RenderableCard, SpreadPosition>;
+
+export type PreparedDeckCard<TCard extends CardReference = CardReference> = {
+  card: TCard;
+  orientation: Orientation;
+};
 
 export function shuffleDeck<T>(
   cards: readonly T[],
@@ -57,6 +58,44 @@ export function createDrawnCard<
   return {
     card,
     orientation: orientation ?? (random() >= 0.5 ? "upright" : "reversed"),
+    position,
+  };
+}
+
+export function prepareDeckForSelection<TCard extends CardReference>(
+  cards: readonly TCard[],
+  random: () => number = Math.random,
+): PreparedDeckCard<TCard>[] {
+  return shuffleDeck(cards, random).map((card) => ({
+    card,
+    orientation: random() >= 0.5 ? "upright" : "reversed",
+  }));
+}
+
+export function drawPreparedCardAt<
+  TCard extends CardReference,
+  TPosition extends SpreadPositionReference,
+>(
+  preparedDeck: readonly PreparedDeckCard<TCard>[],
+  deckIndex: number,
+  position: TPosition,
+  selectedDeckIndexes: readonly number[] = [],
+): DrawnCard<TCard, TPosition> {
+  if (
+    !Number.isInteger(deckIndex) ||
+    deckIndex < 0 ||
+    deckIndex >= preparedDeck.length
+  ) {
+    throw new Error(`Deck position ${deckIndex} is outside the prepared deck`);
+  }
+  if (selectedDeckIndexes.includes(deckIndex)) {
+    throw new Error(`Deck position ${deckIndex} has already been selected`);
+  }
+
+  const prepared = preparedDeck[deckIndex];
+  return {
+    card: prepared.card,
+    orientation: prepared.orientation,
     position,
   };
 }

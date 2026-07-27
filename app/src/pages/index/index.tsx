@@ -6,7 +6,7 @@ import {
   Textarea,
   View,
 } from '@tarojs/components'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
 import { getAssetPlatform, resolveCardAssets } from '@/adapters/card-assets'
@@ -39,9 +39,12 @@ import {
   pickDailyCard,
 } from '@arcana/tarot-core/domain/daily-card'
 import {
-  drawForSpread,
+  drawPreparedCardAt,
+  prepareDeckForSelection,
   type DrawnRenderableCard,
+  type PreparedDeckCard,
 } from '@arcana/tarot-core/domain/draw'
+import type { RenderableCard } from '@arcana/tarot-core/domain/tarot'
 import {
   composeInterpretation,
   composeSpreadSummary,
@@ -52,8 +55,6 @@ import './index.scss'
 
 type ReadingPhase =
   'question' | 'shuffle' | 'choose' | 'reveal' | 'result' | 'history'
-
-const CARD_CHOICES = Array.from({ length: 7 }, (_, index) => index)
 
 export default function Index() {
   const [readingDraft, setReadingDraft] = useState<{
@@ -73,6 +74,10 @@ export default function Index() {
   const [phase, setPhase] = useState<ReadingPhase>('question')
   const [dailyMode, setDailyMode] = useState(false)
   const [preparedDraws, setPreparedDraws] = useState<DrawnRenderableCard[]>([])
+  const [preparedDeck, setPreparedDeck] = useState<
+    PreparedDeckCard<RenderableCard>[]
+  >([])
+  const [selectedDeckIndexes, setSelectedDeckIndexes] = useState<number[]>([])
   const [drawnCards, setDrawnCards] = useState<DrawnRenderableCard[]>([])
   const [interpretations, setInterpretations] = useState<InterpretationView[]>(
     [],
@@ -81,6 +86,7 @@ export default function Index() {
   const [history, setHistory] = useState<SavedReading[]>(readReadingHistory)
   const [savedReadingId, setSavedReadingId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState('')
+  const revealInFlight = useRef(false)
 
   const categories = useMemo(() => getQuestionCategories(), [])
   const cards = useMemo(
@@ -126,6 +132,8 @@ export default function Index() {
     await triggerHaptic()
     updateDraft({ questionCategoryId: categoryId, question: '' })
     setPreparedDraws([])
+    setPreparedDeck([])
+    setSelectedDeckIndexes([])
     setDrawnCards([])
     setInterpretations([])
     setDetailsOpen(false)
@@ -142,6 +150,8 @@ export default function Index() {
     await triggerHaptic()
     updateDraft({ spreadId: nextSpreadId })
     setPreparedDraws([])
+    setPreparedDeck([])
+    setSelectedDeckIndexes([])
     setDrawnCards([])
     setInterpretations([])
     setDetailsOpen(false)
@@ -183,6 +193,8 @@ export default function Index() {
           position,
         }
         setPreparedDraws([nextDrawn])
+        setPreparedDeck([])
+        setSelectedDeckIndexes([])
         setDrawnCards([nextDrawn])
         setInterpretations([
           composeInterpretation({
@@ -201,6 +213,8 @@ export default function Index() {
 
     const picked = pickDailyCard(cards, dateKey)
     setPreparedDraws([{ ...picked, position }])
+    setPreparedDeck([])
+    setSelectedDeckIndexes([])
     setDrawnCards([])
     setInterpretations([])
     setPhase('shuffle')
@@ -212,8 +226,9 @@ export default function Index() {
 
     await triggerHaptic()
     setDailyMode(false)
-    const spread = getSpread(spreadId)
-    setPreparedDraws(drawForSpread(cards, spread))
+    setPreparedDraws([])
+    setPreparedDeck(prepareDeckForSelection(cards))
+    setSelectedDeckIndexes([])
     setDrawnCards([])
     setInterpretations([])
     setDetailsOpen(false)
@@ -222,49 +237,78 @@ export default function Index() {
     setPhase('shuffle')
   }
 
-  const revealNextCard = async () => {
-    if (!question.trim() || !questionCategoryId || phase !== 'choose') return
+  const revealNextCard = async (deckIndex: number) => {
+    if (
+      !question.trim() ||
+      !questionCategoryId ||
+      phase !== 'choose' ||
+      revealInFlight.current
+    ) {
+      return
+    }
 
-    await triggerHaptic()
-    const drawn = preparedDraws[drawnCards.length]
-    if (!drawn) return
-    const resolvedDrawn: DrawnRenderableCard = {
-      ...drawn,
-      card: {
-        ...drawn.card,
-        asset: {
-          ...drawn.card.asset,
-          image: drawn.card.asset.image
-            ? await resolveCloudFileUrl(drawn.card.asset.image)
-            : null,
+    revealInFlight.current = true
+    try {
+      await triggerHaptic()
+      const position = [...activeSpread.positions].sort(
+        (left, right) => left.order - right.order,
+      )[drawnCards.length]
+      const drawn = dailyMode
+        ? preparedDraws[drawnCards.length]
+        : position
+          ? drawPreparedCardAt(
+              preparedDeck,
+              deckIndex,
+              position,
+              selectedDeckIndexes,
+            )
+          : null
+      if (!drawn) return
+      const resolvedDrawn: DrawnRenderableCard = {
+        ...drawn,
+        card: {
+          ...drawn.card,
+          asset: {
+            ...drawn.card.asset,
+            image: drawn.card.asset.image
+              ? await resolveCloudFileUrl(drawn.card.asset.image)
+              : null,
+          },
         },
-      },
-    }
-    const nextInterpretation = composeInterpretation({
-      card: resolvedDrawn.card,
-      layeredMeaning: getLayeredMeaning(drawn.card.id),
-      orientation: drawn.orientation,
-      topicId: getMeaningTopic(questionCategoryId),
-      position: drawn.position,
-    })
-    setDrawnCards((current) => [...current, resolvedDrawn])
-    setInterpretations((current) => [...current, nextInterpretation])
-    if (dailyMode) {
-      writeDailyCardRecord({
-        dateKey: getLocalDateKey(),
-        cardId: drawn.card.id,
+      }
+      const nextInterpretation = composeInterpretation({
+        card: resolvedDrawn.card,
+        layeredMeaning: getLayeredMeaning(drawn.card.id),
         orientation: drawn.orientation,
-        revealedAt: new Date().toISOString(),
+        topicId: getMeaningTopic(questionCategoryId),
+        position: drawn.position,
       })
+      setDrawnCards((current) => [...current, resolvedDrawn])
+      setInterpretations((current) => [...current, nextInterpretation])
+      if (!dailyMode) {
+        setSelectedDeckIndexes((current) => [...current, deckIndex])
+      }
+      if (dailyMode) {
+        writeDailyCardRecord({
+          dateKey: getLocalDateKey(),
+          cardId: drawn.card.id,
+          orientation: drawn.orientation,
+          revealedAt: new Date().toISOString(),
+        })
+      }
+      setPhase('reveal')
+      await triggerHaptic()
+    } finally {
+      revealInFlight.current = false
     }
-    setPhase('reveal')
-    await triggerHaptic()
   }
 
   const startAgain = () => {
     resetDraft()
     setDailyMode(false)
     setPreparedDraws([])
+    setPreparedDeck([])
+    setSelectedDeckIndexes([])
     setDrawnCards([])
     setInterpretations([])
     setDetailsOpen(false)
@@ -346,6 +390,8 @@ export default function Index() {
       spreadId: reading.spreadId,
     })
     setPreparedDraws(nextDrawnCards)
+    setPreparedDeck([])
+    setSelectedDeckIndexes([])
     setDrawnCards(nextDrawnCards)
     setInterpretations(nextInterpretations)
     setDetailsOpen(false)
@@ -527,31 +573,67 @@ export default function Index() {
 
       {phase === 'choose' ? (
         <View className='ritual-stage'>
-          <ScrollView className='card-choice-scroll' scrollX>
-            <View className='card-choice-row'>
-              {CARD_CHOICES.map((choice) => (
-                <Button
-                  aria-label={`选择第 ${choice + 1} 张牌`}
-                  className='ritual-choice'
-                  key={choice}
-                  onClick={revealNextCard}
-                >
-                  {cardBack ? (
-                    <Image
-                      className='card-back-image'
-                      mode='scaleToFill'
-                      src={cardBack.image}
-                    />
-                  ) : (
-                    <Text className='card-back-symbol'>✦</Text>
-                  )}
-                </Button>
-              ))}
+          {dailyMode ? (
+            <View className='daily-card-choice'>
+              <Button
+                aria-label='翻开今日卡牌'
+                className='ritual-choice'
+                onClick={() => revealNextCard(0)}
+              >
+                {cardBack ? (
+                  <Image
+                    className='card-back-image'
+                    mode='scaleToFill'
+                    src={cardBack.image}
+                  />
+                ) : (
+                  <Text className='card-back-symbol'>✦</Text>
+                )}
+              </Button>
             </View>
-          </ScrollView>
+          ) : (
+            <ScrollView className='card-choice-scroll' scrollX>
+              <View
+                className='card-choice-row'
+                style={{
+                  width: `${preparedDeck.length * 208 + 132}px`,
+                }}
+              >
+                {preparedDeck.map(({ card }, deckIndex) => {
+                  const selected = selectedDeckIndexes.includes(deckIndex)
+                  return (
+                    <Button
+                      aria-label={`选择洗牌后的第 ${deckIndex + 1} 个位置`}
+                      className={`ritual-choice ${
+                        selected ? 'ritual-choice--selected' : ''
+                      }`}
+                      disabled={selected}
+                      key={card.id}
+                      onClick={() => revealNextCard(deckIndex)}
+                    >
+                      {selected ? (
+                        <Text className='selected-card-mark'>已选择</Text>
+                      ) : cardBack ? (
+                        <Image
+                          className='card-back-image'
+                          mode='scaleToFill'
+                          src={cardBack.image}
+                        />
+                      ) : (
+                        <Text className='card-back-symbol'>✦</Text>
+                      )}
+                    </Button>
+                  )
+                })}
+              </View>
+            </ScrollView>
+          )}
           <Text className='ritual-stage__hint'>
-            左右滑动，触碰最吸引你的牌 · {drawnCards.length + 1} /{' '}
-            {activeSpread.positions.length}
+            {dailyMode
+              ? '翻开今天的卡牌'
+              : `78张牌已完成洗牌，左右滑动选择位置 · ${
+                  drawnCards.length + 1
+                } / ${activeSpread.positions.length}`}
           </Text>
         </View>
       ) : null}
