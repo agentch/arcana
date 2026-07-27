@@ -228,6 +228,13 @@
     font-size: 24px;
     letter-spacing: 2px;
   }
+
+  &__error {
+    display: block;
+    margin-top: 18px;
+    color: #d9a7ad;
+    font-size: 22px;
+  }
 }
 
 .shuffle-stack {

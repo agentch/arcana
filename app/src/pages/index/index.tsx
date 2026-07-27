@@ -86,6 +86,7 @@ export default function Index() {
   const [history, setHistory] = useState<SavedReading[]>(readReadingHistory)
   const [savedReadingId, setSavedReadingId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState('')
+  const [ritualError, setRitualError] = useState('')
   const revealInFlight = useRef(false)
 
   const categories = useMemo(() => getQuestionCategories(), [])
@@ -139,6 +140,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setRitualError('')
   }
 
   const selectQuestion = async (prompt: string) => {
@@ -157,6 +159,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setRitualError('')
   }
 
   const startDailyReading = async () => {
@@ -169,6 +172,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setRitualError('')
     updateDraft({
       question: DAILY_QUESTION,
       questionCategoryId: DAILY_CATEGORY_ID,
@@ -234,13 +238,17 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setRitualError('')
     setPhase('shuffle')
   }
 
   const revealNextCard = async (deckIndex: number) => {
+    const interpretationCategoryId = dailyMode
+      ? DAILY_CATEGORY_ID
+      : questionCategoryId
     if (
-      !question.trim() ||
-      !questionCategoryId ||
+      (!dailyMode && (!question.trim() || !questionCategoryId)) ||
+      !interpretationCategoryId ||
       phase !== 'choose' ||
       revealInFlight.current
     ) {
@@ -248,6 +256,7 @@ export default function Index() {
     }
 
     revealInFlight.current = true
+    setRitualError('')
     try {
       await triggerHaptic()
       const position = [...activeSpread.positions].sort(
@@ -280,7 +289,7 @@ export default function Index() {
         card: resolvedDrawn.card,
         layeredMeaning: getLayeredMeaning(drawn.card.id),
         orientation: drawn.orientation,
-        topicId: getMeaningTopic(questionCategoryId),
+        topicId: getMeaningTopic(interpretationCategoryId),
         position: drawn.position,
       })
       setDrawnCards((current) => [...current, resolvedDrawn])
@@ -298,6 +307,8 @@ export default function Index() {
       }
       setPhase('reveal')
       await triggerHaptic()
+    } catch {
+      setRitualError('牌面加载失败，请重新翻开')
     } finally {
       revealInFlight.current = false
     }
@@ -314,6 +325,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setRitualError('')
     setPhase('question')
   }
 
@@ -635,6 +647,9 @@ export default function Index() {
                   drawnCards.length + 1
                 } / ${activeSpread.positions.length}`}
           </Text>
+          {ritualError ? (
+            <Text className='ritual-stage__error'>{ritualError}</Text>
+          ) : null}
         </View>
       ) : null}
 
