@@ -584,7 +584,6 @@ export default function Index() {
                     mode='scaleToFill'
                     onError={() => setCardBackLoadFailed(true)}
                     src={visibleCardBack.image}
-                    webp
                   />
                 ) : (
                   <Text className='card-back-symbol'>✦</Text>
@@ -611,7 +610,6 @@ export default function Index() {
                     mode='scaleToFill'
                     onError={() => setCardBackLoadFailed(true)}
                     src={visibleCardBack.image}
-                    webp
                   />
                 ) : (
                   <Text className='card-back-symbol'>✦</Text>
@@ -646,7 +644,6 @@ export default function Index() {
                           mode='scaleToFill'
                           onError={() => setCardBackLoadFailed(true)}
                           src={visibleCardBack.image}
-                          webp
                         />
                       ) : (
                         <Text className='card-back-symbol'>✦</Text>

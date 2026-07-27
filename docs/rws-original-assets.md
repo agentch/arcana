@@ -146,14 +146,14 @@ data/
     "sha256": "..."
   },
   "web": {
-    "file": "web/card-backs/arcana-starpath-mirror-card-back.webp",
-    "publicPath": "/assets/card-backs/arcana-starpath-mirror-card-back.webp",
+    "file": "web/card-backs/arcana-starpath-mirror-card-back.jpg",
+    "publicPath": "/assets/card-backs/arcana-starpath-mirror-card-back.jpg",
     "sha256": "..."
   }
 }
 ```
 
-牌背原图只保存在归档目录，不进入公开静态目录；构建前由素材同步命令仅复制审核通过的 WebP。
+牌背原图只保存在归档目录，不进入公开静态目录；构建时仅复制审核通过的真机兼容 JPEG。
 
 若选定扫描批次没有可确认授权的原始牌背，应使用 Arcana 自有牌背，不得从其他商业牌组拼接。
 
@@ -234,7 +234,7 @@ npm run assets:sync:public
 - `assets:approve` 只允许来源和许可已批准、Web 文件完整的素材进入 `approved`。
 - `assets:sync:public` 根据牌组映射生成站点静态副本，不让业务逻辑引用归档原图。
 
-截至2026-07-22，78张正面牌均为 `approved`；原创牌背 `arcana-starpath-mirror` 已补齐作者、版本、许可、尺寸、字节数和 SHA-256，源 PNG 仅归档，运行时只发布 WebP。
+截至2026-07-27，78张正面牌均为 `approved`；原创牌背 `arcana-starpath-mirror` 已补齐作者、版本、许可、尺寸、字节数和 SHA-256，源 PNG 仅归档，运行时发布基线 JPEG。
 
 候选来源的详细核验记录见 [`rws-source-audit.md`](rws-source-audit.md)。
 

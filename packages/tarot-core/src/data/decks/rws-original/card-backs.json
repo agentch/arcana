@@ -28,13 +28,13 @@
         "sha256": "5505ed7975a8d98085d63596ff8a05f1241191845cd7a0d5c1459dc474aa5c7f"
       },
       "web": {
-        "file": "web/card-backs/arcana-starpath-mirror-card-back.webp",
-        "publicPath": "/assets/card-backs/arcana-starpath-mirror-card-back.webp",
-        "mediaType": "image/webp",
+        "file": "web/card-backs/arcana-starpath-mirror-card-back.jpg",
+        "publicPath": "/assets/card-backs/arcana-starpath-mirror-card-back.jpg",
+        "mediaType": "image/jpeg",
         "width": 720,
         "height": 1080,
-        "bytes": 154560,
-        "sha256": "5469194e5f0459df0d6d235c398c0e84ad7eab0590753e70240b6678021a42c3"
+        "bytes": 242138,
+        "sha256": "be7603a521ab3ec416b576fd09697daf0c84f98275857ad36a0777d565251b6c"
       }
     }
   ],
