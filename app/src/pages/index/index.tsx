@@ -4,12 +4,19 @@ import type {
   ITouchEvent,
 } from '@tarojs/components/types/common'
 import Taro from '@tarojs/taro'
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
 import { getAssetPlatform, resolveCardAssets } from '@/adapters/card-assets'
 import { resolveBundledCardBack } from '@/adapters/card-back-assets'
-import { resolveCloudFileUrl } from '@/adapters/cloudbase'
+import { resolveCloudFileUrl, warmCloudFileUrls } from '@/adapters/cloudbase'
 import {
   readDailyCardRecord,
   writeDailyCardRecord,
@@ -23,7 +30,6 @@ import {
 } from '@/features/history/reading-history'
 import {
   clampDeckRotation,
-  DECK_ARC_SWEEP_DEGREES,
   getDeckWheelCardLayouts,
   getDrawAnimationGeometry,
   getFocusedDeckIndex,
@@ -148,18 +154,27 @@ export default function Index() {
   } | null>(null)
   const suppressDeckClick = useRef(false)
   const lastWheelHapticIndex = useRef(0)
-  const handleCardBackError = (event: {
-    detail?: {
-      errMsg?: string
-    }
-  }) => {
-    setCardBackLoadFailed(true)
-    setRitualError(
-      event.detail?.errMsg
-        ? `牌背加载失败：${event.detail.errMsg}`
-        : '牌背加载失败，请重新编译后再试',
-    )
-  }
+  const pendingDeckRotation = useRef<number | null>(null)
+  const deckRotationTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const deckRotationValue = useRef(0)
+  const selectDeckCardRef = useRef<
+    (deckIndex: number, sourceRotation: number) => void
+  >(() => undefined)
+  const handleCardBackError = useCallback(
+    (event: {
+      detail?: {
+        errMsg?: string
+      }
+    }) => {
+      setCardBackLoadFailed(true)
+      setRitualError(
+        event.detail?.errMsg
+          ? `牌背加载失败：${event.detail.errMsg}`
+          : '牌背加载失败，请重新编译后再试',
+      )
+    },
+    [],
+  )
 
   const categories = useMemo(() => getQuestionCategories(), [])
   const cards = useMemo(
@@ -179,27 +194,22 @@ export default function Index() {
     phase === 'reveal' ? drawnCards.slice(0, -1) : drawnCards
   const activeDrawPosition =
     orderedActivePositions[displayedDrawnCards.length] ?? null
-  const availableDeckCards = useMemo(
-    () =>
-      preparedDeck
-        .map((prepared, deckIndex) => ({ ...prepared, deckIndex }))
-        .filter(({ deckIndex }) => !selectedDeckIndexes.includes(deckIndex)),
-    [preparedDeck, selectedDeckIndexes],
-  )
   const deckWheelCards = useMemo(
     () =>
-      getDeckWheelCardLayouts(availableDeckCards.length).map((layout) => ({
-        ...availableDeckCards[layout.itemIndex],
+      getDeckWheelCardLayouts(preparedDeck.length).map((layout) => ({
+        ...preparedDeck[layout.itemIndex],
+        deckIndex: layout.itemIndex,
+        extracted: selectedDeckIndexes.includes(layout.itemIndex),
         layout,
       })),
-    [availableDeckCards],
+    [preparedDeck, selectedDeckIndexes],
   )
   const focusedDeckIndex = getFocusedDeckIndex(
-    availableDeckCards.length,
+    preparedDeck.length,
     deckRotation,
   )
   const focusedDeckOrdinal =
-    availableDeckCards.length === 0 ? 0 : focusedDeckIndex + 1
+    preparedDeck.length === 0 ? 0 : focusedDeckIndex + 1
   const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null
   const spreadSummary: SpreadSummaryView | null =
     interpretations.length > 1
@@ -222,6 +232,29 @@ export default function Index() {
     }, 1800)
     return () => clearTimeout(timer)
   }, [phase])
+
+  useEffect(() => {
+    if (phase !== 'shuffle') return
+    const preparedCards = dailyMode ? preparedDraws : preparedDeck
+    void warmCloudFileUrls(
+      preparedCards.flatMap(({ card }) =>
+        card.asset.image ? [card.asset.image] : [],
+      ),
+    )
+  }, [dailyMode, phase, preparedDeck, preparedDraws])
+
+  useEffect(
+    () => () => {
+      if (deckRotationTimer.current) {
+        clearTimeout(deckRotationTimer.current)
+      }
+    },
+    [],
+  )
+
+  useEffect(() => {
+    deckRotationValue.current = deckRotation
+  }, [deckRotation])
 
   useEffect(() => {
     if (phase !== 'reveal') return undefined
@@ -370,7 +403,7 @@ export default function Index() {
     revealInFlight.current = true
     setRitualError('')
     try {
-      await triggerHaptic()
+      void triggerHaptic('medium')
       const position = [...activeSpread.positions].sort(
         (left, right) => left.order - right.order,
       )[drawnCards.length]
@@ -385,6 +418,16 @@ export default function Index() {
             )
           : null
       if (!drawn) return
+      if (!dailyMode) {
+        setSelectedDeckIndexes((current) => [...current, deckIndex])
+      }
+      const sourceImage = drawn.card.asset.image
+      const resolvedImageTask = sourceImage
+        ? resolveCloudFileUrl(sourceImage).then(
+            (image) => ({ image, failed: false }),
+            () => ({ image: null, failed: true }),
+          )
+        : Promise.resolve({ image: null, failed: false })
       const nextAnimationGeometry = sourceSelector
         ? await measureDrawAnimation(
             sourceSelector,
@@ -392,31 +435,26 @@ export default function Index() {
             sourceRotation,
           )
         : DEFAULT_DRAW_ANIMATION_GEOMETRY
-      const resolvedDrawn: DrawnRenderableCard = {
+      const animatingDraw: DrawnRenderableCard = {
         ...drawn,
         card: {
           ...drawn.card,
           asset: {
             ...drawn.card.asset,
-            image: drawn.card.asset.image
-              ? await resolveCloudFileUrl(drawn.card.asset.image)
-              : null,
+            image: null,
           },
         },
       }
       const nextInterpretation = composeInterpretation({
-        card: resolvedDrawn.card,
+        card: drawn.card,
         layeredMeaning: getLayeredMeaning(drawn.card.id),
         orientation: drawn.orientation,
         topicId: getMeaningTopic(interpretationCategoryId),
         position: drawn.position,
       })
       setDrawAnimationGeometry(nextAnimationGeometry)
-      setDrawnCards((current) => [...current, resolvedDrawn])
+      setDrawnCards((current) => [...current, animatingDraw])
       setInterpretations((current) => [...current, nextInterpretation])
-      if (!dailyMode) {
-        setSelectedDeckIndexes((current) => [...current, deckIndex])
-      }
       if (dailyMode) {
         writeDailyCardRecord({
           dateKey: getLocalDateKey(),
@@ -426,8 +464,32 @@ export default function Index() {
         })
       }
       setPhase('reveal')
-      await triggerHaptic()
+      void resolvedImageTask.then(({ image, failed }) => {
+        if (failed || !image) {
+          if (failed) setRitualError('牌面图片加载失败，请检查网络后重试')
+          return
+        }
+        setDrawnCards((current) =>
+          current.map((item) =>
+            item.card.id === drawn.card.id &&
+            item.position.id === drawn.position.id
+              ? {
+                  ...item,
+                  card: {
+                    ...item.card,
+                    asset: { ...item.card.asset, image },
+                  },
+                }
+              : item,
+          ),
+        )
+      })
     } catch {
+      if (!dailyMode) {
+        setSelectedDeckIndexes((current) =>
+          current.filter((index) => index !== deckIndex),
+        )
+      }
       setRitualError('牌面加载失败，请重新翻开')
     } finally {
       revealInFlight.current = false
@@ -475,14 +537,20 @@ export default function Index() {
     const nextRotation = clampDeckRotation(
       rotationFromDrag(drag.startRotation, drag.startX, touch.clientX),
     )
-    setDeckRotation((current) =>
-      Math.abs(nextRotation - current) < 0.45 ? current : nextRotation,
-    )
-    const cardAngleStep =
-      availableDeckCards.length > 1
-        ? DECK_ARC_SWEEP_DEGREES / (availableDeckCards.length - 1)
-        : DECK_ARC_SWEEP_DEGREES
-    const hapticIndex = Math.round(nextRotation / cardAngleStep)
+    pendingDeckRotation.current = nextRotation
+    if (!deckRotationTimer.current) {
+      deckRotationTimer.current = setTimeout(() => {
+        const pending = pendingDeckRotation.current
+        pendingDeckRotation.current = null
+        deckRotationTimer.current = null
+        if (pending === null) return
+        deckRotationValue.current = pending
+        setDeckRotation((current) =>
+          Math.abs(pending - current) < 0.45 ? current : pending,
+        )
+      }, 24)
+    }
+    const hapticIndex = Math.round(nextRotation / 8)
     if (hapticIndex !== lastWheelHapticIndex.current) {
       lastWheelHapticIndex.current = hapticIndex
       void triggerHaptic('light')
@@ -490,6 +558,15 @@ export default function Index() {
   }
 
   const finishDeckDrag = () => {
+    if (deckRotationTimer.current) {
+      clearTimeout(deckRotationTimer.current)
+      deckRotationTimer.current = null
+    }
+    if (pendingDeckRotation.current !== null) {
+      deckRotationValue.current = pendingDeckRotation.current
+      setDeckRotation(pendingDeckRotation.current)
+      pendingDeckRotation.current = null
+    }
     if (deckDrag.current?.moved) {
       suppressDeckClick.current = true
       setTimeout(() => {
@@ -507,6 +584,54 @@ export default function Index() {
     }
     void revealNextCard(deckIndex, `#deck-card-${deckIndex}`, sourceRotation)
   }
+  selectDeckCardRef.current = selectDeckCard
+
+  const deckCardButtons = useMemo(
+    () =>
+      deckWheelCards.map(({ card, deckIndex, extracted, layout }) => {
+        const focused = !extracted && layout.itemIndex === focusedDeckIndex
+        return (
+          <Button
+            aria-label={
+              extracted
+                ? `洗牌后的第 ${deckIndex + 1} 个位置已抽出`
+                : `选择洗牌后的第 ${deckIndex + 1} 个位置`
+            }
+            className={`draw-deck-card ${
+              focused ? 'draw-deck-card--focused' : ''
+            } ${extracted ? 'draw-deck-card--extracted' : ''}`}
+            disabled={extracted}
+            id={`deck-card-${deckIndex}`}
+            key={card.id}
+            onClick={
+              extracted
+                ? undefined
+                : () =>
+                    selectDeckCardRef.current(
+                      deckIndex,
+                      layout.angle + deckRotationValue.current,
+                    )
+            }
+            style={{
+              transform: `translate(-50%, -50%) rotate(${layout.angle}deg) translateY(-460rpx)`,
+              zIndex: focused ? 300 : extracted ? 240 : 100,
+            }}
+          >
+            {extracted ? null : visibleCardBack ? (
+              <Image
+                className='draw-deck-card__image'
+                mode='aspectFill'
+                onError={handleCardBackError}
+                src={visibleCardBack.image}
+              />
+            ) : (
+              <Text className='draw-deck-card__symbol'>✦</Text>
+            )}
+          </Button>
+        )
+      }),
+    [deckWheelCards, focusedDeckIndex, handleCardBackError, visibleCardBack],
+  )
 
   const saveReading = () => {
     if (
@@ -826,7 +951,7 @@ export default function Index() {
           <Text className='ritual-stage__hint draw-stage__hint'>
             {dailyMode
               ? '翻开今天的卡牌'
-              : `转动牌组，为“${activeDrawPosition?.name ?? ''}”选择一张牌 · ${focusedDeckOrdinal}/${availableDeckCards.length}`}
+              : `转动牌组，为“${activeDrawPosition?.name ?? ''}”选择一张牌 · ${focusedDeckOrdinal}/${preparedDeck.length}`}
           </Text>
           {dailyMode ? (
             <View className='daily-card-choice'>
@@ -864,37 +989,7 @@ export default function Index() {
                   transform: `rotate(${deckRotation}deg)`,
                 }}
               >
-                {deckWheelCards.map(({ card, deckIndex, layout }) => {
-                  const focused = layout.itemIndex === focusedDeckIndex
-                  return (
-                    <Button
-                      aria-label={`选择洗牌后的第 ${deckIndex + 1} 个位置`}
-                      className={`draw-deck-card ${
-                        focused ? 'draw-deck-card--focused' : ''
-                      }`}
-                      id={`deck-card-${deckIndex}`}
-                      key={card.id}
-                      onClick={() =>
-                        selectDeckCard(deckIndex, layout.angle + deckRotation)
-                      }
-                      style={{
-                        transform: `translate(-50%, -50%) rotate(${layout.angle}deg) translateY(-460rpx)`,
-                        zIndex: focused ? 300 : 100,
-                      }}
-                    >
-                      {visibleCardBack ? (
-                        <Image
-                          className='draw-deck-card__image'
-                          mode='aspectFill'
-                          onError={handleCardBackError}
-                          src={visibleCardBack.image}
-                        />
-                      ) : (
-                        <Text className='draw-deck-card__symbol'>✦</Text>
-                      )}
-                    </Button>
-                  )
-                })}
+                {deckCardButtons}
               </View>
             </View>
           )}
@@ -937,13 +1032,21 @@ export default function Index() {
                 )}
               </View>
               <View className='draw-card-flip__face draw-card-flip__front'>
-                <Image
-                  className='draw-card-flip__image'
-                  mode='scaleToFill'
-                  onError={() => setRitualError('牌面图片加载失败，请重新尝试')}
-                  src={currentDrawnCard.card.asset.image ?? ''}
-                  webp
-                />
+                {currentDrawnCard.card.asset.image ? (
+                  <Image
+                    className='draw-card-flip__image'
+                    mode='scaleToFill'
+                    onError={() =>
+                      setRitualError('牌面图片加载失败，请重新尝试')
+                    }
+                    src={currentDrawnCard.card.asset.image}
+                    webp
+                  />
+                ) : (
+                  <View className='draw-card-flip__loading'>
+                    <Text>✦</Text>
+                  </View>
+                )}
               </View>
             </View>
           </View>
