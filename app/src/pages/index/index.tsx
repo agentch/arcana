@@ -1,11 +1,8 @@
-import {
-  Button,
-  Image,
-  ScrollView,
-  Text,
-  Textarea,
-  View,
-} from '@tarojs/components'
+import { Button, Image, Text, Textarea, View } from '@tarojs/components'
+import type {
+  BaseEventOrig,
+  ITouchEvent,
+} from '@tarojs/components/types/common'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
@@ -23,6 +20,10 @@ import {
   type SavedReading,
   writeReadingHistory,
 } from '@/features/history/reading-history'
+import {
+  getDeckWheelCardLayout,
+  rotationFromDrag,
+} from '@/features/draw/deck-wheel'
 import {
   activeDeck,
   catalogVersions,
@@ -89,7 +90,16 @@ export default function Index() {
   const [saveStatus, setSaveStatus] = useState('')
   const [ritualError, setRitualError] = useState('')
   const [cardBackLoadFailed, setCardBackLoadFailed] = useState(false)
+  const [deckRotation, setDeckRotation] = useState(0)
+  const [deckDragging, setDeckDragging] = useState(false)
   const revealInFlight = useRef(false)
+  const deckDrag = useRef<{
+    startX: number
+    startRotation: number
+    moved: boolean
+  } | null>(null)
+  const suppressDeckClick = useRef(false)
+  const lastWheelHapticIndex = useRef(0)
   const handleCardBackError = (event: {
     detail?: {
       errMsg?: string
@@ -114,6 +124,13 @@ export default function Index() {
   )
   const visibleCardBack = cardBackLoadFailed ? null : cardBack
   const activeSpread = getSpread(dailyMode ? 'single-card' : spreadId)
+  const orderedActivePositions = [...activeSpread.positions].sort(
+    (left, right) => left.order - right.order,
+  )
+  const activeDrawPosition = orderedActivePositions[drawnCards.length] ?? null
+  const availableDeckCards = preparedDeck
+    .map((prepared, deckIndex) => ({ ...prepared, deckIndex }))
+    .filter(({ deckIndex }) => !selectedDeckIndexes.includes(deckIndex))
   const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null
   const spreadSummary: SpreadSummaryView | null =
     interpretations.length > 1
@@ -133,7 +150,7 @@ export default function Index() {
     const timer = setTimeout(() => {
       setPhase('choose')
       void triggerHaptic()
-    }, 1100)
+    }, 1800)
     return () => clearTimeout(timer)
   }, [phase])
 
@@ -143,7 +160,7 @@ export default function Index() {
       setPhase(
         drawnCards.length < activeSpread.positions.length ? 'choose' : 'result',
       )
-    }, 900)
+    }, 1500)
     return () => clearTimeout(timer)
   }, [activeSpread.positions.length, drawnCards.length, phase])
 
@@ -159,6 +176,7 @@ export default function Index() {
     setSavedReadingId(null)
     setSaveStatus('')
     setRitualError('')
+    setDeckRotation(0)
   }
 
   const selectQuestion = async (prompt: string) => {
@@ -178,6 +196,7 @@ export default function Index() {
     setSavedReadingId(null)
     setSaveStatus('')
     setRitualError('')
+    setDeckRotation(0)
   }
 
   const startDailyReading = async () => {
@@ -191,6 +210,7 @@ export default function Index() {
     setSavedReadingId(null)
     setSaveStatus('')
     setRitualError('')
+    setDeckRotation(0)
     updateDraft({
       question: DAILY_QUESTION,
       questionCategoryId: DAILY_CATEGORY_ID,
@@ -257,6 +277,7 @@ export default function Index() {
     setSavedReadingId(null)
     setSaveStatus('')
     setRitualError('')
+    setDeckRotation(0)
     setPhase('shuffle')
   }
 
@@ -344,7 +365,62 @@ export default function Index() {
     setSavedReadingId(null)
     setSaveStatus('')
     setRitualError('')
+    setDeckRotation(0)
     setPhase('question')
+  }
+
+  const startDeckDrag = (event: BaseEventOrig) => {
+    const touch = (event as ITouchEvent).touches[0]
+    if (!touch) return
+    deckDrag.current = {
+      startX: touch.clientX,
+      startRotation: deckRotation,
+      moved: false,
+    }
+  }
+
+  const moveDeckDrag = (event: BaseEventOrig) => {
+    const drag = deckDrag.current
+    const touch = (event as ITouchEvent).touches[0]
+    if (!drag || !touch) return
+    const distance = touch.clientX - drag.startX
+    if (Math.abs(distance) > 5 && !drag.moved) {
+      drag.moved = true
+      setDeckDragging(true)
+    }
+    if (!drag.moved) return
+
+    event.preventDefault()
+    const nextRotation = rotationFromDrag(
+      drag.startRotation,
+      drag.startX,
+      touch.clientX,
+    )
+    setDeckRotation(nextRotation)
+    const hapticIndex = Math.round(nextRotation / 8)
+    if (hapticIndex !== lastWheelHapticIndex.current) {
+      lastWheelHapticIndex.current = hapticIndex
+      void triggerHaptic('light')
+    }
+  }
+
+  const finishDeckDrag = () => {
+    if (deckDrag.current?.moved) {
+      suppressDeckClick.current = true
+      setTimeout(() => {
+        suppressDeckClick.current = false
+      }, 240)
+    }
+    deckDrag.current = null
+    setDeckDragging(false)
+  }
+
+  const selectDeckCard = (deckIndex: number) => {
+    if (suppressDeckClick.current) {
+      suppressDeckClick.current = false
+      return
+    }
+    void revealNextCard(deckIndex)
   }
 
   const saveReading = () => {
@@ -453,7 +529,7 @@ export default function Index() {
       : phase === 'shuffle'
         ? '让牌序慢慢沉静'
         : phase === 'choose'
-          ? `选择第 ${drawnCards.length + 1} 张牌`
+          ? '倾听直觉，召出你的牌'
           : phase === 'reveal'
             ? '牌面正在显现'
             : phase === 'result'
@@ -472,7 +548,7 @@ export default function Index() {
           : '放慢一点，不必寻找唯一正确的牌。'
 
   return (
-    <View className='reading-page'>
+    <View className={`reading-page reading-page--${phase}`}>
       <View className='reading-page__glow' />
       <Text className='reading-page__eyebrow'>
         ARCANA · {dailyMode ? '今日一牌' : activeSpread.name}
@@ -612,7 +688,53 @@ export default function Index() {
       ) : null}
 
       {phase === 'choose' ? (
-        <View className='ritual-stage'>
+        <View className='ritual-stage draw-stage'>
+          <Text className='draw-progress'>
+            已选卡牌 {drawnCards.length} / {orderedActivePositions.length}
+          </Text>
+          <View
+            className={`draw-position-slots draw-position-slots--${orderedActivePositions.length}`}
+          >
+            {orderedActivePositions.map((position) => {
+              const drawn = drawnCards.find(
+                (item) => item.position.id === position.id,
+              )
+              const active = activeDrawPosition?.id === position.id
+              return (
+                <View
+                  className={`draw-position-slot ${
+                    active ? 'draw-position-slot--active' : ''
+                  } ${drawn ? 'draw-position-slot--filled' : ''}`}
+                  key={position.id}
+                >
+                  <Text className='draw-position-slot__name'>
+                    {position.name}
+                  </Text>
+                  <View className='draw-position-slot__frame'>
+                    {drawn?.card.asset.image ? (
+                      <Image
+                        className={`draw-position-slot__image ${
+                          drawn.orientation === 'reversed'
+                            ? 'draw-position-slot__image--reversed'
+                            : ''
+                        }`}
+                        mode='scaleToFill'
+                        src={drawn.card.asset.image}
+                        webp
+                      />
+                    ) : (
+                      <Text className='draw-position-slot__symbol'>✦</Text>
+                    )}
+                  </View>
+                </View>
+              )
+            })}
+          </View>
+          <Text className='ritual-stage__hint draw-stage__hint'>
+            {dailyMode
+              ? '翻开今天的卡牌'
+              : `转动牌组，为“${activeDrawPosition?.name ?? ''}”选择一张牌`}
+          </Text>
           {dailyMode ? (
             <View className='daily-card-choice'>
               <Button
@@ -633,50 +755,47 @@ export default function Index() {
               </Button>
             </View>
           ) : (
-            <ScrollView className='card-choice-scroll' scrollX>
-              <View
-                className='card-choice-row'
-                style={{
-                  width: `${preparedDeck.length * 208 + 132}px`,
-                }}
-              >
-                {preparedDeck.map(({ card }, deckIndex) => {
-                  const selected = selectedDeckIndexes.includes(deckIndex)
-                  return (
-                    <Button
-                      aria-label={`选择洗牌后的第 ${deckIndex + 1} 个位置`}
-                      className={`ritual-choice ${
-                        selected ? 'ritual-choice--selected' : ''
-                      }`}
-                      disabled={selected}
-                      key={card.id}
-                      onClick={() => revealNextCard(deckIndex)}
-                    >
-                      {selected ? (
-                        <Text className='selected-card-mark'>已选择</Text>
-                      ) : visibleCardBack ? (
-                        <Image
-                          className='card-back-image'
-                          mode='scaleToFill'
-                          onError={handleCardBackError}
-                          src={visibleCardBack.image}
-                        />
-                      ) : (
-                        <Text className='card-back-symbol'>✦</Text>
-                      )}
-                    </Button>
-                  )
-                })}
-              </View>
-            </ScrollView>
+            <View
+              className={`draw-deck-wheel ${
+                deckDragging ? 'draw-deck-wheel--dragging' : ''
+              }`}
+              onTouchCancel={finishDeckDrag}
+              onTouchEnd={finishDeckDrag}
+              onTouchMove={moveDeckDrag}
+              onTouchStart={startDeckDrag}
+            >
+              {availableDeckCards.map(({ card, deckIndex }, availableIndex) => {
+                const layout = getDeckWheelCardLayout(
+                  availableIndex,
+                  availableDeckCards.length,
+                  deckRotation,
+                )
+                return (
+                  <Button
+                    aria-label={`选择洗牌后的第 ${deckIndex + 1} 个位置`}
+                    className='draw-deck-card'
+                    key={card.id}
+                    onClick={() => selectDeckCard(deckIndex)}
+                    style={{
+                      transform: `translate(-50%, -50%) rotate(${layout.angle}deg) translateY(-292rpx)`,
+                      zIndex: layout.zIndex,
+                    }}
+                  >
+                    {visibleCardBack ? (
+                      <Image
+                        className='draw-deck-card__image'
+                        mode='scaleToFill'
+                        onError={handleCardBackError}
+                        src={visibleCardBack.image}
+                      />
+                    ) : (
+                      <Text className='draw-deck-card__symbol'>✦</Text>
+                    )}
+                  </Button>
+                )
+              })}
+            </View>
           )}
-          <Text className='ritual-stage__hint'>
-            {dailyMode
-              ? '翻开今天的卡牌'
-              : `78张牌已完成洗牌，左右滑动选择位置 · ${
-                  drawnCards.length + 1
-                } / ${activeSpread.positions.length}`}
-          </Text>
           {ritualError ? (
             <Text className='ritual-stage__error'>{ritualError}</Text>
           ) : null}
@@ -684,20 +803,35 @@ export default function Index() {
       ) : null}
 
       {phase === 'reveal' && currentDrawnCard ? (
-        <View className='ritual-stage'>
+        <View className='ritual-stage draw-card-animation'>
           <View className='reveal-card'>
-            <Image
-              className={`result-card__image ${
-                currentDrawnCard.orientation === 'reversed'
-                  ? 'result-card__image--reversed'
-                  : ''
-              }`}
-              mode='scaleToFill'
-              onError={() => setRitualError('牌面图片加载失败，请重新尝试')}
-              src={currentDrawnCard.card.asset.image ?? ''}
-              style={{ width: '100%', height: '100%' }}
-              webp
-            />
+            <View className='reveal-card__inner'>
+              <View className='reveal-card__face reveal-card__back'>
+                {visibleCardBack ? (
+                  <Image
+                    className='card-back-image'
+                    mode='scaleToFill'
+                    src={visibleCardBack.image}
+                  />
+                ) : (
+                  <Text className='card-back-symbol'>✦</Text>
+                )}
+              </View>
+              <View className='reveal-card__face reveal-card__front'>
+                <Image
+                  className={`result-card__image ${
+                    currentDrawnCard.orientation === 'reversed'
+                      ? 'result-card__image--reversed'
+                      : ''
+                  }`}
+                  mode='scaleToFill'
+                  onError={() => setRitualError('牌面图片加载失败，请重新尝试')}
+                  src={currentDrawnCard.card.asset.image ?? ''}
+                  style={{ width: '100%', height: '100%' }}
+                  webp
+                />
+              </View>
+            </View>
           </View>
           {ritualError ? (
             <Text className='ritual-stage__error'>{ritualError}</Text>

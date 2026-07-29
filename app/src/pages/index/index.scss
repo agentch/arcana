@@ -258,19 +258,17 @@
 
 .shuffle-card {
   inset: 0;
-  animation: shuffle-pulse 900ms ease-in-out infinite alternate;
 
   &--1 {
-    transform: translateX(-22px) rotate(-6deg);
+    animation: shuffle-card-left 720ms ease-in-out infinite alternate;
   }
 
   &--2 {
-    animation-delay: 120ms;
-    transform: translateX(22px) rotate(6deg);
+    animation: shuffle-card-right 640ms 90ms ease-in-out infinite alternate;
   }
 
   &--3 {
-    animation-delay: 240ms;
+    animation: shuffle-card-center 820ms ease-in-out infinite alternate;
   }
 }
 
@@ -289,25 +287,219 @@
   place-items: center;
 }
 
-.card-choice-scroll {
-  width: 100%;
-  height: 390px;
-}
-
-.card-choice-row {
-  display: flex;
-  box-sizing: border-box;
-  gap: 28px;
-  align-items: flex-end;
-  height: 390px;
-  padding: 32px 80px 12px;
-}
-
 .daily-card-choice {
   display: flex;
   height: 390px;
   align-items: flex-end;
   justify-content: center;
+}
+
+.reading-page--choose {
+  min-height: 100vh;
+  padding-bottom: 0;
+
+  .reading-page__glow {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 22px;
+  }
+
+  .reading-page__title {
+    margin-bottom: 10px;
+    font-size: 42px;
+  }
+
+  .reading-page__summary {
+    font-size: 22px;
+  }
+
+  .reading-page__disclaimer {
+    margin-top: 0;
+    padding: 0 20px 28px;
+  }
+}
+
+.draw-stage {
+  position: relative;
+  min-height: 990px;
+  margin: 24px (-$space-page) 0;
+  overflow: hidden;
+  background-image:
+    radial-gradient(
+      circle at 12% 14%,
+      rgb(215 181 109 / 72%) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 68% 27%,
+      rgb(255 255 255 / 52%) 0 2px,
+      transparent 3px
+    ),
+    radial-gradient(
+      circle at 87% 43%,
+      rgb(215 181 109 / 54%) 0 1px,
+      transparent 2px
+    );
+  background-size:
+    148px 176px,
+    190px 214px,
+    124px 158px;
+}
+
+.draw-progress {
+  display: block;
+  margin-bottom: 30px;
+  color: $color-gold;
+  font-size: 22px;
+  letter-spacing: 2px;
+}
+
+.draw-position-slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 56px;
+
+  &--1 {
+    grid-template-columns: 180px;
+    justify-content: center;
+  }
+}
+
+.draw-position-slot {
+  min-width: 0;
+  color: $color-muted;
+
+  &__name,
+  &__symbol {
+    display: block;
+  }
+
+  &__name {
+    min-height: 36px;
+    margin-bottom: 12px;
+    font-size: 21px;
+  }
+
+  &__frame {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    aspect-ratio: 0.6;
+    overflow: hidden;
+    border: 2px dashed rgb(215 181 109 / 30%);
+    border-radius: 14px;
+    background: rgb(12 11 31 / 48%);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  &__symbol {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    color: rgb(215 181 109 / 38%);
+    font-size: 28px;
+    place-items: center;
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+
+    &--reversed {
+      transform: rotate(180deg);
+    }
+  }
+
+  &--active {
+    color: $color-gold;
+
+    .draw-position-slot__frame {
+      border-color: $color-gold;
+      box-shadow: 0 14px 30px rgb(0 0 0 / 24%);
+    }
+  }
+
+  &--filled {
+    .draw-position-slot__frame {
+      border-style: solid;
+      border-color: rgb(215 181 109 / 56%);
+    }
+  }
+}
+
+.draw-stage__hint {
+  position: absolute;
+  right: 20px;
+  bottom: 392px;
+  left: 20px;
+  z-index: 220;
+  margin: 0;
+}
+
+.draw-deck-wheel {
+  position: absolute;
+  right: -30px;
+  bottom: -54px;
+  left: -30px;
+  height: 430px;
+  overflow: hidden;
+  touch-action: none;
+
+  &--dragging {
+    .draw-deck-card {
+      transition: none;
+    }
+  }
+}
+
+.draw-deck-card {
+  position: absolute;
+  top: 430px;
+  left: 50%;
+  box-sizing: border-box;
+  width: 90px;
+  height: 150px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgb(215 181 109 / 58%);
+  border-radius: 9px;
+  background: #0b0a18;
+  box-shadow: -8px 10px 18px rgb(4 3 12 / 36%);
+  transition:
+    transform 150ms ease,
+    filter 150ms ease;
+  transform-origin: center;
+
+  &::after {
+    border: 0;
+  }
+
+  &:active {
+    filter: brightness(1.2);
+  }
+
+  &__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__symbol {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    color: $color-gold;
+    font-size: 24px;
+    place-items: center;
+  }
 }
 
 .ritual-choice {
@@ -325,28 +517,43 @@
   &::after {
     border: 0;
   }
-
-  &--selected {
-    border-style: dashed;
-    background: rgb(215 181 109 / 10%);
-    box-shadow: none;
-    opacity: 0.48;
-  }
-}
-
-.selected-card-mark {
-  display: grid;
-  width: 100%;
-  height: 100%;
-  color: $color-gold;
-  font-size: 22px;
-  place-items: center;
 }
 
 .reveal-card {
   position: relative;
   margin: 0 auto;
-  animation: reveal-card 850ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
+}
+
+.draw-card-animation {
+  min-height: 560px;
+  display: grid;
+  margin-top: 16px;
+  perspective: 1000px;
+  place-items: center;
+
+  .reveal-card {
+    animation: selected-card-pop 1500ms ease-in-out both;
+  }
+}
+
+.reveal-card__inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  animation: selected-card-turn 1500ms ease-in-out both;
+  transform-style: preserve-3d;
+}
+
+.reveal-card__face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  backface-visibility: hidden;
+}
+
+.reveal-card__front {
+  transform: rotateY(180deg);
 }
 
 .save-status {
@@ -430,25 +637,74 @@
   font-size: 22px;
 }
 
-@keyframes shuffle-pulse {
+@keyframes shuffle-card-left {
   from {
-    filter: brightness(0.84);
+    filter: brightness(0.88);
+    transform: translate(0, 0) rotate(0);
+  }
+
+  to {
+    filter: brightness(1.08);
+    transform: translate(-82px, -6px) rotate(-10deg);
+  }
+}
+
+@keyframes shuffle-card-right {
+  from {
+    filter: brightness(0.9);
+    transform: translate(0, 0) rotate(0);
+  }
+
+  to {
+    filter: brightness(1.1);
+    transform: translate(82px, 7px) rotate(10deg);
+  }
+}
+
+@keyframes shuffle-card-center {
+  from {
+    filter: brightness(0.86);
+    transform: translateY(0) rotate(0);
   }
 
   to {
     filter: brightness(1.12);
+    transform: translateY(-14px) rotate(1deg);
   }
 }
 
-@keyframes reveal-card {
+@keyframes selected-card-pop {
   0% {
     opacity: 0;
-    transform: scale(0.78) rotateY(90deg);
+    transform: translateY(260px) scale(0.55);
+  }
+
+  18%,
+  68% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  92% {
+    opacity: 1;
+    transform: translateY(-120px) scale(0.62);
   }
 
   100% {
-    opacity: 1;
-    transform: scale(1) rotateY(0);
+    opacity: 0;
+    transform: translateY(-140px) scale(0.54);
+  }
+}
+
+@keyframes selected-card-turn {
+  0%,
+  24% {
+    transform: rotateY(0);
+  }
+
+  58%,
+  100% {
+    transform: rotateY(180deg);
   }
 }
 
