@@ -4,6 +4,7 @@ import {
   clampDeckRotation,
   getDeckWheelCardLayouts,
   getDrawAnimationGeometry,
+  getFocusedDeckCardPresentation,
   getFocusedDeckIndex,
   rotationFromDrag,
 } from '@/features/draw/deck-wheel'
@@ -28,6 +29,29 @@ describe('半圆牌组布局', () => {
     expect(getFocusedDeckIndex(78, 150)).toBe(0)
     expect(getFocusedDeckIndex(78, 0)).toBe(39)
     expect(getFocusedDeckIndex(78, -150)).toBe(77)
+  })
+
+  it('聚焦牌上浮放大，并局部拉开相邻三层牌距', () => {
+    expect(getFocusedDeckCardPresentation(10, 10, 0)).toEqual({
+      angle: 0,
+      radius: 476,
+      scale: 1.04,
+    })
+    expect(getFocusedDeckCardPresentation(9, 10, -4)).toEqual({
+      angle: -6.2,
+      radius: 460,
+      scale: 1,
+    })
+    expect(getFocusedDeckCardPresentation(12, 10, 8)).toEqual({
+      angle: 9.2,
+      radius: 460,
+      scale: 1,
+    })
+    expect(getFocusedDeckCardPresentation(14, 10, 16)).toEqual({
+      angle: 16,
+      radius: 460,
+      scale: 1,
+    })
   })
 
   it('支持空牌组并拒绝无效牌数', () => {

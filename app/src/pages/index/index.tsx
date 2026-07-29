@@ -32,6 +32,7 @@ import {
   clampDeckRotation,
   getDeckWheelCardLayouts,
   getDrawAnimationGeometry,
+  getFocusedDeckCardPresentation,
   getFocusedDeckIndex,
   rotationFromDrag,
   type DrawAnimationGeometry,
@@ -590,6 +591,11 @@ export default function Index() {
     () =>
       deckWheelCards.map(({ card, deckIndex, extracted, layout }) => {
         const focused = !extracted && layout.itemIndex === focusedDeckIndex
+        const presentation = getFocusedDeckCardPresentation(
+          layout.itemIndex,
+          focusedDeckIndex,
+          layout.angle,
+        )
         return (
           <Button
             aria-label={
@@ -609,11 +615,11 @@ export default function Index() {
                 : () =>
                     selectDeckCardRef.current(
                       deckIndex,
-                      layout.angle + deckRotationValue.current,
+                      presentation.angle + deckRotationValue.current,
                     )
             }
             style={{
-              transform: `translate(-50%, -50%) rotate(${layout.angle}deg) translateY(-460rpx)`,
+              transform: `translate(-50%, -50%) rotate(${presentation.angle}deg) translateY(-${presentation.radius}rpx) scale(${presentation.scale})`,
               zIndex: focused ? 300 : extracted ? 240 : 100,
             }}
           >

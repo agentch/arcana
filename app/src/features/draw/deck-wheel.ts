@@ -3,6 +3,12 @@ export type DeckWheelCardLayout = {
   angle: number
 }
 
+export type FocusedDeckCardPresentation = {
+  angle: number
+  radius: number
+  scale: number
+}
+
 export type DrawAnimationRect = {
   left: number
   top: number
@@ -54,6 +60,21 @@ export function getFocusedDeckIndex(total: number, rotation: number): number {
     ((-clampedRotation - DECK_ARC_START_DEGREES) / DECK_ARC_SWEEP_DEGREES) *
     (total - 1)
   return Math.min(total - 1, Math.max(0, Math.round(focusedPosition)))
+}
+
+export function getFocusedDeckCardPresentation(
+  itemIndex: number,
+  focusedIndex: number,
+  baseAngle: number,
+): FocusedDeckCardPresentation {
+  const distance = Math.abs(itemIndex - focusedIndex)
+  const direction = Math.sign(itemIndex - focusedIndex)
+  const extraSpacing = [0, 2.2, 1.2, 0.6][distance] ?? 0
+  return {
+    angle: baseAngle + direction * extraSpacing,
+    radius: distance === 0 ? 476 : 460,
+    scale: distance === 0 ? 1.04 : 1,
+  }
 }
 
 export function rotationFromDrag(
