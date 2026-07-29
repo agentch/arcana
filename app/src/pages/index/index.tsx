@@ -3,7 +3,7 @@ import type {
   BaseEventOrig,
   ITouchEvent,
 } from '@tarojs/components/types/common'
-import Taro from '@tarojs/taro'
+import Taro, { useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import {
   useCallback,
   useEffect,
@@ -14,6 +14,7 @@ import {
 } from 'react'
 
 import { triggerHaptic } from '@/adapters/haptics'
+import { shareCard } from '@/adapters/share'
 import { getAssetPlatform, resolveCardAssets } from '@/adapters/card-assets'
 import { resolveBundledCardBack } from '@/adapters/card-back-assets'
 import { resolveCloudFileUrl, warmCloudFileUrls } from '@/adapters/cloudbase'
@@ -67,6 +68,7 @@ import {
   type InterpretationView,
   type SpreadSummaryView,
 } from '@arcana/tarot-core/domain/interpretation'
+import { composeShareCardContent } from '@arcana/tarot-core/domain/share-card'
 import './index.scss'
 
 type ReadingPhase =
@@ -141,6 +143,8 @@ export default function Index() {
   const [history, setHistory] = useState<SavedReading[]>(readReadingHistory)
   const [savedReadingId, setSavedReadingId] = useState<string | null>(null)
   const [saveStatus, setSaveStatus] = useState('')
+  const [shareStatus, setShareStatus] = useState('')
+  const [sharing, setSharing] = useState(false)
   const [ritualError, setRitualError] = useState('')
   const [cardBackLoadFailed, setCardBackLoadFailed] = useState(false)
   const [deckRotation, setDeckRotation] = useState(0)
@@ -224,6 +228,28 @@ export default function Index() {
   const activeCategory = categories.find(
     (category) => category.id === questionCategoryId,
   )
+  const shareContent =
+    interpretations.length > 0
+      ? composeShareCardContent({
+          title: dailyMode ? '今日一牌' : activeSpread.name,
+          question: question.trim() || DAILY_QUESTION,
+          interpretations,
+          summary: spreadSummary,
+        })
+      : null
+  const nativeShareTitle = shareContent
+    ? `${shareContent.brand} · ${shareContent.title}`
+    : '阿卡纳星语 · 卡牌反思'
+
+  useShareAppMessage(() => ({
+    title: nativeShareTitle,
+    path: '/pages/index/index',
+  }))
+
+  useShareTimeline(() => ({
+    title: nativeShareTitle,
+    query: '',
+  }))
 
   useEffect(() => {
     if (phase !== 'shuffle') return undefined
@@ -267,6 +293,14 @@ export default function Index() {
     return () => clearTimeout(timer)
   }, [activeSpread.positions.length, drawnCards.length, phase])
 
+  useEffect(() => {
+    if (process.env.TARO_ENV !== 'weapp' || phase !== 'result') return
+    void Taro.showShareMenu({
+      withShareTicket: false,
+      showShareItems: ['shareAppMessage', 'shareTimeline'],
+    })
+  }, [phase])
+
   const selectCategory = async (categoryId: string) => {
     await triggerHaptic()
     updateDraft({ questionCategoryId: categoryId, question: '' })
@@ -278,6 +312,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setShareStatus('')
     setRitualError('')
     setDeckRotation(0)
   }
@@ -298,6 +333,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setShareStatus('')
     setRitualError('')
     setDeckRotation(0)
   }
@@ -312,6 +348,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setShareStatus('')
     setRitualError('')
     setDeckRotation(0)
     updateDraft({
@@ -379,6 +416,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setShareStatus('')
     setRitualError('')
     setDeckRotation(0)
     setPhase('shuffle')
@@ -508,6 +546,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(null)
     setSaveStatus('')
+    setShareStatus('')
     setRitualError('')
     setDeckRotation(0)
     setPhase('question')
@@ -679,6 +718,26 @@ export default function Index() {
     void triggerHaptic()
   }
 
+  const shareReading = async () => {
+    if (!shareContent || sharing) return
+    setSharing(true)
+    setShareStatus('')
+    const result = await shareCard(shareContent)
+    setSharing(false)
+
+    if (result.status === 'shared') {
+      setShareStatus('已打开系统分享')
+      return
+    }
+    if (result.status === 'copied') {
+      setShareStatus('分享文案已复制')
+      return
+    }
+    if (result.status === 'failed') {
+      setShareStatus('暂时无法分享，请稍后再试')
+    }
+  }
+
   const openSavedReading = async (reading: SavedReading) => {
     const spread = getSpread(reading.spreadId)
     const nextDrawnCards: DrawnRenderableCard[] = []
@@ -728,6 +787,7 @@ export default function Index() {
     setDetailsOpen(false)
     setSavedReadingId(reading.id)
     setSaveStatus('正在查看已保存的卡牌解读')
+    setShareStatus('')
     setPhase('result')
   }
 
@@ -1191,6 +1251,76 @@ export default function Index() {
           </Button>
           {saveStatus ? (
             <Text className='save-status'>{saveStatus}</Text>
+          ) : null}
+          {shareContent ? (
+            <View className='share-panel'>
+              <Text className='reading-section__label'>分享卡片</Text>
+              <View className='share-preview'>
+                <Text className='share-preview__brand'>
+                  {shareContent.brand}
+                </Text>
+                <Text className='share-preview__title'>
+                  {shareContent.title}
+                </Text>
+                <Text className='share-preview__question'>
+                  {shareContent.question}
+                </Text>
+                <View className='share-preview__cards'>
+                  {shareContent.cards.map((card) => (
+                    <View
+                      className='share-preview__card'
+                      key={`${card.positionName}-${card.cardName}`}
+                    >
+                      <Text className='share-preview__position'>
+                        {card.positionName}
+                      </Text>
+                      <Text className='share-preview__card-name'>
+                        {card.cardName} · {card.orientationName}
+                      </Text>
+                      <Text className='share-preview__keywords'>
+                        {card.keywords.join(' · ')}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+                {shareContent.highlight ? (
+                  <Text className='share-preview__highlight'>
+                    {shareContent.highlight}
+                  </Text>
+                ) : null}
+                <Text className='share-preview__disclaimer'>
+                  {shareContent.disclaimer}
+                </Text>
+              </View>
+              {process.env.TARO_ENV === 'weapp' ? (
+                <>
+                  <Button className='primary-action' openType='share'>
+                    分享给好友
+                  </Button>
+                  <Text className='share-panel__hint'>
+                    朋友圈分享请使用右上角菜单
+                  </Text>
+                  <Button
+                    className='secondary-action'
+                    disabled={sharing}
+                    onClick={shareReading}
+                  >
+                    {sharing ? '正在处理…' : '复制分享文案'}
+                  </Button>
+                </>
+              ) : (
+                <Button
+                  className='primary-action'
+                  disabled={sharing}
+                  onClick={shareReading}
+                >
+                  {sharing ? '正在生成…' : '生成并分享卡片'}
+                </Button>
+              )}
+              {shareStatus ? (
+                <Text className='share-panel__status'>{shareStatus}</Text>
+              ) : null}
+            </View>
           ) : null}
           <Button className='secondary-action' onClick={startAgain}>
             开始新的卡牌解读

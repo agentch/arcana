@@ -649,6 +649,122 @@
   font-size: 22px;
 }
 
+.share-panel {
+  margin-top: 36px;
+  padding-top: 30px;
+  border-top: 1px solid rgb(215 181 109 / 18%);
+}
+
+.share-preview {
+  position: relative;
+  box-sizing: border-box;
+  padding: 30px;
+  overflow: hidden;
+  border: 1px solid rgb(215 181 109 / 38%);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 84% 12%, rgb(215 181 109 / 15%), transparent 28%),
+    linear-gradient(160deg, #17132c, #0b0a18);
+  text-align: left;
+
+  &::before {
+    position: absolute;
+    inset: 10px;
+    border: 1px solid rgb(215 181 109 / 16%);
+    border-radius: 14px;
+    content: '';
+    pointer-events: none;
+  }
+
+  &__brand,
+  &__title,
+  &__question,
+  &__position,
+  &__card-name,
+  &__keywords,
+  &__highlight,
+  &__disclaimer {
+    position: relative;
+    z-index: 1;
+    display: block;
+  }
+
+  &__brand,
+  &__position {
+    color: $color-gold;
+  }
+
+  &__brand {
+    font-size: 20px;
+    letter-spacing: 3px;
+  }
+
+  &__title {
+    margin-top: 12px;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 38px;
+  }
+
+  &__question {
+    margin-top: 14px;
+    color: $color-muted;
+    font-size: 22px;
+    line-height: 1.55;
+  }
+
+  &__cards {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 16px;
+    margin-top: 26px;
+    padding-top: 24px;
+    border-top: 1px solid rgb(215 181 109 / 22%);
+  }
+
+  &__card {
+    min-width: 0;
+  }
+
+  &__position,
+  &__keywords {
+    font-size: 19px;
+  }
+
+  &__card-name {
+    margin-top: 4px;
+    color: $color-paper;
+    font-size: 25px;
+  }
+
+  &__keywords {
+    margin-top: 5px;
+    color: $color-muted;
+  }
+
+  &__highlight {
+    margin-top: 24px;
+    color: rgb(244 238 223 / 88%);
+    font-size: 22px;
+    line-height: 1.6;
+  }
+
+  &__disclaimer {
+    margin-top: 24px;
+    color: rgb(215 181 109 / 72%);
+    font-size: 18px;
+    line-height: 1.5;
+  }
+}
+
+.share-panel__hint,
+.share-panel__status {
+  display: block;
+  margin-top: 14px;
+  color: $color-muted;
+  font-size: 20px;
+}
+
 .history-panel {
   margin-top: 40px;
 }

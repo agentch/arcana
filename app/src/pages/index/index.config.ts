@@ -1,3 +1,5 @@
 export default definePageConfig({
-  navigationBarTitleText: 'Arcana',
+  navigationBarTitleText: '阿卡纳星语',
+  enableShareAppMessage: true,
+  enableShareTimeline: true,
 })
