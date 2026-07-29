@@ -240,15 +240,14 @@
 .shuffle-stack {
   position: relative;
   width: 240px;
-  height: 402px;
+  height: 360px;
   margin: 0 auto;
 }
 
-.shuffle-card,
-.reveal-card {
+.shuffle-card {
   position: absolute;
   width: 240px;
-  height: 402px;
+  height: 360px;
   overflow: hidden;
   border: 2px solid rgb(215 181 109 / 55%);
   border-radius: 18px;
@@ -436,7 +435,7 @@
 .draw-stage__hint {
   position: absolute;
   right: 20px;
-  bottom: 392px;
+  bottom: 442px;
   left: 20px;
   z-index: 220;
   margin: 0;
@@ -445,9 +444,9 @@
 .draw-deck-wheel {
   position: absolute;
   right: -30px;
-  bottom: -54px;
+  bottom: -78px;
   left: -30px;
-  height: 430px;
+  height: 500px;
   overflow: hidden;
   touch-action: none;
 
@@ -460,22 +459,35 @@
 
 .draw-deck-card {
   position: absolute;
-  top: 430px;
+  top: 500px;
   left: 50%;
   box-sizing: border-box;
-  width: 90px;
-  height: 150px;
+  width: 96px;
+  height: 152px;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  border: 1px solid rgb(215 181 109 / 58%);
-  border-radius: 9px;
+  border: 2px solid rgb(225 193 122 / 72%);
+  border-radius: 11px;
   background: #0b0a18;
-  box-shadow: -8px 10px 18px rgb(4 3 12 / 36%);
+  box-shadow:
+    -8px 10px 18px rgb(4 3 12 / 42%),
+    0 0 10px rgb(215 181 109 / 10%);
   transition:
     transform 150ms ease,
     filter 150ms ease;
   transform-origin: center;
+
+  &::before {
+    position: absolute;
+    z-index: 2;
+    inset: 5px;
+    border: 1px solid rgb(231 202 137 / 40%);
+    border-radius: 7px;
+    box-shadow: inset 0 0 8px rgb(0 0 0 / 30%);
+    content: '';
+    pointer-events: none;
+  }
 
   &::after {
     border: 0;
@@ -483,6 +495,14 @@
 
   &:active {
     filter: brightness(1.2);
+  }
+
+  &--focused {
+    border-color: $color-gold;
+    box-shadow:
+      -8px 10px 18px rgb(4 3 12 / 42%),
+      0 0 22px rgb(215 181 109 / 32%);
+    filter: brightness(1.12);
   }
 
   &__image {
@@ -503,57 +523,83 @@
 }
 
 .ritual-choice {
-  flex: 0 0 180px;
-  width: 180px;
-  height: 302px;
+  flex: 0 0 200px;
+  width: 200px;
+  height: 300px;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  border: 2px solid rgb(215 181 109 / 48%);
+  border: 2px solid rgb(225 193 122 / 66%);
   border-radius: 16px;
   background: #171735;
-  box-shadow: 0 18px 42px rgb(0 0 0 / 30%);
+  box-shadow:
+    0 22px 48px rgb(0 0 0 / 38%),
+    0 0 24px rgb(215 181 109 / 10%);
 
   &::after {
     border: 0;
   }
 }
 
-.reveal-card {
-  position: relative;
-  margin: 0 auto;
-}
-
 .draw-card-animation {
-  min-height: 560px;
-  display: grid;
-  margin-top: 16px;
-  perspective: 1000px;
-  place-items: center;
+  --draw-animation-duration: 3200ms;
 
-  .reveal-card {
-    animation: selected-card-pop 1500ms ease-in-out both;
-  }
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  margin: 0;
+  background: rgb(7 5 18 / 52%);
+  animation: draw-overlay var(--draw-animation-duration) ease both;
+  perspective: 1200px;
+  pointer-events: none;
+  place-items: center;
 }
 
-.reveal-card__inner {
+.draw-card-flip {
+  width: 240px;
+  height: 400px;
+  animation: selected-card-pop var(--draw-animation-duration) ease-in-out both;
+  perspective: 1000px;
+}
+
+.draw-card-flip__inner {
   position: relative;
   width: 100%;
   height: 100%;
-  animation: selected-card-turn 1500ms ease-in-out both;
+  animation: selected-card-turn var(--draw-animation-duration) ease-in-out both;
   transform-style: preserve-3d;
 }
 
-.reveal-card__face {
+.draw-card-flip__face {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  border-radius: inherit;
+  border: 2px solid rgb(215 181 109 / 62%);
+  border-radius: 18px;
+  box-shadow: 0 28px 70px rgb(0 0 0 / 56%);
   backface-visibility: hidden;
 }
 
-.reveal-card__front {
+.draw-card-flip__back {
+  background: #0b0a18;
+}
+
+.draw-card-flip__front {
+  background: #171224;
   transform: rotateY(180deg);
+}
+
+.draw-card-flip__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.draw-card-flip--reversed {
+  .draw-card-flip__image {
+    transform: rotate(180deg);
+  }
 }
 
 .save-status {
@@ -673,32 +719,47 @@
   }
 }
 
-@keyframes selected-card-pop {
-  0% {
-    opacity: 0;
-    transform: translateY(260px) scale(0.55);
-  }
-
-  18%,
-  68% {
+@keyframes draw-overlay {
+  0%,
+  99% {
     opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-
-  92% {
-    opacity: 1;
-    transform: translateY(-120px) scale(0.62);
   }
 
   100% {
     opacity: 0;
-    transform: translateY(-140px) scale(0.54);
+  }
+}
+
+@keyframes selected-card-pop {
+  0% {
+    opacity: 1;
+    transform: translate(var(--draw-source-x), var(--draw-source-y))
+      rotate(var(--draw-source-rotation)) scale(var(--draw-source-scale));
+  }
+
+  15%,
+  60% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0) scale(1);
+  }
+
+  92%,
+  99% {
+    opacity: 1;
+    transform: translate(var(--draw-target-x), var(--draw-target-y))
+      scale(var(--draw-target-scale));
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(var(--draw-target-x), var(--draw-target-y))
+      scale(var(--draw-target-scale));
   }
 }
 
 @keyframes selected-card-turn {
   0%,
-  24% {
+  25% {
     transform: rotateY(0);
   }
 
