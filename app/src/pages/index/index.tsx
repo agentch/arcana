@@ -22,9 +22,11 @@ import {
   writeReadingHistory,
 } from '@/features/history/reading-history'
 import {
-  DECK_CARD_ANGLE_STEP,
+  clampDeckRotation,
+  DECK_ARC_SWEEP_DEGREES,
+  getDeckWheelCardLayouts,
   getDrawAnimationGeometry,
-  getVisibleDeckCardLayouts,
+  getFocusedDeckIndex,
   rotationFromDrag,
   type DrawAnimationGeometry,
   type DrawAnimationRect,
@@ -173,7 +175,10 @@ export default function Index() {
   const orderedActivePositions = [...activeSpread.positions].sort(
     (left, right) => left.order - right.order,
   )
-  const activeDrawPosition = orderedActivePositions[drawnCards.length] ?? null
+  const displayedDrawnCards =
+    phase === 'reveal' ? drawnCards.slice(0, -1) : drawnCards
+  const activeDrawPosition =
+    orderedActivePositions[displayedDrawnCards.length] ?? null
   const availableDeckCards = useMemo(
     () =>
       preparedDeck
@@ -181,16 +186,20 @@ export default function Index() {
         .filter(({ deckIndex }) => !selectedDeckIndexes.includes(deckIndex)),
     [preparedDeck, selectedDeckIndexes],
   )
-  const visibleDeckCards = useMemo(
+  const deckWheelCards = useMemo(
     () =>
-      getVisibleDeckCardLayouts(availableDeckCards.length, deckRotation).map(
-        (layout) => ({
-          ...availableDeckCards[layout.itemIndex],
-          layout,
-        }),
-      ),
-    [availableDeckCards, deckRotation],
+      getDeckWheelCardLayouts(availableDeckCards.length).map((layout) => ({
+        ...availableDeckCards[layout.itemIndex],
+        layout,
+      })),
+    [availableDeckCards],
   )
+  const focusedDeckIndex = getFocusedDeckIndex(
+    availableDeckCards.length,
+    deckRotation,
+  )
+  const focusedDeckOrdinal =
+    availableDeckCards.length === 0 ? 0 : focusedDeckIndex + 1
   const currentDrawnCard = drawnCards[drawnCards.length - 1] ?? null
   const spreadSummary: SpreadSummaryView | null =
     interpretations.length > 1
@@ -463,15 +472,17 @@ export default function Index() {
     if (!drag.moved) return
 
     event.preventDefault()
-    const nextRotation = rotationFromDrag(
-      drag.startRotation,
-      drag.startX,
-      touch.clientX,
+    const nextRotation = clampDeckRotation(
+      rotationFromDrag(drag.startRotation, drag.startX, touch.clientX),
     )
     setDeckRotation((current) =>
       Math.abs(nextRotation - current) < 0.45 ? current : nextRotation,
     )
-    const hapticIndex = Math.round(nextRotation / DECK_CARD_ANGLE_STEP)
+    const cardAngleStep =
+      availableDeckCards.length > 1
+        ? DECK_ARC_SWEEP_DEGREES / (availableDeckCards.length - 1)
+        : DECK_ARC_SWEEP_DEGREES
+    const hapticIndex = Math.round(nextRotation / cardAngleStep)
     if (hapticIndex !== lastWheelHapticIndex.current) {
       lastWheelHapticIndex.current = hapticIndex
       void triggerHaptic('light')
@@ -761,16 +772,21 @@ export default function Index() {
         </View>
       ) : null}
 
-      {phase === 'choose' ? (
-        <View className='ritual-stage draw-stage'>
+      {phase === 'choose' || phase === 'reveal' ? (
+        <View
+          className={`ritual-stage draw-stage ${
+            phase === 'reveal' ? 'draw-stage--paused' : ''
+          }`}
+        >
           <Text className='draw-progress'>
-            已选卡牌 {drawnCards.length} / {orderedActivePositions.length}
+            已选卡牌 {displayedDrawnCards.length} /{' '}
+            {orderedActivePositions.length}
           </Text>
           <View
             className={`draw-position-slots draw-position-slots--${orderedActivePositions.length}`}
           >
             {orderedActivePositions.map((position) => {
-              const drawn = drawnCards.find(
+              const drawn = displayedDrawnCards.find(
                 (item) => item.position.id === position.id,
               )
               const active = activeDrawPosition?.id === position.id
@@ -810,7 +826,7 @@ export default function Index() {
           <Text className='ritual-stage__hint draw-stage__hint'>
             {dailyMode
               ? '翻开今天的卡牌'
-              : `转动牌组，为“${activeDrawPosition?.name ?? ''}”选择一张牌`}
+              : `转动牌组，为“${activeDrawPosition?.name ?? ''}”选择一张牌 · ${focusedDeckOrdinal}/${availableDeckCards.length}`}
           </Text>
           {dailyMode ? (
             <View className='daily-card-choice'>
@@ -842,37 +858,44 @@ export default function Index() {
               onTouchMove={moveDeckDrag}
               onTouchStart={startDeckDrag}
             >
-              {visibleDeckCards.map(({ card, deckIndex, layout }) => {
-                return (
-                  <Button
-                    aria-label={`选择洗牌后的第 ${deckIndex + 1} 个位置`}
-                    className={`draw-deck-card ${
-                      Math.abs(layout.angle) <=
-                      DECK_CARD_ANGLE_STEP / 2
-                        ? 'draw-deck-card--focused'
-                        : ''
-                    }`}
-                    id={`deck-card-${deckIndex}`}
-                    key={card.id}
-                    onClick={() => selectDeckCard(deckIndex, layout.angle)}
-                    style={{
-                      transform: `translate(-50%, -50%) rotate(${layout.angle}deg) translateY(-340rpx)`,
-                      zIndex: layout.zIndex,
-                    }}
-                  >
-                    {visibleCardBack ? (
-                      <Image
-                        className='draw-deck-card__image'
-                        mode='aspectFill'
-                        onError={handleCardBackError}
-                        src={visibleCardBack.image}
-                      />
-                    ) : (
-                      <Text className='draw-deck-card__symbol'>✦</Text>
-                    )}
-                  </Button>
-                )
-              })}
+              <View
+                className='draw-deck-wheel__rotor'
+                style={{
+                  transform: `rotate(${deckRotation}deg)`,
+                }}
+              >
+                {deckWheelCards.map(({ card, deckIndex, layout }) => {
+                  const focused = layout.itemIndex === focusedDeckIndex
+                  return (
+                    <Button
+                      aria-label={`选择洗牌后的第 ${deckIndex + 1} 个位置`}
+                      className={`draw-deck-card ${
+                        focused ? 'draw-deck-card--focused' : ''
+                      }`}
+                      id={`deck-card-${deckIndex}`}
+                      key={card.id}
+                      onClick={() =>
+                        selectDeckCard(deckIndex, layout.angle + deckRotation)
+                      }
+                      style={{
+                        transform: `translate(-50%, -50%) rotate(${layout.angle}deg) translateY(-460rpx)`,
+                        zIndex: focused ? 300 : 100,
+                      }}
+                    >
+                      {visibleCardBack ? (
+                        <Image
+                          className='draw-deck-card__image'
+                          mode='aspectFill'
+                          onError={handleCardBackError}
+                          src={visibleCardBack.image}
+                        />
+                      ) : (
+                        <Text className='draw-deck-card__symbol'>✦</Text>
+                      )}
+                    </Button>
+                  )
+                })}
+              </View>
             </View>
           )}
           {ritualError ? (

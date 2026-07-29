@@ -1,7 +1,6 @@
-export type VisibleDeckCardLayout = {
+export type DeckWheelCardLayout = {
   itemIndex: number
   angle: number
-  zIndex: number
 }
 
 export type DrawAnimationRect = {
@@ -21,40 +20,40 @@ export type DrawAnimationGeometry = {
   targetScale: number
 }
 
-export const VISIBLE_DECK_CARD_COUNT = 13
-export const DECK_CARD_ANGLE_STEP = 11
+export const DECK_ARC_START_DEGREES = -150
+export const DECK_ARC_SWEEP_DEGREES = 300
 
-function modulo(value: number, divisor: number): number {
-  return ((value % divisor) + divisor) % divisor
+export function clampDeckRotation(rotation: number): number {
+  return Math.min(
+    -DECK_ARC_START_DEGREES,
+    Math.max(-(DECK_ARC_START_DEGREES + DECK_ARC_SWEEP_DEGREES), rotation),
+  )
 }
 
-export function getVisibleDeckCardLayouts(
-  total: number,
-  rotation: number,
-  visibleLimit = VISIBLE_DECK_CARD_COUNT,
-): VisibleDeckCardLayout[] {
+export function getDeckWheelCardLayouts(total: number): DeckWheelCardLayout[] {
   if (!Number.isInteger(total) || total < 0) {
     throw new Error(`Invalid deck wheel total ${total}`)
   }
-  if (!Number.isInteger(visibleLimit) || visibleLimit < 1) {
-    throw new Error(`Invalid visible deck card limit ${visibleLimit}`)
-  }
   if (total === 0) return []
 
-  const visibleCount = Math.min(total, visibleLimit)
-  const focusedIndex = -Math.round(rotation / DECK_CARD_ANGLE_STEP)
-  const residualAngle = rotation + focusedIndex * DECK_CARD_ANGLE_STEP
-  const firstOffset = -Math.floor(visibleCount / 2)
+  return Array.from({ length: total }, (_, itemIndex) => ({
+    itemIndex,
+    angle:
+      total === 1
+        ? 0
+        : DECK_ARC_START_DEGREES +
+          (itemIndex * DECK_ARC_SWEEP_DEGREES) / (total - 1),
+  }))
+}
 
-  return Array.from({ length: visibleCount }, (_, visibleIndex) => {
-    const offset = firstOffset + visibleIndex
-    const angle = offset * DECK_CARD_ANGLE_STEP + residualAngle
-    return {
-      itemIndex: modulo(focusedIndex + offset, total),
-      angle,
-      zIndex: 100 + Math.round(Math.cos((angle * Math.PI) / 180) * 50),
-    }
-  })
+export function getFocusedDeckIndex(total: number, rotation: number): number {
+  if (!Number.isInteger(total) || total < 1) return 0
+  if (total === 1) return 0
+  const clampedRotation = clampDeckRotation(rotation)
+  const focusedPosition =
+    ((-clampedRotation - DECK_ARC_START_DEGREES) / DECK_ARC_SWEEP_DEGREES) *
+    (total - 1)
+  return Math.min(total - 1, Math.max(0, Math.round(focusedPosition)))
 }
 
 export function rotationFromDrag(
@@ -62,7 +61,7 @@ export function rotationFromDrag(
   startX: number,
   currentX: number,
 ): number {
-  return startRotation + (currentX - startX) * 0.32
+  return startRotation + (currentX - startX) * 0.38
 }
 
 export function getDrawAnimationGeometry(
