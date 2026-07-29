@@ -164,7 +164,7 @@ function pickIllumination(item: InterpretationView): string {
 
 function pickAdvice(item: InterpretationView): string {
   if (item.advice.length > 0) {
-    return item.advice.join("；");
+    return item.advice.join("");
   }
   return item.reflection?.trim() ?? "";
 }

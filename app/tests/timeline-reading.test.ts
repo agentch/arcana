@@ -41,5 +41,8 @@ describe('正式应用时间流', () => {
     ])
     expect(summary.illumination.lines.length).toBeGreaterThan(0)
     expect(summary.guidance.lines.length).toBeGreaterThan(0)
+    expect(
+      summary.guidance.lines.every((line) => !line.text.includes('。；')),
+    ).toBe(true)
   })
 })
