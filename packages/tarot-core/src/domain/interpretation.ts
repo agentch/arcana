@@ -374,6 +374,59 @@ function composeChoiceSummary(
   };
 }
 
+/** 凯尔特十字：分层整理问题内核、背景条件和可执行的综合方向。 */
+function composeCelticCrossSummary(
+  spreadName: string,
+  spreadDescription: string,
+  interpretations: InterpretationView[],
+): SpreadSummaryView {
+  const [
+    present,
+    crossing,
+    foundation,
+    pastInfluence,
+    consciousFocus,
+    nearFocus,
+    selfPosition,
+    environment,
+    hopesFears,
+    overallDirection,
+  ] = interpretations;
+
+  const illuminationItems = [
+    ["核心现状", present],
+    ["交叉挑战", crossing],
+    ["内在基础", foundation],
+    ["已有影响", pastInfluence],
+    ["可见目标", consciousFocus],
+  ] as const;
+  const guidanceItems = [
+    ["近期关注", nearFocus],
+    ["自我位置", selfPosition],
+    ["外部环境", environment],
+    ["希望与担忧", hopesFears],
+    ["综合方向", overallDirection],
+  ] as const;
+
+  const illuminationLines: SpreadSummaryLine[] = illuminationItems.flatMap(
+    ([label, item]) => (item ? [{label, text: pickIllumination(item)}] : []),
+  );
+  const guidanceLines: SpreadSummaryLine[] = guidanceItems.flatMap(
+    ([label, item]) => (item ? [{label, text: pickIllumination(item)}] : []),
+  );
+  if (overallDirection) {
+    const action = pickAdvice(overallDirection);
+    if (action) guidanceLines.push({label: "可以尝试", text: action});
+  }
+
+  return {
+    title: `${spreadName} · 全局观察与建议`,
+    illumination: {title: "问题脉络", lines: illuminationLines},
+    guidance: {title: "行动参考", lines: guidanceLines},
+    closing: closingText(spreadDescription),
+  };
+}
+
 /** 多牌阵消息流摘要：按牌阵语义组织照耀与建议。 */
 export function composeSpreadSummary({
   spreadId,
@@ -404,6 +457,14 @@ export function composeSpreadSummary({
       spreadDescription,
       interpretations,
       choiceOptions,
+    );
+  }
+
+  if (spreadId === "celtic-cross") {
+    return composeCelticCrossSummary(
+      spreadName,
+      spreadDescription,
+      interpretations,
     );
   }
 

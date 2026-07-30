@@ -98,4 +98,20 @@ describe('单牌历史记录', () => {
 
     expect(normalizeReadingHistory([timeline])[0].cards).toHaveLength(3)
   })
+
+  it('保留凯尔特十字的十个牌位记录', () => {
+    const celticCross = {
+      ...createReading(1),
+      spreadId: 'celtic-cross',
+      cards: Array.from({ length: 10 }, (_, index) => ({
+        cardId: `major-${String(index).padStart(2, '0')}`,
+        cardName: `牌 ${index + 1}`,
+        orientation: (index % 2 === 0 ? 'upright' : 'reversed') as
+          'upright' | 'reversed',
+        positionId: `position-${index + 1}`,
+      })),
+    }
+
+    expect(normalizeReadingHistory([celticCross])[0].cards).toHaveLength(10)
+  })
 })

@@ -38,13 +38,13 @@ describe('正式应用分享卡片', () => {
     )
   })
 
-  it('为五张牌保留互不重叠的海报位置', () => {
-    const slots = planShareCardSlots(5)
+  it('为十张牌保留互不重叠的海报位置', () => {
+    const slots = planShareCardSlots(10)
 
-    expect(slots).toHaveLength(5)
-    expect(new Set(slots.map((slot) => `${slot.x}:${slot.y}`)).size).toBe(5)
+    expect(slots).toHaveLength(10)
+    expect(new Set(slots.map((slot) => `${slot.x}:${slot.y}`)).size).toBe(10)
     expect(
       Math.max(...slots.map((slot) => slot.y + slot.height)),
-    ).toBeLessThanOrEqual(380)
+    ).toBeLessThanOrEqual(480)
   })
 })

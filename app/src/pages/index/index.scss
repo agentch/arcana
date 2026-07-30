@@ -370,6 +370,36 @@
     grid-template-columns: 180px;
     justify-content: center;
   }
+
+  &--configured {
+    position: relative;
+    display: block;
+    height: 470px;
+    padding: 0 24px;
+
+    .draw-position-slot {
+      position: absolute;
+      width: 74px;
+      transform: translate(-50%, -50%);
+    }
+
+    .draw-position-slot__name {
+      position: relative;
+      z-index: 2;
+      width: 34px;
+      min-height: 0;
+      margin: 0 auto 4px;
+      border: 1px solid rgb(215 181 109 / 38%);
+      border-radius: 999px;
+      background: rgb(11 10 24 / 84%);
+      font-size: 17px;
+      line-height: 32px;
+    }
+
+    .draw-position-slot__frame {
+      border-radius: 8px;
+    }
+  }
 }
 
 .draw-position-slot {

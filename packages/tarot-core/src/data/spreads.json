@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0",
-  "spreadsVersion": "2026.07.8",
+  "spreadsVersion": "2026.07.9",
   "spreads": [
     {
       "id": "single-card",
@@ -102,6 +102,39 @@
         {"id": "option-a-direction", "name": "A 的倾向", "prompt": "沿 A 路径发展的可能方向", "order": 3},
         {"id": "option-b-process", "name": "B 的过程", "prompt": "选择 B 可能面对的体验、资源和挑战", "order": 4},
         {"id": "option-b-direction", "name": "B 的倾向", "prompt": "沿 B 路径发展的可能方向", "order": 5}
+      ]
+    },
+    {
+      "id": "celtic-cross",
+      "name": "凯尔特十字",
+      "description": "用十个观察位置梳理复杂问题的内外因素与综合方向",
+      "enabled": true,
+      "supportedTopics": ["general", "love", "career", "growth"],
+      "visual": {
+        "cards": [
+          {"x": 28, "y": 25},
+          {"x": 28, "y": 25, "rotation": 90},
+          {"x": 28, "y": 43},
+          {"x": 10, "y": 25},
+          {"x": 28, "y": 7},
+          {"x": 46, "y": 25},
+          {"x": 64, "y": 43},
+          {"x": 64, "y": 31},
+          {"x": 64, "y": 19},
+          {"x": 64, "y": 7}
+        ]
+      },
+      "positions": [
+        {"id": "present", "name": "核心现状", "prompt": "问题此刻最核心、最需要被看见的状态", "order": 1},
+        {"id": "crossing", "name": "交叉挑战", "prompt": "与核心状态交织的阻力、张力或可用力量", "order": 2},
+        {"id": "foundation", "name": "内在基础", "prompt": "支撑当前问题的深层需要、动机或旧模式", "order": 3},
+        {"id": "past-influence", "name": "已有影响", "prompt": "已经形成并仍在影响当下的经历或条件", "order": 4},
+        {"id": "conscious-focus", "name": "可见目标", "prompt": "用户目前清楚意识到的期待、目标或关注点", "order": 5},
+        {"id": "near-focus", "name": "近期关注", "prompt": "沿当前方向前进时近期值得观察的变化", "order": 6},
+        {"id": "self-position", "name": "自我位置", "prompt": "用户面对问题时的态度、资源与可调整空间", "order": 7},
+        {"id": "environment", "name": "外部环境", "prompt": "周围关系、条件与现实环境带来的影响", "order": 8},
+        {"id": "hopes-fears", "name": "希望与担忧", "prompt": "期待与顾虑如何同时影响判断和行动", "order": 9},
+        {"id": "overall-direction", "name": "综合方向", "prompt": "整合前九个位置后最值得带走的观察与行动方向", "order": 10}
       ]
     }
   ]

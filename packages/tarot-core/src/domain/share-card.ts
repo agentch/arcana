@@ -23,15 +23,24 @@ export type ShareCardSlot = {
   height: number;
 };
 
-/** 为1–5张牌生成不会截断的分享卡布局。 */
+/** 为1–10张牌生成不会截断的分享卡布局。 */
 export function planShareCardSlots(cardCount: number): ShareCardSlot[] {
-  const count = Math.max(0, Math.min(5, cardCount));
+  const count = Math.max(0, Math.min(10, cardCount));
   if (count <= 3) {
     return Array.from({length: count}, (_, index) => ({
       x: 0,
       y: index * 146,
       width: 888,
       height: 138,
+    }));
+  }
+
+  if (count >= 6) {
+    return Array.from({length: count}, (_, index) => ({
+      x: (index % 2) * 456,
+      y: Math.floor(index / 2) * 96,
+      width: 432,
+      height: 90,
     }));
   }
 

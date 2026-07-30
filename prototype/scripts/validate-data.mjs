@@ -438,7 +438,14 @@ for (const category of questionPrompts.categories) {
 
 assert.deepEqual(
   enabledSpreadIds,
-  ["single-card", "timeline", "sacred-triangle", "relationship-five", "choice-five"],
+  [
+    "single-card",
+    "timeline",
+    "sacred-triangle",
+    "relationship-five",
+    "choice-five",
+    "celtic-cross",
+  ],
   "only completed core spreads may be enabled",
 );
 

@@ -29,6 +29,7 @@ import {
   type SavedReading,
   writeReadingHistory,
 } from '@/features/history/reading-history'
+import readingConfig from '@/config/reading.json'
 import {
   clampDeckRotation,
   getDeckWheelCardLayouts,
@@ -182,6 +183,10 @@ export default function Index() {
   )
 
   const categories = useMemo(() => getQuestionCategories(), [])
+  const availableSpreads = useMemo(
+    () => readingConfig.availableSpreadIds.map((id) => getSpread(id)),
+    [],
+  )
   const cards = useMemo(
     () => resolveCardAssets(getCards(), getAssetPlatform()),
     [],
@@ -322,7 +327,7 @@ export default function Index() {
     updateDraft({ question: prompt })
   }
 
-  const selectSpread = async (nextSpreadId: 'single-card' | 'timeline') => {
+  const selectSpread = async (nextSpreadId: string) => {
     await triggerHaptic()
     updateDraft({ spreadId: nextSpreadId })
     setPreparedDraws([])
@@ -896,27 +901,24 @@ export default function Index() {
             <View className='reading-section'>
               <Text className='reading-section__label'>选择牌阵</Text>
               <View className='spread-choice-grid'>
-                {(['single-card', 'timeline'] as const).map(
-                  (availableSpreadId) => {
-                    const spread = getSpread(availableSpreadId)
-                    return (
-                      <Button
-                        className={`spread-choice ${
-                          spreadId === spread.id ? 'spread-choice--active' : ''
-                        }`}
-                        key={spread.id}
-                        onClick={() => selectSpread(availableSpreadId)}
-                      >
-                        <Text className='spread-choice__title'>
-                          {spread.name}
-                        </Text>
-                        <Text className='spread-choice__description'>
-                          {spread.description}
-                        </Text>
-                      </Button>
-                    )
-                  },
-                )}
+                {availableSpreads.map((spread) => {
+                  return (
+                    <Button
+                      className={`spread-choice ${
+                        spreadId === spread.id ? 'spread-choice--active' : ''
+                      }`}
+                      key={spread.id}
+                      onClick={() => selectSpread(spread.id)}
+                    >
+                      <Text className='spread-choice__title'>
+                        {spread.name}
+                      </Text>
+                      <Text className='spread-choice__description'>
+                        {spread.description}
+                      </Text>
+                    </Button>
+                  )
+                })}
               </View>
             </View>
           ) : null}
@@ -974,26 +976,52 @@ export default function Index() {
             {orderedActivePositions.length}
           </Text>
           <View
-            className={`draw-position-slots draw-position-slots--${orderedActivePositions.length}`}
+            className={`draw-position-slots draw-position-slots--${orderedActivePositions.length} ${
+              orderedActivePositions.length > 5 &&
+              activeSpread.visual?.cards.length ===
+                orderedActivePositions.length
+                ? 'draw-position-slots--configured'
+                : ''
+            }`}
           >
-            {orderedActivePositions.map((position) => {
+            {orderedActivePositions.map((position, index) => {
               const drawn = displayedDrawnCards.find(
                 (item) => item.position.id === position.id,
               )
               const active = activeDrawPosition?.id === position.id
+              const configuredVisual =
+                orderedActivePositions.length > 5
+                  ? activeSpread.visual?.cards[index]
+                  : undefined
               return (
                 <View
                   className={`draw-position-slot ${
                     active ? 'draw-position-slot--active' : ''
                   } ${drawn ? 'draw-position-slot--filled' : ''}`}
                   key={position.id}
+                  style={
+                    configuredVisual
+                      ? {
+                          left: `${(configuredVisual.x / 72) * 100}%`,
+                          top: `${(configuredVisual.y / 48) * 100}%`,
+                          zIndex: index + 1,
+                        }
+                      : undefined
+                  }
                 >
                   <Text className='draw-position-slot__name'>
-                    {position.name}
+                    {configuredVisual ? index + 1 : position.name}
                   </Text>
                   <View
                     className='draw-position-slot__frame'
                     id={`draw-position-${position.id}`}
+                    style={
+                      configuredVisual?.rotation
+                        ? {
+                            transform: `rotate(${configuredVisual.rotation}deg)`,
+                          }
+                        : undefined
+                    }
                   >
                     {drawn?.card.asset.image ? (
                       <Image

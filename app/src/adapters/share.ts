@@ -74,7 +74,7 @@ export async function renderShareCardBlob(
 
   context.fillStyle = '#f4eedf'
   context.font = "600 64px Georgia, 'Times New Roman', serif"
-  const visibleCards = content.cards.slice(0, 5)
+  const visibleCards = content.cards.slice(0, 10)
   const compactCards = visibleCards.length >= 4
   let cursorY = 230
   for (const line of wrapText(context, content.title, width - 192).slice(
