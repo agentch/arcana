@@ -35,8 +35,8 @@ export function ChatThread({
   return (
     <div className="chat-thread" role="log" aria-live="polite">
       <div className="chat-intro">
-        <p className="eyebrow">阿卡纳星语 · 卡牌反思</p>
-        <h1 className="chat-title">在牌面中，安静整理思绪</h1>
+        <p className="eyebrow">ARCANA · TAROT ORACLE</p>
+        <h1 className="chat-title">让牌面揭开命运的低语</h1>
       </div>
       {messages.map((message, index) => (
         <div
@@ -54,7 +54,7 @@ export function ChatThread({
         {children}
       </div>
       <p className="chat-disclaimer">
-        牌语仅供娱乐与自我探索，不替代专业建议
+        塔罗启示仅供娱乐与自我探索，重要决定仍请相信自己的判断
       </p>
     </div>
   );

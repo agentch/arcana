@@ -25,21 +25,26 @@ const interpretations = [
 
 test("composes share card content from a single-card reading", () => {
   const content = composeShareCardContent({
+    brand: "Arcana",
     title: "今日一牌",
+    defaultTitle: "塔罗启示",
     question: "今天，我最需要看见什么？",
     interpretations,
+    disclaimer: "命运从不只写下一种答案，塔罗启示仅供娱乐与自我探索",
   });
 
-  assert.equal(content.brand, "阿卡纳星语");
+  assert.equal(content.brand, "Arcana");
   assert.equal(content.title, "今日一牌");
   assert.equal(content.cards[0].cardName, "愚人");
   assert.equal(content.highlight, "把注意力放回第一步。");
-  assert.match(content.disclaimer, /不代表事实结论或未来结果/);
+  assert.match(content.disclaimer, /塔罗启示仅供娱乐与自我探索/);
 });
 
 test("prefers summary illumination for multi-card share highlight", () => {
   const content = composeShareCardContent({
+    brand: "Arcana",
     title: "时间流",
+    defaultTitle: "塔罗启示",
     question: "这件事如何发展到现在？",
     interpretations: [
       interpretations[0],
@@ -59,6 +64,7 @@ test("prefers summary illumination for multi-card share highlight", () => {
       guidance: {title: "建议", lines: []},
       closing: "趋势观察。",
     },
+    disclaimer: "命运从不只写下一种答案，塔罗启示仅供娱乐与自我探索",
   });
 
   assert.equal(content.highlight, "旧模式仍在影响此刻。");
@@ -67,15 +73,18 @@ test("prefers summary illumination for multi-card share highlight", () => {
 
 test("composeShareText includes cards and disclaimer without winner claims", () => {
   const content = composeShareCardContent({
+    brand: "Arcana",
     title: "二选一牌阵",
+    defaultTitle: "塔罗启示",
     question: "留下还是转行？",
     interpretations,
+    disclaimer: "命运从不只写下一种答案，塔罗启示仅供娱乐与自我探索",
   });
   const text = composeShareText(content);
 
-  assert.match(text, /阿卡纳星语 · 二选一牌阵/);
+  assert.match(text, /Arcana · 二选一牌阵/);
   assert.match(text, /愚人（正位）/);
-  assert.match(text, /不代表事实结论或未来结果/);
+  assert.match(text, /塔罗启示仅供娱乐与自我探索/);
   assert.doesNotMatch(text, /必须选|胜者/);
 });
 

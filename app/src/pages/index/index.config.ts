@@ -1,5 +1,8 @@
+const navigationBarTitleText =
+  process.env.TARO_ENV === 'weapp' ? '星简集' : 'Arcana'
+
 export default definePageConfig({
-  navigationBarTitleText: '阿卡纳星语',
+  navigationBarTitleText,
   enableShareAppMessage: true,
   enableShareTimeline: true,
 })

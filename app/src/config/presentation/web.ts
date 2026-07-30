@@ -1,0 +1,42 @@
+import type { PlatformPresentation } from './types'
+
+export const webPresentation: PlatformPresentation = {
+  brand: 'Arcana',
+  eyebrow: 'ARCANA · TAROT ORACLE',
+  shareDefaultTitle: '塔罗启示',
+  shareDisclaimer: '命运从不只写下一种答案，塔罗启示仅供娱乐与自我探索',
+  pageTitles: {
+    history: '往日启示',
+    shuffle: '让命运重新排列',
+    choose: '倾听直觉，召出你的牌',
+    reveal: '牌面正在揭开秘密',
+    dailyResult: '今日启示已经显现',
+    question: '向群星提出你的问题',
+  },
+  pageSummaries: {
+    history: '重访曾被星光照亮的问题，聆听它们此刻不同的回声。',
+    question: '选择你想探寻的领域，让牌阵承接这次发问。',
+    result: '牌面已经回应。凝视象征，也聆听直觉深处的声音。',
+    ritual: '让思绪安静下来，那张呼唤你的牌会自行显现。',
+  },
+  dailyDescription: '接受今日唯一的牌，让它照见此刻的命运线索',
+  modeDivider: '或者，开启一次完整占卜',
+  categoryLabel: '选择占卜领域',
+  questionLabel: '写下你的发问',
+  questionPlaceholder: '向牌面低语你想探寻的问题…',
+  spreadLabel: '选择命运牌阵',
+  startAction: '开启占卜仪式',
+  historyLabel: '占卜记录',
+  shuffleHint: '命运正在洗牌…',
+  drawProgressLabel: '已召出',
+  dailyDrawHint: '翻开今日命运之牌',
+  saveAction: '封存本次启示',
+  savedStatus: '启示已封存',
+  savedConfirmation: '本次启示已收入占卜记录',
+  historyEmpty: '尚未留下任何占卜记录',
+  openHistoryStatus: '正在重访往日启示',
+  restartAction: '开启新的占卜',
+  footerDisclaimer:
+    '塔罗揭示象征与可能，并非写定的命运；请以自己的判断作出重要决定',
+  resultTitle: (spreadName) => `${spreadName}的启示已经显现`,
+}

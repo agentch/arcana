@@ -30,6 +30,7 @@ import {
   writeReadingHistory,
 } from '@/features/history/reading-history'
 import readingConfig from '@/config/reading.json'
+import { platformPresentation } from '@/config/presentation'
 import {
   clampDeckRotation,
   getDeckWheelCardLayouts,
@@ -242,15 +243,18 @@ export default function Index() {
   const shareContent =
     interpretations.length > 0
       ? composeShareCardContent({
+          brand: platformPresentation.brand,
           title: dailyMode ? '今日一牌' : activeSpread.name,
+          defaultTitle: platformPresentation.shareDefaultTitle,
           question: question.trim() || DAILY_QUESTION,
           interpretations,
           summary: spreadSummary,
+          disclaimer: platformPresentation.shareDisclaimer,
         })
       : null
   const nativeShareTitle = shareContent
     ? `${shareContent.brand} · ${shareContent.title}`
-    : '阿卡纳星语 · 卡牌反思'
+    : `${platformPresentation.brand} · ${platformPresentation.shareDefaultTitle}`
 
   useShareAppMessage(() => ({
     title: nativeShareTitle,
@@ -729,7 +733,7 @@ export default function Index() {
 
     setHistory(nextHistory)
     setSavedReadingId(reading.id)
-    setSaveStatus('已保存到卡牌记录')
+    setSaveStatus(platformPresentation.savedConfirmation)
     void triggerHaptic()
   }
 
@@ -801,7 +805,7 @@ export default function Index() {
     setInterpretations(nextInterpretations)
     setDetailsOpen(false)
     setSavedReadingId(reading.id)
-    setSaveStatus('正在查看已保存的卡牌解读')
+    setSaveStatus(platformPresentation.openHistoryStatus)
     setShareStatus('')
     setPhase('result')
   }
@@ -816,33 +820,34 @@ export default function Index() {
 
   const pageTitle =
     phase === 'history'
-      ? '卡牌记录'
+      ? platformPresentation.pageTitles.history
       : phase === 'shuffle'
-        ? '让牌序慢慢沉静'
+        ? platformPresentation.pageTitles.shuffle
         : phase === 'choose'
-          ? '倾听直觉，召出你的牌'
+          ? platformPresentation.pageTitles.choose
           : phase === 'reveal'
-            ? '牌面正在显现'
+            ? platformPresentation.pageTitles.reveal
             : phase === 'result'
               ? dailyMode
-                ? '今日卡牌已生成'
-                : `${activeSpread.name}解读已生成`
-              : '带一个问题来到牌前'
+                ? platformPresentation.pageTitles.dailyResult
+                : platformPresentation.resultTitle(activeSpread.name)
+              : platformPresentation.pageTitles.question
 
   const pageSummary =
     phase === 'history'
-      ? '回看曾经保存的问题，也可以删除不再需要的记录。'
+      ? platformPresentation.pageSummaries.history
       : phase === 'question'
-        ? '先选择问题方向，再进入洗牌与选牌。'
+        ? platformPresentation.pageSummaries.question
         : phase === 'result'
-          ? '牌面仅提供观察角度，不代表事实结论或未来结果。'
-          : '放慢一点，不必寻找唯一正确的牌。'
+          ? platformPresentation.pageSummaries.result
+          : platformPresentation.pageSummaries.ritual
 
   return (
     <View className={`reading-page reading-page--${phase}`}>
       <View className='reading-page__glow' />
       <Text className='reading-page__eyebrow'>
-        ARCANA · {dailyMode ? '今日一牌' : activeSpread.name}
+        {platformPresentation.eyebrow} ·{' '}
+        {dailyMode ? '今日一牌' : activeSpread.name}
       </Text>
       <Text className='reading-page__title'>{pageTitle}</Text>
       <Text className='reading-page__summary'>{pageSummary}</Text>
@@ -854,13 +859,17 @@ export default function Index() {
             <View className='daily-entry__content'>
               <Text className='daily-entry__title'>今日一牌</Text>
               <Text className='daily-entry__description'>
-                同一天保持同一张牌，随时回来查看
+                {platformPresentation.dailyDescription}
               </Text>
             </View>
           </Button>
-          <Text className='mode-divider'>或者，带着一个问题开始</Text>
+          <Text className='mode-divider'>
+            {platformPresentation.modeDivider}
+          </Text>
           <View className='reading-section'>
-            <Text className='reading-section__label'>问题方向</Text>
+            <Text className='reading-section__label'>
+              {platformPresentation.categoryLabel}
+            </Text>
             <View className='choice-grid'>
               {categories.map((category) => (
                 <Button
@@ -883,7 +892,9 @@ export default function Index() {
 
           {activeCategory ? (
             <View className='reading-section'>
-              <Text className='reading-section__label'>选择或修改问题</Text>
+              <Text className='reading-section__label'>
+                {platformPresentation.questionLabel}
+              </Text>
               <View className='prompt-list'>
                 {activeCategory.options.map((option) => (
                   <Button
@@ -898,7 +909,7 @@ export default function Index() {
               <Textarea
                 className='question-input'
                 maxlength={120}
-                placeholder='写下你想问的问题…'
+                placeholder={platformPresentation.questionPlaceholder}
                 value={question}
                 onInput={(event) =>
                   updateDraft({ question: event.detail.value })
@@ -909,7 +920,9 @@ export default function Index() {
 
           {activeCategory ? (
             <View className='reading-section'>
-              <Text className='reading-section__label'>选择牌阵</Text>
+              <Text className='reading-section__label'>
+                {platformPresentation.spreadLabel}
+              </Text>
               <View className='spread-choice-grid'>
                 {availableSpreads.map((spread) => {
                   return (
@@ -938,14 +951,14 @@ export default function Index() {
             disabled={!question.trim() || !questionCategoryId}
             onClick={beginRitual}
           >
-            进入洗牌
+            {platformPresentation.startAction}
           </Button>
           <Button
             className='history-link'
             disabled={history.length === 0}
             onClick={() => setPhase('history')}
           >
-            卡牌记录（{history.length}）
+            {platformPresentation.historyLabel}（{history.length}）
           </Button>
         </>
       ) : null}
@@ -971,7 +984,9 @@ export default function Index() {
               </View>
             ))}
           </View>
-          <Text className='ritual-stage__hint'>正在洗牌…</Text>
+          <Text className='ritual-stage__hint'>
+            {platformPresentation.shuffleHint}
+          </Text>
         </View>
       ) : null}
 
@@ -982,8 +997,8 @@ export default function Index() {
           }`}
         >
           <Text className='draw-progress'>
-            已选卡牌 {displayedDrawnCards.length} /{' '}
-            {orderedActivePositions.length}
+            {platformPresentation.drawProgressLabel}{' '}
+            {displayedDrawnCards.length} / {orderedActivePositions.length}
           </Text>
           <View
             className={`draw-position-slots draw-position-slots--${orderedActivePositions.length} ${
@@ -1054,7 +1069,7 @@ export default function Index() {
           </View>
           <Text className='ritual-stage__hint draw-stage__hint'>
             {dailyMode
-              ? '翻开今天的卡牌'
+              ? platformPresentation.dailyDrawHint
               : `转动牌组，为“${activeDrawPosition?.name ?? ''}”选择一张牌 · ${focusedDeckOrdinal}/${preparedDeck.length}`}
           </Text>
           {dailyMode ? (
@@ -1286,7 +1301,9 @@ export default function Index() {
             disabled={Boolean(savedReadingId)}
             onClick={saveReading}
           >
-            {savedReadingId ? '已保存' : '保存本次记录'}
+            {savedReadingId
+              ? platformPresentation.savedStatus
+              : platformPresentation.saveAction}
           </Button>
           {saveStatus ? (
             <Text className='save-status'>{saveStatus}</Text>
@@ -1362,7 +1379,7 @@ export default function Index() {
             </View>
           ) : null}
           <Button className='secondary-action' onClick={startAgain}>
-            开始新的卡牌解读
+            {platformPresentation.restartAction}
           </Button>
         </View>
       ) : null}
@@ -1370,7 +1387,9 @@ export default function Index() {
       {phase === 'history' ? (
         <View className='history-panel'>
           {history.length === 0 ? (
-            <Text className='history-empty'>还没有保存过卡牌记录</Text>
+            <Text className='history-empty'>
+              {platformPresentation.historyEmpty}
+            </Text>
           ) : (
             history.map((reading) => (
               <View className='history-item' key={reading.id}>
@@ -1413,7 +1432,7 @@ export default function Index() {
       ) : null}
 
       <Text className='reading-page__disclaimer'>
-        仅供娱乐与自我反思；牌面不代表事实结论或未来结果，也不替代医疗、心理、法律或财务等专业建议
+        {platformPresentation.footerDisclaimer}
       </Text>
     </View>
   )

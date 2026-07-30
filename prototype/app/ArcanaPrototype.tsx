@@ -53,6 +53,7 @@ import {
   resolveSpreadPosition,
 } from "./domain/interpretation";
 import {composeShareCardContent} from "./domain/share-card";
+import {getConfiguredSpreadSlots} from "./domain/spread-layout";
 import type {
   Orientation,
   Reading,
@@ -169,6 +170,7 @@ export function ArcanaPrototype() {
     targetX: 0,
     targetY: -180,
     targetScale: 0.38,
+    targetRotation: 0,
   });
   const [history, setHistory] = useState<Reading[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -397,6 +399,8 @@ export function ArcanaPrototype() {
         targetX: targetRect.left + targetRect.width / 2 - sourceCenterX,
         targetY: targetRect.top + targetRect.height / 2 - sourceCenterY,
         targetScale: targetRect.width / 154,
+        targetRotation:
+          configuredSpreadSlotByPosition.get(position.id)?.rotation ?? 0,
       });
     } else {
       setDrawAnimationGeometry({
@@ -407,6 +411,8 @@ export function ArcanaPrototype() {
         targetX: 0,
         targetY: -180,
         targetScale: 0.38,
+        targetRotation:
+          configuredSpreadSlotByPosition.get(position.id)?.rotation ?? 0,
       });
     }
     triggerHaptic("impact");
@@ -497,6 +503,7 @@ export function ArcanaPrototype() {
           targetX: targetRect.left + targetRect.width / 2 - sourceCenterX,
           targetY: targetRect.top + targetRect.height / 2 - sourceCenterY,
           targetScale: targetRect.width / 154,
+          targetRotation: 0,
         });
       } else {
         setDrawAnimationGeometry({
@@ -507,6 +514,7 @@ export function ArcanaPrototype() {
           targetX: 0,
           targetY: -180,
           targetScale: 0.38,
+          targetRotation: 0,
         });
       }
       triggerHaptic("impact");
@@ -639,6 +647,10 @@ export function ArcanaPrototype() {
       : null;
   const showReadingDetail =
     readingDetailOpen && drawnCards.length > 1 && flow.phase === "result";
+  const configuredSpreadSlots = getConfiguredSpreadSlots(activeSpread);
+  const configuredSpreadSlotByPosition = new Map(
+    configuredSpreadSlots?.map((slot) => [slot.positionId, slot]) ?? [],
+  );
 
   async function shareReading() {
     if (resultInterpretations.length === 0 || sharing) return;
@@ -647,10 +659,13 @@ export function ArcanaPrototype() {
     setShareStatus("");
     try {
       const content = composeShareCardContent({
+        brand: "Arcana",
         title: isDailyMode ? "今日一牌" : activeSpread.name,
+        defaultTitle: "塔罗启示",
         question: question.trim() || DAILY_QUESTION,
         interpretations: resultInterpretations,
         summary: spreadSummary,
+        disclaimer: "命运从不只写下一种答案，塔罗启示仅供娱乐与自我探索",
       });
       const result = await shareCard(content);
       if (result.status === "shared") {
@@ -696,7 +711,7 @@ export function ArcanaPrototype() {
           >
             {showReadingDetail ? "←" : "☾"}
           </button>
-          <p className="wordmark">阿卡纳星语</p>
+          <p className="wordmark">Arcana</p>
           <button
             className="icon-button"
             onClick={() => setHistoryOpen(true)}
@@ -729,7 +744,7 @@ export function ArcanaPrototype() {
                     className="primary-button"
                     onClick={() => dispatchFlow({ type: "start" })}
                   >
-                    开始卡牌解读
+                    开启塔罗占卜
                   </button>
                   <button
                     className="secondary-button"
@@ -907,7 +922,7 @@ export function ArcanaPrototype() {
           <section
             className={`chat-step draw-stage selection-stage${
               activeSpread.positions.length === 5 ? " spread-dense" : ""
-            }`}
+            }${configuredSpreadSlots ? " spread-configured" : ""}`}
           >
             <h2 className="message-card-title">倾听直觉，召出你的牌</h2>
             <p className="draw-progress" aria-live="polite">
@@ -919,7 +934,9 @@ export function ArcanaPrototype() {
                   ? " layout-choice"
                   : activeSpread.positions.length === 5
                     ? " layout-cross"
-                    : ""
+                    : configuredSpreadSlots
+                      ? " layout-configured"
+                      : ""
               }`}
               aria-label={`${activeSpread.name}牌位`}
             >
@@ -927,12 +944,24 @@ export function ArcanaPrototype() {
                 const drawn = drawnCards.find(
                   (item) => item.position.id === position.id,
                 );
+                const configuredSlot =
+                  configuredSpreadSlotByPosition.get(position.id);
                 return (
                   <button
                     className={`draw-position-slot ${
                       activeDrawPositionId === position.id ? "active" : ""
                     } ${drawn ? "filled" : ""}`}
                     key={position.id}
+                    style={
+                      configuredSlot
+                        ? ({
+                            left: configuredSlot.left,
+                            top: configuredSlot.top,
+                            zIndex: configuredSlot.zIndex,
+                            "--spread-slot-rotation": `${configuredSlot.rotation}deg`,
+                          } as CSSProperties)
+                        : undefined
+                    }
                     onClick={() => {
                       setActiveDrawPositionId(position.id);
                       triggerHaptic("selection");
@@ -941,8 +970,15 @@ export function ArcanaPrototype() {
                       shuffling || Boolean(drawn) || Boolean(animatingDraw)
                     }
                     aria-pressed={activeDrawPositionId === position.id}
+                    aria-label={
+                      configuredSlot
+                        ? `牌位 ${configuredSlot.label}：${position.name}`
+                        : undefined
+                    }
                   >
-                    <span className="draw-position-name">{position.name}</span>
+                    <span className="draw-position-name">
+                      {configuredSlot ? configuredSlot.label : position.name}
+                    </span>
                     <span
                       className="draw-position-frame"
                       ref={(element) => {
@@ -1123,6 +1159,7 @@ export function ArcanaPrototype() {
                       "--draw-target-y": `${drawAnimationGeometry.targetY}px`,
                       "--draw-target-scale":
                         drawAnimationGeometry.targetScale,
+                      "--draw-target-rotation": `${drawAnimationGeometry.targetRotation}deg`,
                     } as CSSProperties
                   }
                   onAnimationEnd={(event) => {
@@ -1174,7 +1211,7 @@ export function ArcanaPrototype() {
           <AssistantCard>
           <section className="chat-step result-step">
             <p className="message-card-label">
-              卡牌解读 · {isDailyMode ? "今日一牌" : activeSpread.name}
+              塔罗启示 · {isDailyMode ? "今日一牌" : activeSpread.name}
             </p>
             <h2 className="message-card-title">
               {isDailyMode ? "今日卡牌已生成" : "本次解读已生成"}
@@ -1290,7 +1327,7 @@ export function ArcanaPrototype() {
                 {sharing ? "正在生成分享卡片…" : "生成分享卡片"}
               </button>
               <button className="secondary-button" onClick={resetReading}>
-                开始新的卡牌解读
+                开启新的占卜
               </button>
             </div>
             {shareStatus ? (
@@ -1299,7 +1336,7 @@ export function ArcanaPrototype() {
               </p>
             ) : null}
             <p className="disclaimer">
-              仅供娱乐与自我反思；牌面不代表事实结论或未来结果，也不替代医疗、心理、法律或财务等专业建议
+              塔罗揭示象征与可能，并非写定的命运；请以自己的判断作出重要决定
             </p>
           </section>
           </AssistantCard>
@@ -1380,7 +1417,7 @@ export function ArcanaPrototype() {
                     );
                   }}
                 >
-                  开始新的卡牌解读
+                  开启新的占卜
                 </button>
               </>
             )}

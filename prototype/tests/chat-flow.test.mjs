@@ -37,7 +37,7 @@ test("advances through the guided conversation in order", () => {
       (message) => message.text,
     ),
     [
-      "开始卡牌解读",
+      "开启塔罗占卜",
       "感情",
       "这段关系现在最需要我看见什么？",
       "使用时间流",

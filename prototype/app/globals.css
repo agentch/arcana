@@ -816,6 +816,51 @@ button {
   display: none;
 }
 
+/* 六张及以上牌阵读取共享 visual 坐标，避免十张牌横向溢出 */
+.draw-position-slots.layout-configured {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 100%;
+  height: 250px;
+  margin: 4px 0 8px;
+  padding: 0 8px;
+  overflow: visible;
+}
+
+.draw-position-slots.layout-configured .draw-position-slot {
+  position: absolute;
+  display: block;
+  width: 44px;
+  min-width: 44px;
+  transform: translate(-50%, -50%);
+}
+
+.draw-position-slots.layout-configured .draw-position-name {
+  position: relative;
+  z-index: 2;
+  width: 20px;
+  min-height: 20px;
+  margin: 0 auto 3px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 18px;
+  background: rgba(11, 10, 24, 0.86);
+  border: 1px solid rgba(214, 185, 120, 0.38);
+  border-radius: 999px;
+}
+
+.draw-position-slots.layout-configured .draw-position-frame {
+  width: 44px;
+  transform: rotate(var(--spread-slot-rotation, 0deg));
+}
+
+.draw-position-slots.layout-configured .draw-position-slot.active .draw-position-frame {
+  transform:
+    translateY(-2px)
+    rotate(var(--spread-slot-rotation, 0deg));
+}
+
 /* 五牌阵抽牌位：十字形，避免横向挤出右侧 */
 .draw-position-slots.layout-cross {
   display: grid;
@@ -1149,6 +1194,43 @@ button {
   z-index: 1;
   margin: 0;
   transform: translateX(-50%);
+}
+
+.draw-page .selection-stage.spread-configured {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 196px;
+}
+
+.draw-page .selection-stage.spread-configured .message-card-title {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  font-size: 1.2rem;
+}
+
+.draw-page .selection-stage.spread-configured .draw-progress {
+  flex: 0 0 auto;
+  margin-top: 8px;
+}
+
+.draw-page .selection-stage.spread-configured .draw-position-slots.layout-configured {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  min-height: 230px;
+  max-height: 280px;
+}
+
+.draw-page .selection-stage.spread-configured .draw-hint {
+  bottom: 172px;
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.draw-page .selection-stage.spread-configured .draw-deck-wheel {
+  bottom: -36px;
+  width: calc(100% + 44px);
+  height: 180px;
 }
 
 /* 五牌阵：牌位略放大并在可用区内居中，底部仍给圆环留空 */
@@ -1959,6 +2041,7 @@ button {
     opacity: 1;
     transform:
       translate(var(--draw-target-x), var(--draw-target-y))
+      rotate(var(--draw-target-rotation, 0deg))
       scale(var(--draw-target-scale));
   }
 
@@ -1966,6 +2049,7 @@ button {
     opacity: 0;
     transform:
       translate(var(--draw-target-x), var(--draw-target-y))
+      rotate(var(--draw-target-rotation, 0deg))
       scale(var(--draw-target-scale));
   }
 }

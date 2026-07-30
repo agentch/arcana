@@ -57,18 +57,24 @@ export function planShareCardSlots(cardCount: number): ShareCardSlot[] {
 }
 
 type ComposeShareCardInput = {
+  brand: string;
   title: string;
+  defaultTitle: string;
   question: string;
   interpretations: InterpretationView[];
   summary?: SpreadSummaryView | null;
+  disclaimer: string;
 };
 
 /** 组装分享卡片所需的纯展示内容，不触碰平台 API。 */
 export function composeShareCardContent({
+  brand,
   title,
+  defaultTitle,
   question,
   interpretations,
   summary,
+  disclaimer,
 }: ComposeShareCardInput): ShareCardContent {
   const cards = interpretations.map((item) => ({
     positionName: item.positionName,
@@ -87,12 +93,12 @@ export function composeShareCardContent({
   }
 
   return {
-    brand: "阿卡纳星语",
-    title: title.trim() || "卡牌反思",
+    brand: brand.trim(),
+    title: title.trim() || defaultTitle.trim(),
     question: question.trim(),
     cards,
     highlight: truncateText(highlight, 72),
-    disclaimer: "牌面仅提供观察角度，不代表事实结论或未来结果",
+    disclaimer: disclaimer.trim(),
   };
 }
 

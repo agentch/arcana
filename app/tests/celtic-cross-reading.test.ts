@@ -77,9 +77,12 @@ describe('正式应用凯尔特十字', () => {
       }),
     )
     const content = composeShareCardContent({
+      brand: '星简集',
       title: spread.name,
+      defaultTitle: '卡牌反思',
       question: '我该如何梳理当前这个复杂问题？',
       interpretations,
+      disclaimer: '牌面仅提供观察角度，不代表事实结论或未来结果',
     })
 
     expect(spread.visual?.cards).toHaveLength(10)

@@ -24,12 +24,15 @@ describe('正式应用分享卡片', () => {
       position: drawn.position,
     })
     const content = composeShareCardContent({
+      brand: '星简集',
       title: '今日一牌',
+      defaultTitle: '卡牌反思',
       question: '今天，我最需要看见什么？',
       interpretations: [interpretation],
+      disclaimer: '牌面仅提供观察角度，不代表事实结论或未来结果',
     })
 
-    expect(content.brand).toBe('阿卡纳星语')
+    expect(content.brand).toBe('星简集')
     expect(content.cards).toHaveLength(1)
     expect(content.cards[0].cardName).toBe(interpretation.cardName)
     expect(content.disclaimer).toContain('不代表事实结论或未来结果')

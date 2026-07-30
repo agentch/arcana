@@ -35,7 +35,7 @@ export const initialChatFlowState: ChatFlowState = {
     {
       id: "message-0",
       role: "assistant",
-      text: "夜色沉静，星光微亮。欢迎来到阿卡纳星语——把问题写下，让牌面成为整理思绪的一种角度。",
+      text: "夜色沉静，星光微亮。欢迎来到 Arcana——把问题写进星光，让牌面回应此刻的召唤。",
     },
   ],
 };
@@ -63,10 +63,10 @@ export function chatFlowReducer(
     case "start":
       if (state.phase !== "welcome" && state.phase !== "complete") return state;
       return appendMessages(state, "category", [
-        { role: "user", text: "开始卡牌解读" },
+        { role: "user", text: "开启塔罗占卜" },
         {
           role: "assistant",
-          text: "先选择一个方向，看看此刻最值得梳理的是什么。",
+          text: "先选择一个领域，看看命运将从哪一扇门回应你。",
         },
       ]);
     case "start-daily":
@@ -75,7 +75,7 @@ export function chatFlowReducer(
         { role: "user", text: "今日一牌" },
         {
           role: "assistant",
-          text: "今日卡牌已准备好。洗牌之后，选择一张最吸引你的牌。",
+          text: "今日的命运之牌已经苏醒。洗牌之后，选择那张正在呼唤你的牌。",
         },
       ]);
     case "reveal-daily":
@@ -84,7 +84,7 @@ export function chatFlowReducer(
         { role: "user", text: "今日一牌" },
         {
           role: "assistant",
-          text: "今日卡牌已生成，看看它提供了怎样的观察角度。",
+          text: "今日启示已经显现，凝视牌面，聆听它留下的低语。",
         },
       ]);
     case "select-category":
@@ -119,7 +119,7 @@ export function chatFlowReducer(
       return appendMessages(state, "result", [
         {
           role: "assistant",
-          text: "卡牌已经选齐，解读正在生成。",
+          text: "牌阵已经完整，启示正在星光中显现。",
         },
       ]);
     case "save":
@@ -127,7 +127,7 @@ export function chatFlowReducer(
       return appendMessages(state, "complete", [
         {
           role: "assistant",
-          text: "本次卡牌记录已保存，你可以随时回来查看。",
+          text: "本次启示已经封存，你可以随时回来重访它的回声。",
         },
       ]);
     case "reset":

@@ -9,17 +9,17 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImage = `${protocol}://${host}/og.png`;
 
   return {
-    title: "阿卡纳星语｜在牌面中整理思绪",
-    description: "夜色沉静，星光微亮。一个克制而沉浸的卡牌自我反思体验。",
+    title: "Arcana｜聆听命运的低语",
+    description: "当星光落向牌面，让塔罗揭开此刻隐藏的象征与可能。",
     openGraph: {
-      title: "阿卡纳星语｜在牌面中整理思绪",
-      description: "带着一个问题而来，从牌面获得一种新的观察角度。",
+      title: "Arcana｜聆听命运的低语",
+      description: "带着一个问题踏入牌阵，接受只属于此刻的塔罗启示。",
       images: [{ url: ogImage, width: 1200, height: 630, alt: "Arcana 社交预览图" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "阿卡纳星语｜在牌面中整理思绪",
-      description: "借一张牌，安静整理此刻的想法。",
+      title: "Arcana｜聆听命运的低语",
+      description: "翻开一张牌，看看命运此刻留下了什么线索。",
       images: [ogImage],
     },
   };

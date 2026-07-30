@@ -31,9 +31,9 @@ test("server-renders the Arcana prototype shell", async () => {
   const html = await response.text();
   assert.match(html, /<html lang="zh-CN">/i);
   assert.match(html, /Arcana/);
-  assert.match(html, /在牌面中/);
-  assert.match(html, /开始卡牌解读/);
-  assert.match(html, /仅供娱乐与自我探索/);
+  assert.match(html, /命运的低语/);
+  assert.match(html, /开启塔罗占卜/);
+  assert.match(html, /塔罗启示仅供娱乐与自我探索/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/i);
 });
 

@@ -1,0 +1,42 @@
+import type { PlatformPresentation } from './types'
+
+export const weappPresentation: PlatformPresentation = {
+  brand: '星简集',
+  eyebrow: '星简集',
+  shareDefaultTitle: '卡牌反思',
+  shareDisclaimer: '牌面仅提供观察角度，不代表事实结论或未来结果',
+  pageTitles: {
+    history: '卡牌记录',
+    shuffle: '让牌序慢慢沉静',
+    choose: '倾听直觉，选出你的牌',
+    reveal: '牌面正在显现',
+    dailyResult: '今日卡牌已生成',
+    question: '带一个问题来到牌前',
+  },
+  pageSummaries: {
+    history: '回看曾经保存的问题，也可以删除不再需要的记录。',
+    question: '先选择问题方向，再进入洗牌与选牌。',
+    result: '牌面仅提供观察角度，不代表事实结论或未来结果。',
+    ritual: '放慢一点，不必寻找唯一正确的牌。',
+  },
+  dailyDescription: '同一天保持同一张牌，随时回来查看',
+  modeDivider: '或者，带着一个问题开始',
+  categoryLabel: '问题方向',
+  questionLabel: '选择或修改问题',
+  questionPlaceholder: '写下你想问的问题…',
+  spreadLabel: '选择牌阵',
+  startAction: '进入洗牌',
+  historyLabel: '卡牌记录',
+  shuffleHint: '正在洗牌…',
+  drawProgressLabel: '已选卡牌',
+  dailyDrawHint: '翻开今天的卡牌',
+  saveAction: '保存本次记录',
+  savedStatus: '已保存',
+  savedConfirmation: '已保存到卡牌记录',
+  historyEmpty: '还没有保存过卡牌记录',
+  openHistoryStatus: '正在查看已保存的卡牌解读',
+  restartAction: '开始新的卡牌解读',
+  footerDisclaimer:
+    '仅供娱乐与自我反思；牌面不代表事实结论或未来结果，也不替代医疗、心理、法律或财务等专业建议',
+  resultTitle: (spreadName) => `${spreadName}解读已生成`,
+}

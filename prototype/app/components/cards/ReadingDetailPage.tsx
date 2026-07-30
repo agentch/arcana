@@ -35,7 +35,7 @@ export function ReadingDetailPage({
         ← 返回消息流
       </button>
       <p className="message-card-label">牌语详解 · {spreadName}</p>
-      <h2 className="message-card-title">逐张查看卡牌解读</h2>
+      <h2 className="message-card-title">逐张聆听塔罗启示</h2>
       <div className="reading-list reading-detail-list">
         {drawnCards.map((drawn, index) => {
           const interpretation = interpretations[index];
