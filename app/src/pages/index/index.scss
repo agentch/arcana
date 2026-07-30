@@ -933,13 +933,13 @@
   99% {
     opacity: 1;
     transform: translate(var(--draw-target-x), var(--draw-target-y))
-      scale(var(--draw-target-scale));
+      rotate(var(--draw-target-rotation)) scale(var(--draw-target-scale));
   }
 
   100% {
     opacity: 0;
     transform: translate(var(--draw-target-x), var(--draw-target-y))
-      scale(var(--draw-target-scale));
+      rotate(var(--draw-target-rotation)) scale(var(--draw-target-scale));
   }
 }
 

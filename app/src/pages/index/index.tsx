@@ -83,12 +83,14 @@ const DEFAULT_DRAW_ANIMATION_GEOMETRY: DrawAnimationGeometry = {
   targetX: 0,
   targetY: -180,
   targetScale: 0.54,
+  targetRotation: 0,
 }
 
 function measureDrawAnimation(
   sourceSelector: string,
   targetSelector: string,
   sourceRotation: number,
+  targetRotation: number,
 ): Promise<DrawAnimationGeometry> {
   return new Promise((resolve) => {
     const { windowWidth, windowHeight } = Taro.getWindowInfo()
@@ -99,7 +101,10 @@ function measureDrawAnimation(
       const source = results[0] as DrawAnimationRect | undefined
       const target = results[1] as DrawAnimationRect | undefined
       if (!source || !target) {
-        resolve(DEFAULT_DRAW_ANIMATION_GEOMETRY)
+        resolve({
+          ...DEFAULT_DRAW_ANIMATION_GEOMETRY,
+          targetRotation,
+        })
         return
       }
       resolve(
@@ -108,6 +113,7 @@ function measureDrawAnimation(
           target,
           { width: windowWidth, height: windowHeight },
           sourceRotation,
+          targetRotation,
         ),
       )
     })
@@ -477,6 +483,10 @@ export default function Index() {
             sourceSelector,
             `#draw-position-${drawn.position.id}`,
             sourceRotation,
+            activeSpread.visual?.cards.find(
+              (_, index) =>
+                orderedActivePositions[index]?.id === drawn.position.id,
+            )?.rotation ?? 0,
           )
         : DEFAULT_DRAW_ANIMATION_GEOMETRY
       const animatingDraw: DrawnRenderableCard = {
@@ -1110,6 +1120,7 @@ export default function Index() {
                 '--draw-target-x': `${drawAnimationGeometry.targetX}px`,
                 '--draw-target-y': `${drawAnimationGeometry.targetY}px`,
                 '--draw-target-scale': drawAnimationGeometry.targetScale,
+                '--draw-target-rotation': `${drawAnimationGeometry.targetRotation}deg`,
               } as CSSProperties
             }
           >

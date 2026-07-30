@@ -75,6 +75,19 @@ describe('半圆牌组布局', () => {
       targetX: -7.5,
       targetY: -143,
       targetScale: 100 / 120,
+      targetRotation: 0,
     })
+  })
+
+  it('在入位末段使用配置的目标旋转角', () => {
+    expect(
+      getDrawAnimationGeometry(
+        { left: 160, top: 600, width: 56, height: 92 },
+        { left: 130, top: 180, width: 166, height: 100 },
+        { width: 375, height: 812 },
+        12,
+        90,
+      ).targetRotation,
+    ).toBe(90)
   })
 })

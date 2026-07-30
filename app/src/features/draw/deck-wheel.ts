@@ -24,6 +24,7 @@ export type DrawAnimationGeometry = {
   targetX: number
   targetY: number
   targetScale: number
+  targetRotation: number
 }
 
 export const DECK_ARC_START_DEGREES = -150
@@ -90,6 +91,7 @@ export function getDrawAnimationGeometry(
   target: DrawAnimationRect,
   viewport: { width: number; height: number },
   sourceRotation: number,
+  targetRotation = 0,
 ): DrawAnimationGeometry {
   const animationCardWidth = Math.min(154, viewport.width * 0.32)
   const centerX = viewport.width / 2
@@ -102,5 +104,6 @@ export function getDrawAnimationGeometry(
     targetX: target.left + target.width / 2 - centerX,
     targetY: target.top + target.height / 2 - centerY,
     targetScale: target.width / animationCardWidth,
+    targetRotation,
   }
 }
