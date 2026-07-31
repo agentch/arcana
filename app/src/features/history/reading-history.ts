@@ -17,3 +17,7 @@ export function readReadingHistory(): SavedReading[] {
 export function writeReadingHistory(history: SavedReading[]): boolean {
   return storageAdapter.write(READING_HISTORY_KEY, history)
 }
+
+export function clearReadingHistory(): boolean {
+  return storageAdapter.remove(READING_HISTORY_KEY)
+}

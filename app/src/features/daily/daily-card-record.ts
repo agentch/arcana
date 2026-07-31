@@ -19,3 +19,7 @@ export function readDailyCardRecord(): DailyCardRecord | null {
 export function writeDailyCardRecord(record: DailyCardRecord): boolean {
   return storageAdapter.write(DAILY_STORAGE_KEY, record)
 }
+
+export function clearDailyCardRecord(): boolean {
+  return storageAdapter.remove(DAILY_STORAGE_KEY)
+}

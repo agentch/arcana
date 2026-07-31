@@ -29,6 +29,7 @@ import {
   type SavedReading,
   writeReadingHistory,
 } from '@/features/history/reading-history'
+import { clearLocalReadingData } from '@/features/privacy/local-data'
 import readingConfig from '@/config/reading.json'
 import { platformPresentation } from '@/config/presentation'
 import {
@@ -153,6 +154,9 @@ export default function Index() {
   const [saveStatus, setSaveStatus] = useState('')
   const [shareStatus, setShareStatus] = useState('')
   const [sharing, setSharing] = useState(false)
+  const [aboutOpen, setAboutOpen] = useState(false)
+  const [clearConfirmationOpen, setClearConfirmationOpen] = useState(false)
+  const [privacyStatus, setPrivacyStatus] = useState('')
   const [ritualError, setRitualError] = useState('')
   const [cardBackLoadFailed, setCardBackLoadFailed] = useState(false)
   const [deckRotation, setDeckRotation] = useState(0)
@@ -818,6 +822,44 @@ export default function Index() {
     void triggerHaptic()
   }
 
+  const openAbout = () => {
+    setClearConfirmationOpen(false)
+    setPrivacyStatus('')
+    setAboutOpen(true)
+    void triggerHaptic('light')
+  }
+
+  const closeAbout = () => {
+    setClearConfirmationOpen(false)
+    setPrivacyStatus('')
+    setAboutOpen(false)
+  }
+
+  const confirmClearLocalData = () => {
+    const result = clearLocalReadingData()
+    setClearConfirmationOpen(false)
+
+    if (result.historyCleared) {
+      setHistory([])
+      setSavedReadingId(null)
+    }
+    if (result.success) {
+      startAgain()
+      setPrivacyStatus('本机保存的卡牌记录和今日一牌已全部清除')
+      void triggerHaptic('medium')
+      return
+    }
+
+    setHistory(readReadingHistory())
+    setPrivacyStatus(
+      result.historyCleared
+        ? '卡牌记录已清除，但今日一牌清除失败，请稍后重试'
+        : result.dailyCardCleared
+          ? '今日一牌已清除，但卡牌记录清除失败，请稍后重试'
+          : '本地数据清除失败，请检查设备存储权限后重试',
+    )
+  }
+
   const pageTitle =
     phase === 'history'
       ? platformPresentation.pageTitles.history
@@ -1431,9 +1473,106 @@ export default function Index() {
         </View>
       ) : null}
 
+      <Button className='about-link' onClick={openAbout}>
+        关于{platformPresentation.brand} · 隐私说明
+      </Button>
       <Text className='reading-page__disclaimer'>
         {platformPresentation.footerDisclaimer}
       </Text>
+
+      {aboutOpen ? (
+        <View
+          aria-label={`关于${platformPresentation.brand}与隐私说明`}
+          className='privacy-overlay'
+        >
+          <View className='privacy-panel'>
+            <View className='privacy-panel__header'>
+              <View>
+                <Text className='privacy-panel__eyebrow'>
+                  {platformPresentation.brand}
+                </Text>
+                <Text className='privacy-panel__title'>关于与隐私说明</Text>
+              </View>
+              <Button
+                aria-label='关闭关于与隐私说明'
+                className='privacy-panel__close'
+                onClick={closeAbout}
+              >
+                ×
+              </Button>
+            </View>
+
+            <View className='privacy-section'>
+              <Text className='privacy-section__title'>我们如何使用数据</Text>
+              <Text className='privacy-section__line'>
+                ·
+                你填写的问题、卡牌结果和历史记录只保存在当前设备本地，不会上传或跨设备同步。
+              </Text>
+              <Text className='privacy-section__line'>
+                · 牌面图片按平台从应用静态资源或 CloudBase
+                云存储读取；图片请求不包含你的问题或卡牌记录。
+              </Text>
+              <Text className='privacy-section__line'>
+                ·
+                分享只在你主动操作时触发，由浏览器或微信平台完成；应用不会读取联系人。
+              </Text>
+              <Text className='privacy-section__line'>
+                · 当前版本不使用账号、手机号、支付或 AI
+                解读接口，也不采集定位、通讯录和相册内容。
+              </Text>
+            </View>
+
+            <View className='privacy-section'>
+              <Text className='privacy-section__title'>内容边界</Text>
+              <Text className='privacy-section__line'>
+                {platformPresentation.footerDisclaimer}
+              </Text>
+            </View>
+
+            <View className='privacy-section'>
+              <Text className='privacy-section__title'>管理本地数据</Text>
+              <Text className='privacy-section__line'>
+                清除后，历史记录和今日一牌无法恢复，但不会影响牌面素材和应用功能。
+              </Text>
+              {clearConfirmationOpen ? (
+                <View className='privacy-confirm'>
+                  <Text className='privacy-confirm__title'>
+                    确认清空全部本地记录？
+                  </Text>
+                  <View className='privacy-confirm__actions'>
+                    <Button
+                      className='privacy-action privacy-action--secondary'
+                      onClick={() => setClearConfirmationOpen(false)}
+                    >
+                      取消
+                    </Button>
+                    <Button
+                      className='privacy-action privacy-action--danger'
+                      onClick={confirmClearLocalData}
+                    >
+                      确认清空
+                    </Button>
+                  </View>
+                </View>
+              ) : (
+                <Button
+                  className='privacy-action privacy-action--danger'
+                  onClick={() => {
+                    setPrivacyStatus('')
+                    setClearConfirmationOpen(true)
+                    void triggerHaptic('light')
+                  }}
+                >
+                  清空全部本地记录
+                </Button>
+              )}
+              {privacyStatus ? (
+                <Text className='privacy-panel__status'>{privacyStatus}</Text>
+              ) : null}
+            </View>
+          </View>
+        </View>
+      ) : null}
     </View>
   )
 }
