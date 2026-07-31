@@ -3,7 +3,7 @@ import type { PlatformPresentation } from './types'
 export const weappPresentation: PlatformPresentation = {
   brand: '星简集',
   eyebrow: '星简集',
-  shareDefaultTitle: '卡牌反思',
+  shareDefaultTitle: '塔罗启示',
   shareDisclaimer: '牌面仅提供观察角度，不代表事实结论或未来结果',
   pageTitles: {
     history: '卡牌记录',

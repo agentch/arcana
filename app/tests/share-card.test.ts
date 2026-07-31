@@ -26,7 +26,7 @@ describe('正式应用分享卡片', () => {
     const content = composeShareCardContent({
       brand: '星简集',
       title: '今日一牌',
-      defaultTitle: '卡牌反思',
+      defaultTitle: '塔罗启示',
       question: '今天，我最需要看见什么？',
       interpretations: [interpretation],
       disclaimer: '牌面仅提供观察角度，不代表事实结论或未来结果',
